@@ -3,11 +3,13 @@ const fs = require('fs')
 const pathUtils = require('path')
 
 module.exports = {
+  isFile,
   isDirectory,
   getOutfilePath,
-  getOutfileName,
   logError,
-  validatePaths,
+  validateDirPath,
+  validateFilePath,
+  validateOutfileName
 }
 
 // misc utils
@@ -25,85 +27,86 @@ function logError(msg, err) {
  * @param {string} outDir - The out file directory
  * @returns {string} - The complete out file path
  */
-function getOutfilePath(srcFilePath, outDir) {
-  return pathUtils.join(outDir, getOutfileName(srcFilePath))
+function getOutfilePath(outDir, outFileName) {
+  return pathUtils.join(outDir, outFileName || 'bundle.js')
 }
 
-/**
- * Gets the out file name from the source file name/path.
- * (Swaps '.js' for '.json')
- * 
- * @param {string} srcFilePath - The source file path
- */
-function getOutfileName (srcFilePath) {
-  const split = srcFilePath.split('/')
-  return split[split.length - 1].match(/(.+)\.js/)[1] + '.json'
+function validateOutfileName(str) { 
+  if (!str.endsWith('.js') || str.indexOf('/') !== -1) {
+    throw new Error(`Invalid outfile name: ${str}`)
+  }
+  return true
 }
 
 /**
  * Validates paths for building or watching file(s).
  * 
  * @param {object} argv - Argv object from yargs
- * @param {string} argv.src - The src path
- * @param {string} argv.dest - The destination path
+ * @param {string} argv.src - The src file path
+ * @param {string} argv.dist - The destination directory path
  */
-async function validatePaths(argv) {
+async function validateFilePath(fileName) {
 
-  const { src, dest } = argv
+  const exists = await isFile(fileName)
 
-  if (!src || !dest) {
-    throw new Error('Invalid params: must provide src and dest')
+  if (!exists) {
+    throw new Error(`Invalid params: '${fileName}' is not a file or does not exist.`)
   }
 
-  const result = {
-    src: {
-      path: src,
-      isDirectory: await isDirectory(src),
-    },
-    dest: {
-      path: dest,
-      isDirectory: await isDirectory(dest),
-    }
+  return true
+}
+
+async function validateDirPath(dirName, createDir) {
+
+  const exists = await isDirectory(dirName, createDir)
+
+  if (!exists) {
+    throw new Error(`Invalid params: '${dirName}' is not a directory or could not be created.`)
   }
 
-  if (result.src.isDirectory && !result.dest.isDirectory) {
-    throw new Error(
-      `Invalid params: If 'src' is a directory, then 'dest' must be a directory. ` +
-      `Does your destination directory exist?`
-      )
-  }
-
-  if (!result.dest.isDirectory && !result.dest.path.endsWith('.json')) {
-    throw new Error('Invalid params: Output file must be a JSON file.')
-  }
-
-  if (!result.src.isDirectory && result.dest.isDirectory) {
-    result.dest = {
-      path: pathUtils.join(result.dest.path, getOutfileName(result.src.path)),
-      isDirectory: false,
-    }
-  }
-
-  return result
+  return true
 }
 
 /**
- * Checks whether the given path string resolves to an existing directory.
- * @param {string} p - the path string to check
+ * Checks whether the given path string resolves to an existing directory, or 
+ * if a directory was created.
+ * @param {string} p - The path string to check
+ * @param {boolean} createDir - Whether to create the directory if it doesn't exist
  * @returns {boolean} - Whether the given path is an existing directory
  */
-function isDirectory(p) {
+function isDirectory(p, createDir) {
   return new Promise((resolve, _) => {
     fs.stat(p, (err, stats) => {
       if (err || !stats) {
-        if (err.code === 'ENOENT') return resolve(false)
-        logError(
-          `Invalid params: Path '${p}' could not be resolved.`,
-          err
-        )
-        process.exit(1)
+        if (err.code === 'ENOENT') {
+          if (!createDir) return resolve(false)
+          try {
+            fs.mkdirSync(p)
+            return resolve(true)
+          } catch (err) {
+            logError(`Directory '${p}' could not be created.`, err)
+            process.exit(1)
+          }
+        }
+        return resolve(false)
       }
       resolve(stats.isDirectory())
+    })
+  })
+}
+
+/**
+ * Checks whether the given path string resolves to an existing file.
+ * @param {string} p - The path string to check
+ * @returns {boolean} - Whether the given path is an existing file
+ */
+function isFile(p) {
+  return new Promise((resolve, _) => {
+    fs.stat(p, (err, stats) => {
+      if (err || !stats) {
+        return resolve(false)
+      }
+      resolve(stats.isFile())
     })
   })
 }

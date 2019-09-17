@@ -4,8 +4,10 @@ const fs = require('fs')
 const yargs = require('yargs')
 
 const {
-  build, manifest, serve, watch
+  build, manifest, serve, sesEval, watch
 } = require('./src/commands')
+
+const { logError } = require('./src/utils')
 
 // globals
 
@@ -15,26 +17,51 @@ global.mm_plugin = {
 
 // yargs config and constants
 
-const CONFIG_PATH = './.mm-plugin.json'
+const CONFIG_PATH = '.mm-plugin.json'
 
 const builders = {
   src: {
-    describe: 'Source file or directory',
+    describe: 'Source file',
     type: 'string',
+    default: 'index.js'
   },
-  dest: {
-    describe: 'Output file or directory',
+  dist: {
+    describe: 'Output directory',
     type: 'string',
+    default: 'dist'
+  },
+  plugin: {
+    describe: 'Plugin bundle',
+    type: 'string',
+    default: 'dist/bundle.js'
   },
   root: {
     describe: 'Server root directory',
     type: 'string',
+    default: '.'
   },
   port: {
     describe: 'Server port',
     type: 'number',
     default: 8080
   },
+  outfile: {
+    alias: 'n',
+    describe: 'Output file name',
+    type: 'string'
+  },
+  manifest: {
+    alias: 'm',
+    describe: 'Validate project package.json as a plugin manifest',
+    boolean: true,
+    default: true,
+  },
+  populate: {
+    alias: 'p',
+    describe: 'Update plugin manifest properties of package.json',
+    boolean: true,
+    default: true,
+  }
 }
 
 applyConfig()
@@ -43,26 +70,41 @@ applyConfig()
 
 yargs
   .usage('Usage: $0 [command] [options]')
-  .example('$0 plugin.js ./out', `\tBuild 'plugin.js' as './out/plugin.json'`)
-  .example('$0 serve ./out', `\tServe files in './out' on port 8080`)
-  .example('$0 serve ./out 9000', `\tServe files in './out' on port 9000`)
-  .example('$0 watch ./src ./out', `\tRebuild files in './src' to './out' on change`)
+  .example('$0 index.js out', `\tBuild 'plugin.js' as './out/bundle.js'`)
+  .example('$0 index.js out -n plugin.js', `\tBuild 'plugin.js' as './out/plugin.js'`)
+  .example('$0 serve out', `\tServe files in './out' on port 8080`)
+  .example('$0 serve out 9000', `\tServe files in './out' on port 9000`)
+  .example('$0 watch index.js out', `\tRebuild './out/bundle.js' on changes to files in 'index.js' parent and child directories`)
   .command(
-    ['$0 [src] [dest]', 'build', 'b'],
-    'Build plugin file(s) from source',
+    ['$0 [src] [dist]', 'build', 'b'],
+    'Build plugin from source',
     yargs => {
       yargs
         .positional('src', builders.src)
-        .positional('dest', builders.dest)
+        .positional('dist', builders.dist)
+        .option('outfile-name', builders.outfile)
+        .option('manifest', builders.manifest)
+        .option('populate', builders.populate)
+        .implies('populate', 'manifest')
     },
     argv => build(argv)
   )
   .command(
-    ['manifest [src]', 'm'],
-    'Generate plugin manifest file(s) from source',
+    ['eval [plugin]', 'e'],
+    'Evaluate plugin bundle in SES',
     yargs => {
       yargs
-        .positional('src', builders.src)
+        .positional('plugin', builders.plugin)
+    },
+    argv => sesEval(argv)
+  )
+  .command(
+    ['manifest [dist]', 'm'],
+    builders.manifest.describe,
+    yargs => {
+      yargs
+        .positional('dist', builders.dist)
+        .option('populate', builders.populate)
     },
     argv => manifest(argv)
   )
@@ -77,12 +119,13 @@ yargs
     argv => serve(argv)
   )
   .command(
-    ['watch [src] [dest]', 'w'],
+    ['watch [src] [dist]', 'w'],
     'Build file(s) on change',
     yargs => {
       yargs
         .positional('src', builders.src)
-        .positional('dest', builders.dest)
+        .positional('dist', builders.dist)
+        .option('outfile-name', builders.outfile)
     },
     argv => watch(argv)
   )
@@ -92,7 +135,8 @@ yargs
     describe: 'Display original errors'
   })
   .middleware(argv => {
-    mm_plugin.verbose = Boolean(argv.verbose)
+    assignGlobals(argv)
+    sanitizeInputs(argv)
   })
   .help()
   .alias('help', 'h')
@@ -105,6 +149,22 @@ yargs
 
 // misc
 
+function assignGlobals (argv) {
+  mm_plugin.verbose = Boolean(argv.verbose)
+}
+
+function sanitizeInputs (argv) {
+  Object.keys(argv).forEach(key => {
+    if (typeof argv[key] === 'string') {
+      if (argv[key] === './') {
+        argv[key] = '.'
+      } else if (argv[key].startsWith('./')) {
+        argv[key] = argv[key].substring(2)
+      }
+    }
+  })
+}
+
 /**
  * Attempts to read the config file and apply the config to
  * globals.
@@ -113,19 +173,31 @@ function applyConfig () {
   let cfg = {}
   try {
     cfg = JSON.parse(fs.readFileSync(CONFIG_PATH))
-  } catch (_) {}
+  } catch (err) {
+    if (err.code !== 'ENOENT') {
+      logError(`Warning: Could not parse .mm-plugin.json`, err)
+    }
+    return
+  }
   if (!cfg || typeof cfg !== 'object' || Object.keys(cfg).length === 0) return
-  if (cfg['src']) {
+  if (cfg.hasOwnProperty('src')) {
     builders.src.default = cfg['src']
   }
-  if (cfg['dest']) {
-    builders.dest.default = cfg['dest']
-    builders.root.default = cfg['dest']
+  if (cfg.hasOwnProperty('dist')) {
+    builders.dist.default = cfg['dist']
+    builders.root.default = cfg['dist']
+    builders.plugin.default = cfg['dist']
   }
-  if (cfg['root']) {
+  if (cfg.hasOwnProperty('root')) {
     builders.root.default = cfg['root']
   }
-  if (cfg['port']) {
+  if (cfg.hasOwnProperty('port')) {
     builders.port.default = cfg['port']
+  }
+  if (cfg.hasOwnProperty('manifest')) {
+    builders.manifest.default = cfg['manifest']
+  }
+  if (cfg.hasOwnProperty('populate')) {
+    builders.manifest.default = cfg['populate']
   }
 }

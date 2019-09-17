@@ -2,7 +2,6 @@
 const fs = require('fs')
 const browserify = require('browserify')
 const terser = require('terser')
-// const uglify = require('uglify-js')
 
 const { logError } = require('./utils')
 
@@ -17,40 +16,37 @@ module.exports = {
  * @param {string} dest - The destination file path
  */
 function bundle(src, dest) {
-  fs.readFile(src, 'utf8', function(err, source) {
+  return new Promise((resolve, _reject) => {
 
-    if (err) {
-      logError(`Build failure: could not read file '${src}'`, err)
-      return
-    }
-
-    const outStream = openManifest(dest)
+    const outStream = createWriteStream(dest)
 
     browserify(src)
       .plugin('sesify')
-      // .transform('babelify', {
-      //   presets: ['@babel/preset-env'],
-      // })
-      .transform('uglifyify', { sourceMap: false })
+      .transform('babelify', {
+        presets: ['@babel/preset-env'],
+      })
       .bundle((err, bundle) => {
 
         if (err) writeError(err)
 
-        const { error, code } = terser.minify(bundle.toString())
-        if (error) {
-          writeError(error.message, error, dest)
-        }
+        outStream.end(bundle)
+        // outStream.end(bundle.toString())
 
-        outStream.write(JSON.stringify({
-          bundle: code,
-          requestedPermissions: parseRequestedPermissions(source)
-        }, null, 2))
+        // TODO: minify without minifying SES prelude
+        // const { error, code } = terser.minify(bundle.toString())
+        // if (error) {
+        //   writeError(error.message, error, dest)
+        // }
+        // outStream.end(code)
+
+
         console.log(`Build success: '${src}' plugin bundled as '${dest}'`)
+        resolve(true)
       })
   })
 }
 
-function openManifest (dest) {
+function createWriteStream (dest) {
   const outStream = fs.createWriteStream(dest, {
     autoClose: false,
     encoding: 'utf8',
@@ -59,20 +55,6 @@ function openManifest (dest) {
     writeError(err.message, err, dest)
   })
   return outStream
-}
-
-function parseRequestedPermissions (source) {
-  let requestedPermissions = source.match(
-    /ethereumProvider\.[A-z0-9_\-$]+/g
-  )
-
-  if (requestedPermissions) {
-    requestedPermissions = requestedPermissions.reduce(
-      (acc, current) => ({ ...acc, [current.split('.')[1]]: {} }),
-      {}
-    )
-  }
-  return requestedPermissions
 }
 
 function writeError(msg, err, destFilePath) {
