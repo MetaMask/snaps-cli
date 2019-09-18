@@ -4,7 +4,7 @@ const fs = require('fs')
 const yargs = require('yargs')
 
 const {
-  build, manifest, serve, sesEval, watch
+  build, manifest, serve, pluginEval, watch
 } = require('./src/commands')
 
 const { logError } = require('./src/utils')
@@ -91,12 +91,12 @@ yargs
   )
   .command(
     ['eval [plugin]', 'e'],
-    'Evaluate plugin bundle in SES',
+    `Call 'eval' on plugin bundle to ensure it works`,
     yargs => {
       yargs
         .positional('plugin', builders.plugin)
     },
-    argv => sesEval(argv)
+    argv => pluginEval(argv)
   )
   .command(
     ['manifest [dist]', 'm'],

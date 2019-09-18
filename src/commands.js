@@ -1,24 +1,20 @@
 
 const fs = require('fs')
-const pathUtils = require('path')
 const chokidar = require('chokidar')
 const http = require('http')
 const serveHandler = require('serve-handler')
-const dequal = require('fast-deep-equal')
-const SES = require('ses')
 
 const { bundle } = require('./build')
 const {
   logError, getOutfilePath, validateDirPath,
   validateFilePath, validateOutfileName,
-  isFile
 } = require('./utils')
 
 const manifest = require('./manifest')
 
 module.exports = {
   build,
-  sesEval,
+  pluginEval,
   serve,
   watch,
   manifest,
@@ -154,15 +150,14 @@ async function serve (argv) {
 
 // eval
 
-async function sesEval (argv) {
+async function pluginEval (argv) {
   const { plugin } = argv
   await validateFilePath(plugin)
-  const s = SES.makeSESRootRealm({consoleMode: 'allow', errorStackMode: 'allow'})
   try {
-    s.evaluate(fs.readFileSync(plugin))
-    console.log('SES evaluation successful!')
+    eval(fs.readFileSync(plugin))
+    console.log('Plugin evaluation successful!')
   } catch (err) {
-    logError(`SES Evaluation error: ${err.message}`, err)
+    logError(`Plugin Evaluation error: ${err.message}`, err)
     process.exit(1)
   }
 }
