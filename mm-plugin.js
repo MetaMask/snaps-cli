@@ -61,6 +61,12 @@ const builders = {
     describe: 'Update plugin manifest properties of package.json',
     boolean: true,
     default: true,
+  },
+  eval: {
+    alias: 'e',
+    describe: `Call 'eval' on plugin bundle to ensure it works`,
+    boolean: true,
+    default: true,
   }
 }
 
@@ -83,6 +89,7 @@ yargs
         .positional('src', builders.src)
         .positional('dist', builders.dist)
         .option('outfile-name', builders.outfile)
+        .option('eval', builders.eval)
         .option('manifest', builders.manifest)
         .option('populate', builders.populate)
         .implies('populate', 'manifest')
@@ -91,7 +98,7 @@ yargs
   )
   .command(
     ['eval [plugin]', 'e'],
-    `Call 'eval' on plugin bundle to ensure it works`,
+    builders.eval.describe,
     yargs => {
       yargs
         .positional('plugin', builders.plugin)
@@ -230,5 +237,8 @@ function applyConfig () {
   }
   if (cfg.hasOwnProperty('populate')) {
     builders.populate.default = cfg['populate']
+  }
+  if (cfg.hasOwnProperty('eval')) {
+    builders.eval.default = cfg['eval']
   }
 }

@@ -33,15 +33,19 @@ module.exports = {
  * @param {string} argv.dist - The output directory path
  * @param {string} argv.'outfile-name' - The output file name
  */
-async function build(argv) {
+async function build (argv) {
 
   const { src, dist, ['outfile-name']: outfileName } = argv
   if (outfileName) validateOutfileName(outfileName)
   await validateFilePath(src)
   await validateDirPath(dist, true)
 
-  const result = await bundle(src, getOutfilePath(dist, outfileName))
-  if (result && argv.manifest) manifest(argv)
+  const outfilePath = getOutfilePath(dist, outfileName)
+  const result = await bundle(src, outfilePath)
+  if (result && argv.eval) {
+    await pluginEval({ ...argv, plugin: outfilePath })
+    if (argv.manifest) manifest(argv)
+  }
 }
 
 // watch
@@ -157,7 +161,8 @@ async function pluginEval (argv) {
     eval(fs.readFileSync(plugin))
     console.log('Plugin evaluation successful!')
   } catch (err) {
-    logError(`Plugin Evaluation error: ${err.message}`, err)
+    logError(`Plugin evaluation error: ${err.message}`, err)
     process.exit(1)
   }
+  return true
 }
