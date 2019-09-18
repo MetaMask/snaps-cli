@@ -3,6 +3,7 @@ const fs = require('fs')
 const chokidar = require('chokidar')
 const http = require('http')
 const serveHandler = require('serve-handler')
+const SES = require('ses')
 
 const { bundle } = require('./build')
 const {
@@ -158,7 +159,10 @@ async function pluginEval (argv) {
   const { plugin } = argv
   await validateFilePath(plugin)
   try {
-    eval(fs.readFileSync(plugin))
+    const s = SES.makeSESRootRealm({ consoleMode: 'allow', errorStackMode: 'allow' })
+    if (!s.evaluate(fs.readFileSync(plugin))) {
+      throw new Error(`SES.evaluate returned falsy value.`)
+    }
     console.log('Plugin evaluation successful!')
   } catch (err) {
     logError(`Plugin evaluation error: ${err.message}`, err)

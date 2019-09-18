@@ -1,7 +1,7 @@
 
 const fs = require('fs')
 const browserify = require('browserify')
-const terser = require('terser')
+// const terser = require('terser')
 
 const { logError } = require('./utils')
 
@@ -18,10 +18,9 @@ module.exports = {
 function bundle(src, dest) {
   return new Promise((resolve, _reject) => {
 
-    const outStream = createWriteStream(dest)
+    const bundleStream = createBundleStream(dest)
 
     browserify(src)
-      .plugin('sesify')
       .transform('babelify', {
         presets: ['@babel/preset-env'],
       })
@@ -29,36 +28,38 @@ function bundle(src, dest) {
 
         if (err) writeError(err)
 
-        outStream.end(bundle)
-        // outStream.end(bundle.toString())
-
-        // TODO: minify without minifying SES prelude
+        // TODO: minification
         // const { error, code } = terser.minify(bundle.toString())
         // if (error) {
         //   writeError(error.message, error, dest)
         // }
-        // outStream.end(code)
+        // let strData = code.toString().trim()
 
+        let strData = bundle.toString().trim()
+        if (strData.length === 0) writeError(`Bundled code is empty.`, null, dest)
 
-        console.log(`Build success: '${src}' plugin bundled as '${dest}'`)
-        resolve(true)
+        bundleStream.end(strData, (err) => {
+          if (err) writeError(err.message, err, dest)
+          console.log(`Build success: '${src}' plugin bundled as '${dest}'`)
+          resolve(true)
+        })
       })
   })
 }
 
-function createWriteStream (dest) {
-  const outStream = fs.createWriteStream(dest, {
+function createBundleStream (dest) {
+  const bundleStream = fs.createWriteStream(dest, {
     autoClose: false,
     encoding: 'utf8',
   })
-  outStream.on('error', err => {
+  bundleStream.on('error', err => {
     writeError(err.message, err, dest)
   })
-  return outStream
+  return bundleStream
 }
 
 function writeError(msg, err, destFilePath) {
   logError('Write error: ' + msg, err)
-  fs.unlink(destFilePath, () => {})
+  fs.unlinkSync(destFilePath)
   process.exit(1)
 }
