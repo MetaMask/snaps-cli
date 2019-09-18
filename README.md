@@ -12,8 +12,8 @@ touch index.js
 mm-plugin
 ```
 
-This will build to `myPlugin/dist/bundle.js` and attempt to set the required
-custom properties on `package.json`.
+This will build to `myPlugin/dist/bundle.js` from `index.js` and its dependencies,
+and attempt to set the required custom properties on `package.json`.
 
 ## MetaMask Plugins
 
@@ -46,6 +46,10 @@ This tool has default arguments assuming the following project structure:
 Source files other than `index.js` are located through its imports.
 The defaults can be overwritten using the `.mm-plugin.json` config file,
 [see below](#configuration-file).
+
+### Permissions
+
+TODO
 
 ## Usage
 

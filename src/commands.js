@@ -5,6 +5,7 @@ const chokidar = require('chokidar')
 const http = require('http')
 const serveHandler = require('serve-handler')
 const dequal = require('fast-deep-equal')
+const SES = require('ses')
 
 const { bundle } = require('./build')
 const {
@@ -151,8 +152,17 @@ async function serve (argv) {
 
 // eval
 
-function sesEval (argv) {
-
+async function sesEval (argv) {
+  const { plugin } = argv
+  await validateFilePath(plugin)
+  const s = SES.makeSESRootRealm({consoleMode: 'allow', errorStackMode: 'allow'})
+  try {
+    s.evaluate(fs.readFileSync(plugin))
+    console.log('SES evaluation successful!')
+  } catch (err) {
+    logError(`SES Evaluation error: ${err.message}`, err)
+    process.exit(1)
+  }
 }
 
 // manifest

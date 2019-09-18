@@ -170,6 +170,35 @@ function sanitizeInputs (argv) {
  * globals.
  */
 function applyConfig () {
+
+  // first, attempt to read and apply config from package.json
+  let pkg = {}
+  try {
+    pkg = JSON.parse(fs.readFileSync('package.json'))
+
+    if (pkg.main) {
+      builders.src.default = pkg.main
+    }
+
+    if (pkg.web3Wallet) {
+      const { bundle } = pkg.web3Wallet
+      if (bundle) {
+        builders.plugin.default = bundle
+        let dist
+        if (bundle.indexOf('/') !== -1) {
+          dist = bundle.substr(0, bundle.indexOf('/') + 1)
+        } else {
+          dist = '.'
+        }
+        builders.dist.default = dist
+        builders.root.default = dist
+      }
+    }
+  } catch (err) {
+    logError(`Warning: Could not parse package.json`, err)
+  }
+
+  // second, attempt to read and apply config from .mm-plugin.json
   let cfg = {}
   try {
     cfg = JSON.parse(fs.readFileSync(CONFIG_PATH))
@@ -177,7 +206,7 @@ function applyConfig () {
     if (err.code !== 'ENOENT') {
       logError(`Warning: Could not parse .mm-plugin.json`, err)
     }
-    return
+    process.exit(1)
   }
   if (!cfg || typeof cfg !== 'object' || Object.keys(cfg).length === 0) return
   if (cfg.hasOwnProperty('src')) {
@@ -186,7 +215,9 @@ function applyConfig () {
   if (cfg.hasOwnProperty('dist')) {
     builders.dist.default = cfg['dist']
     builders.root.default = cfg['dist']
-    builders.plugin.default = cfg['dist']
+  }
+  if (cfg.hasOwnProperty('plugin')) {
+    builders.plugin.default = cfg['plugin']
   }
   if (cfg.hasOwnProperty('root')) {
     builders.root.default = cfg['root']
@@ -198,6 +229,6 @@ function applyConfig () {
     builders.manifest.default = cfg['manifest']
   }
   if (cfg.hasOwnProperty('populate')) {
-    builders.manifest.default = cfg['populate']
+    builders.populate.default = cfg['populate']
   }
 }
