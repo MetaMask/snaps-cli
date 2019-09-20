@@ -9,7 +9,7 @@ wallet.registerRpcMessageHandler(async (originString, requestObject) => {
   }
 })
 
-function pong (origin) {
+function pong (originString) {
   const approved = confirm('Do you want domain ' + originString +' to receive a pong?')
   if (approved) {
     return 'Pong!'

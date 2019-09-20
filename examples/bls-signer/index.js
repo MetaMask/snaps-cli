@@ -1,10 +1,10 @@
 const { errors: rpcErrors } = require('eth-json-rpc-errors')
-import * as bls from "bls12-381";
+const bls = require('noble-bls12-381')
 
 const DOMAIN = 2;
 const PRIVATE_KEY_PROMISE = wallet.getAppKey();
 
-wallet.registerRpcMessageHandler(async (originString, requestObject) => {
+wallet.registerRpcMessageHandler(async (_originString, requestObject) => {
   switch (requestObject.method) {
 
     case 'getAccount':
@@ -28,6 +28,6 @@ wallet.registerRpcMessageHandler(async (originString, requestObject) => {
 
 async function getPubKey () {
   const PRIV_KEY = await PRIVATE_KEY_PROMISE;
-  return bls.getPublicKey(PRIVATE_KEY);
+  return bls.getPublicKey(PRIV_KEY);
 }
 
