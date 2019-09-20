@@ -39,6 +39,7 @@ function bundle(src, dest) {
 
         let strData = postProcess(bundle.toString())
 
+
         closeBundleStream(bundleStream, strData)
         .then(() => {
           console.log(`Build success: '${src}' plugin bundled as '${dest}'`)
@@ -83,6 +84,15 @@ function createBundleStream (dest) {
     writeError(err.message, err, dest)
   })
   return stream
+}
+
+function postProcess(str) {
+  str = str.trim()
+  str = str.replace(/\.import\(/g, '["import"](')
+  str = str.replace(/([^\w]+)eval\(["'`]{1}(require\([^)]*\))["'`]{1}\)/g, '$1$2')
+  str = str.replace(/([^\w]+)eval(\([^)]*\))/g, '$1$2')
+  if (str.length === 0) throw new Error(`Bundled code is empty after postprocessing.`)
+  return str
 }
 
 function writeError(msg, err, destFilePath) {
