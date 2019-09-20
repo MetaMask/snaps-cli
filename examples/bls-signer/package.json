@@ -9,8 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bls-signatures": "^0.1.9",
     "eth-json-rpc-errors": "^1.1.0",
-    "noble-bls12-381": "^0.2.3",
     "npm": "^6.11.3"
   }
 }
