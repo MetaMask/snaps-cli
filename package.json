@@ -14,7 +14,10 @@
   },
   "devDependencies": {
     "3box": "^1.10.10",
-    "eth-json-rpc-errors": "^1.1.0"
+    "eth-json-rpc-errors": "^1.1.0",
+    "install": "^0.13.0",
+    "noble-bls12-381": "^0.2.3",
+    "npm": "^6.11.3"
   },
   "bin": {
     "mm-plugin": "./mm-plugin.js"
