@@ -4,7 +4,7 @@ A CLI tool for building MetaMask plugins.
 
 ## Basic Usage
 
-Ensure that you are using `node@^10.16.3`.
+Ensure that you are using `node@10.16.3`.
 
 ```bash
 mkdir myPlugin
@@ -63,6 +63,8 @@ or `rpc-cap`](https://github.com/MetaMask/json-rpc-capabilities-middleware).
 See examples in this repo for details.
 
 ## Usage
+
+Ensure that you are using `node@10.16.3`.
 
 `mm-plugin --help`
 ```
