@@ -1,9 +1,9 @@
 const { errors: rpcErrors } = require('eth-json-rpc-errors')
 
-const userBalance = 0;
-const created = false;
+let userBalance = 0;
+let created = false;
 
-const asset = {
+let asset = {
   symbol: 'CUSTOM',
   balance: userBalance.toString(),
   identifier: 'this-plugins-only-asset',
@@ -27,19 +27,20 @@ wallet.registerRpcMessageHandler(async (originString, requestObject) => {
       updateUi();
       return userBalance;
     default:
-      throw rpcErrors.eth.methodNotFound()
+      throw rpcErrors.methodNotFound()
   }
 })
 
 function updateUi () {
   asset.balance = String(userBalance);
+  let method = created ? 'updateAsset' : 'addAsset';
 
+  // addAsset will update if identifier matches.
   wallet.send({
     method: 'wallet_manageAssets',
-    params: [
-      created ? 'updateAsset' : 'createAsset',
-      asset,
-    ],
+    params: [ method, asset ],
   })
+
+  created = true
 }
 

@@ -16,7 +16,7 @@
 
 <script>
 
-const origin = 'http://localhost:8085'
+const origin = 'http://localhost:8085/package.json'
 const pluginOrigin = `wallet_plugin_${origin}`
 
 const connectButton = document.querySelector('button.connect')
@@ -35,9 +35,9 @@ async function connect () {
 
 async function checkBalance() {
   try {
-    const response = await ethereum.send(pluginOrigin, [
-      'getBalance',
-    ])
+    const response = await ethereum.send(pluginOrigin, {
+      method: 'getBalance',
+    })
 
     alert('current balance: ' + response.result)
   } catch (err) {
@@ -48,12 +48,13 @@ async function checkBalance() {
 
 async function mint () {
   try {
-    const response = await ethereum.send(pluginOrigin, [
-      'mint',
-      1,
-    ])
 
-    alert('current balance: ' + response.result)
+    const response = await ethereum.send(pluginOrigin, {
+      method: 'mint',
+      params: [1]
+    })
+
+    alert('new balance: ' + response.result)
   } catch (err) {
     console.error(err)
     alert('Problem minting token: ' + err)
