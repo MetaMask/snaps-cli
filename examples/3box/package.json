@@ -29,6 +29,7 @@
     "initialPermissions": {}
   },
   "dependencies": {
-    "3box": "^1.10.10"
+    "3box": "^1.10.10",
+    "identity-wallet": "^0.1.0"
   }
 }
