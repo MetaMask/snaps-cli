@@ -21,7 +21,7 @@ const connectButton = document.querySelector('button.connect')
 const sendButton = document.querySelector('button.sendPing')
 
 connectButton.addEventListener('click', connect)
-sendButton.addEventListener('click', send)
+// sendButton.addEventListener('click', send)
 
 async function connect () {
   await ethereum.send('wallet_requestPermissions', [{
