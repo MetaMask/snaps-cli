@@ -1,0 +1,35 @@
+<!doctype html>
+
+<html>
+
+</head>
+  <title>Hello Custom Account!</title>
+</head>
+
+<body>
+  <h1>Hello Custom Account!</h1>
+  <p>Make sure the plugin bundle is currently hosted on localhost:8089 for this to work.</p>
+  <button class="connect">Connect and Install</button>
+</body>
+
+<script>
+
+const origin = 'http://localhost:8089/package.json'
+const pluginOrigin = `wallet_plugin_${origin}`
+
+const connectButton = document.querySelector('button.connect')
+
+connectButton.addEventListener('click', connect)
+
+async function connect () {
+  await ethereum.send({
+    method: 'wallet_requestPermissions',
+    params: [{
+      [pluginOrigin]: {}
+    }]
+  })
+}
+
+</script>
+
+</html>
