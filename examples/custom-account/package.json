@@ -14,6 +14,8 @@
       "url": "http://localhost:8089/dist/bundle.js"
     },
     "initialPermissions": {
+      "confirm": {},
+      "prompt": {},
       "wallet_manageIdentities": {}
     }
   },

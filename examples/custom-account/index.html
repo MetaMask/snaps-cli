@@ -3,13 +3,24 @@
 <html>
 
 </head>
-  <title>Hello Custom Account!</title>
+  <title>Hello Offline Account!</title>
 </head>
 
 <body>
-  <h1>Hello Custom Account!</h1>
+
+  <h1>Hello Offline Account!</h1>
   <p>Make sure the plugin bundle is currently hosted on localhost:8089 for this to work.</p>
-  <button class="connect">Connect and Install</button>
+
+  <button class="connectAndInstall">Connect and Install</button>
+  <button class="connect">Connect Only</button>
+
+  <br>
+  <input class="address" placeholder="Ethereum Address"></input>
+  <button class="add">Add Offline Account to Wallet</button>
+
+  <br>
+  <button class="tip">Tip</button>
+
 </body>
 
 <script>
@@ -17,18 +28,76 @@
 const origin = 'http://localhost:8089/package.json'
 const pluginOrigin = `wallet_plugin_${origin}`
 
+const connectAndInstallButton = document.querySelector('button.connectAndInstall')
 const connectButton = document.querySelector('button.connect')
+const addButton = document.querySelector('button.add')
+const tipButton = document.querySelector('button.tip')
 
+connectAndInstallButton.addEventListener('click', connectAndInstall)
 connectButton.addEventListener('click', connect)
+addButton.addEventListener('click', add)
+tipButton.addEventListener('click', tip)
+
+async function connectAndInstall () {
+  await ethereum.send({
+    method: 'wallet_requestPermissions',
+    params: [{
+      'eth_accounts': {},
+      [pluginOrigin]: {},
+    }]
+  })
+}
 
 async function connect () {
   await ethereum.send({
     method: 'wallet_requestPermissions',
     params: [{
-      [pluginOrigin]: {}
+      'eth_accounts': {},
     }]
   })
 }
+
+async function add () {
+  const input = document.querySelector('input.address').value
+
+  const result = await ethereum.send({
+    method: pluginOrigin,
+    params: [{
+      method: 'addAccount',
+      params: [ input ],
+    }]
+  })
+
+  if (result) {
+    alert(`Apparent success: ${JSON.stringify(result)}!`)
+  }
+}
+
+async function tip () {
+  const response = await ethereum.send({
+    method: 'eth_accounts',
+  })
+  const account = response.result[0]
+  console.log(`Account ${account} chosen from ${JSON.stringify(response)}`)
+
+  try {
+    const response2 = await ethereum.send({
+      method: 'eth_sendTransaction',
+      params: [{
+        from: account,
+        value: '0x100000000000000000',
+        to: '0x55e2780588aa5000f464f700d2676fd0a22ee160',
+      }]
+    })
+
+    if (response2) {
+      alert(`Site received tip result: ${response2.result}!`)
+    }
+  } catch (err) {
+    alert(`Problem tipping: ${JSON.stringify(err)}`)
+  }
+}
+
 
 </script>
 
