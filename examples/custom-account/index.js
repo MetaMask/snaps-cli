@@ -25,9 +25,9 @@ wallet.registerAccountMessageHandler(async (origin, req) => {
     case 'wallet_signTypedData':
     case 'wallet_signTypedData_v3':
     case 'wallet_signTypedData_v4':
-      const result = await prompt(`<div style="width: 100%;overflow-wrap: break-word;">
+      const result = await prompt({ customHtml: `<div style="width: 100%;overflow-wrap: break-word;">
         The site from <span style="font-weight: 900;color: #037DD6;"><a href="${origin}">${origin}</a></span> requests you sign this with your offline strategy:\n${JSON.stringify(req)}
-        </div>`)
+        </div>`})
       return result
     default:
       throw rpcErrors.methodNotFound(req)
