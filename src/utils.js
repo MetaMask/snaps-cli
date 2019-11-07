@@ -14,8 +14,10 @@ const permRequestKeys = [
 ]
 
 const CONFIG_PATHS = [
+  'snap.config.json',
+  // backwards compatibility
   'mm-plugin.config.json',
-  '.mm-plugin.json' // backwards compatibility
+  '.mm-plugin.json',
 ]
 
 module.exports = {
