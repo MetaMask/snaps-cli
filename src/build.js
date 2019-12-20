@@ -13,6 +13,28 @@ const lavamoatOpts = {
 const lavamoatPluginOpts = [
   [ 'lavamoat-browserify', lavamoatOpts ],
 ]
+// These globals are already added to the snaps-beta as endowments,
+// and so do not need to initiate warnings yet:
+const permittedGlobals = [
+  'console',
+  'BigInt',
+  'setInterval',
+  'clearInterval',
+  'setTimeout',
+  'clearTimeout',
+  'crypto',
+  'crypto.getRandomValues',
+  'SubtleCrypto',
+  'fetch',
+  'XMLHttpRequest',
+  'WebSocket',
+  'Buffer',
+  'Date',
+  'MessageChannel',
+  'atob',
+  'btoa',
+  'define',
+]
 
 
 module.exports = {
@@ -30,7 +52,7 @@ module.exports = {
 function bundle(src, dest, argv) {
 
   // Warn about global usage by default:
-  if (argv.lava) {
+  if (argv.gw) {
     analyzeGlobalUsage(src, dest, argv)
   }
 
@@ -154,7 +176,9 @@ function listGlobals (lavamoatConfig) {
   }
   const globalArr = []
   for (let entry of globalSet) {
-    globalArr.push(entry)
+    if (!permittedGlobals.includes(entry)) {
+      globalArr.push(entry)
+    }
   }
   return globalArr
 }
