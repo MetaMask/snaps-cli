@@ -1,7 +1,13 @@
 
 const fs = require('fs')
 const browserify = require('browserify')
+const { inspectSource } = require('sesify-tofu')
 // const terser = require('terser')
+//
+const lavamoatOpts = {
+  config: './lavamoat-config.json',
+  writeAutoConfig: true,
+}
 
 const { logError } = require('./utils')
 
@@ -11,7 +17,7 @@ module.exports = {
 
 /**
  * Builds a Snap bundle JSON file from its JavaScript source.
- * 
+ *
  * @param {string} src - The source file path
  * @param {string} dest - The destination file path
  * @param {object} argv - argv from Yargs
@@ -46,6 +52,10 @@ function bundle(src, dest, argv) {
           if (bundle) {
             console.log(`Build success: '${src}' bundled as '${dest}'!`)
           }
+
+          const result = inspectSource(src);
+          console.log('TOFU RESULT', result);
+
           resolve(true)
         })
         .catch((err) => writeError('Write error:', err.message, err, dest))
@@ -89,7 +99,7 @@ async function closeBundleStream (stream, bundleString) {
  * - makes all direct calls to eval indirect
  * - wraps original bundle in anonymous function
  * - handles certain Babel-related edge cases
- * 
+ *
  * @param {string} bundleString - The bundle string
  * @returns {string} - The postprocessed bundle string
  */
