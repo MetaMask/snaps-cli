@@ -52,7 +52,7 @@ module.exports = {
 function bundle(src, dest, argv) {
 
   // Warn about global usage by default:
-  if (argv.gw) {
+  if (!argv.suppressWarnings) {
     analyzeGlobalUsage(src, dest, argv)
   }
 

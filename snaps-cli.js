@@ -28,13 +28,6 @@ const builders = {
     default: 'index.js'
   },
 
-  lava: {
-    alias: 'gw',
-    describe: 'Whether to output warnings about global API usage.',
-    type: 'boolean',
-    default: true,
-  },
-
   dist: {
     alias: 'd',
     describe: 'Output directory',
@@ -149,7 +142,6 @@ yargs
       yargs
         .option('src', builders.src)
         .option('dist', builders.dist)
-        .option('globalWarnings', builders.lava)
         .option('outfileName', builders.outfileName)
         .option('sourceMaps', builders.sourceMaps)
         .option('port', builders.port)
