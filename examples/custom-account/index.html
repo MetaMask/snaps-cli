@@ -1,0 +1,131 @@
+<!doctype html>
+
+<html>
+
+</head>
+  <title>Hello Offline Account!</title>
+</head>
+
+<body>
+
+  <h1>Hello Offline Account!</h1>
+  <p>Make sure the plugin bundle is currently hosted on localhost:8089 for this to work.</p>
+
+  <button class="connectAndInstall">Connect and Install</button>
+  <button class="connect">Connect Only</button>
+
+  <br>
+
+  <input class="address" placeholder="Ethereum Address"></input>
+  <button class="add">Add Offline Account to Wallet</button>
+
+  <br>
+
+  <button class="tip">Tip</button>
+
+  <br>
+
+  <input class="signAddress" placeholder="Plugin Account Address"></input>
+  <button class="sign">Sign</button>
+
+</body>
+
+<script>
+
+const snapId = new URL('package.json', window.location.href).toString()
+
+const connectAndInstallButton = document.querySelector('button.connectAndInstall')
+const connectButton = document.querySelector('button.connect')
+const addButton = document.querySelector('button.add')
+const tipButton = document.querySelector('button.tip')
+const signButton = document.querySelector('button.sign')
+
+connectAndInstallButton.addEventListener('click', connectAndInstall)
+connectButton.addEventListener('click', connect)
+addButton.addEventListener('click', add)
+tipButton.addEventListener('click', tip)
+signButton.addEventListener('click', sign)
+
+async function connectAndInstall () {
+  await ethereum.send({
+    method: 'wallet_enable',
+    params: [{
+      wallet_plugin: { [snapId]: {} },
+      'eth_accounts': {},
+    }]
+  })
+}
+
+async function connect () {
+  await ethereum.send({
+    method: 'wallet_requestPermissions',
+    params: [{
+      'eth_accounts': {},
+    }]
+  })
+}
+
+async function add () {
+  const input = document.querySelector('input.address').value
+
+  const result = await ethereum.send({
+    method: 'wallet_invokePlugin',
+    params: [snapId, {
+      method: 'addAccount',
+      params: [ input ],
+    }]
+  })
+
+  if (result) {
+    alert(`Apparent success: ${JSON.stringify(result)}!`)
+  }
+}
+
+async function tip () {
+  const accounts = await ethereum.send({
+    method: 'eth_accounts',
+  })
+  const account = accounts[0]
+  console.log(`Account ${account} chosen from ${JSON.stringify(accounts)}`)
+
+  try {
+    const response2 = await ethereum.send({
+      method: 'eth_sendTransaction',
+      params: [{
+        from: account,
+        value: '0x10000000000000',
+        to: '0x55e2780588aa5000f464f700d2676fd0a22ee160',
+      }]
+    })
+
+    if (response2) {
+      alert(`Site received tip result: ${response2}!`)
+    }
+  } catch (err) {
+    alert(`Problem tipping: ${JSON.stringify(err)}`)
+  }
+}
+
+async function sign () {
+
+  const account = document.querySelector('input.signAddress').value
+
+  const networkId = await ethereum.send('net_version')
+  const chainId = await ethereum.send('eth_chainId')
+
+  ethereum.sendAsync({
+    method: 'eth_sign',
+    params: [account, JSON.stringify('Do you want to live, deliciously?')],
+    from: account,
+  }, (err, result) => {
+    if (err) {
+      console.log(err)
+    } else {
+      signTypedDataResults.innerHTML = JSON.stringify(result)
+    }
+  })
+}
+
+</script>
+
+</html>
