@@ -26,21 +26,33 @@
   <input class="tipAddress" placeholder="Address to Tip"></input>
   <button class="tip">Tip</button>
 
+  <br>
+
+  <input class="signAddress" placeholder="Address to Sign With"></input>
+  <button class="sign">Sign</button>
+
+  <br>
+  <p>Sign Results: <span id="signResult"></span></p>
+
 </body>
 
 <script>
 
 const snapId = new URL('package.json', window.location.href).toString()
 
+const signResult = document.getElementById('signResult')
+
 const connectAndInstallButton = document.querySelector('button.connectAndInstall')
 const connectButton = document.querySelector('button.connect')
 const addButton = document.querySelector('button.add')
 const tipButton = document.querySelector('button.tip')
+const signButton = document.querySelector('button.sign')
 
 connectAndInstallButton.addEventListener('click', connectAndInstall)
 connectButton.addEventListener('click', connect)
 addButton.addEventListener('click', add)
 tipButton.addEventListener('click', tip)
+signButton.addEventListener('click', sign)
 
 async function connectAndInstall () {
   await ethereum.send({
@@ -107,21 +119,18 @@ async function tip () {
 async function sign () {
 
   const account = document.querySelector('input.signAddress').value
+  console.log(account)
 
-  const networkId = await ethereum.send('net_version')
-  const chainId = await ethereum.send('eth_chainId')
-
-  ethereum.sendAsync({
-    method: 'eth_sign',
-    params: [account, JSON.stringify('Do you want to live, deliciously?')],
-    from: account,
-  }, (err, result) => {
-    if (err) {
-      console.log(err)
-    } else {
-      signTypedDataResults.innerHTML = JSON.stringify(result)
-    }
-  })
+  try {
+    const result = await ethereum.send({
+      method: 'eth_sign',
+      params: [account, JSON.stringify('Do you want to live, deliciously?')],
+      from: account,
+    })
+    signResults.innerHtml = JSON.stringify(result)
+  } catch (err) {
+    console.log(err)
+  }
 }
 
 </script>

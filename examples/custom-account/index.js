@@ -57,7 +57,7 @@ async function confirm (message) {
 }
 
 async function prompt (message) {
-  const result = await wallet.send({ method: 'prompt', params: [message] });
+  const result = await wallet.send({ method: 'customPrompt', params: [message] });
   return result;
 }
 

@@ -15,7 +15,7 @@
     },
     "initialPermissions": {
       "confirm": {},
-      "prompt": {},
+      "customPrompt": {},
       "wallet_manageIdentities": {}
     }
   },
