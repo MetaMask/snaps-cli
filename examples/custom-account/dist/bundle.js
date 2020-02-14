@@ -38,7 +38,7 @@ wallet.registerAccountMessageHandler(async (origin, req) => {
 async function addAccount (params) {
   validate(params);
   const account = params[0]
-  const approved = await confirm(`Do you want to add offline account ${account} to your wallet?`)
+  const approved = await confirm(`Do you want to add observable account ${account} to your wallet?`)
   if (!approved) {
     throw ethErrors.provider.userRejectedRequest({ data: params })
   }

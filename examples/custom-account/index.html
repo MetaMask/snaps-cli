@@ -3,13 +3,15 @@
 <html>
 
 </head>
-  <title>Hello Offline Account!</title>
+  <title>Hello Observable Account!</title>
 </head>
 
 <body>
 
-  <h1>Hello Offline Account!</h1>
+  <h1>Hello Observable Account!</h1>
   <p>Make sure the plugin bundle is currently hosted on localhost:8089 for this to work.</p>
+
+  <p>Try adding this account: 0x55e2780588aa5000f464f700d2676fd0a22ee160</p>
 
   <button class="connectAndInstall">Connect and Install</button>
   <button class="connect">Connect Only</button>
@@ -17,16 +19,12 @@
   <br>
 
   <input class="address" placeholder="Ethereum Address"></input>
-  <button class="add">Add Offline Account to Wallet</button>
+  <button class="add">Add Observable Account to Wallet</button>
 
   <br>
 
+  <input class="tipAddress" placeholder="Address to Tip"></input>
   <button class="tip">Tip</button>
-
-  <br>
-
-  <input class="signAddress" placeholder="Plugin Account Address"></input>
-  <button class="sign">Sign</button>
 
 </body>
 
@@ -38,13 +36,11 @@ const connectAndInstallButton = document.querySelector('button.connectAndInstall
 const connectButton = document.querySelector('button.connect')
 const addButton = document.querySelector('button.add')
 const tipButton = document.querySelector('button.tip')
-const signButton = document.querySelector('button.sign')
 
 connectAndInstallButton.addEventListener('click', connectAndInstall)
 connectButton.addEventListener('click', connect)
 addButton.addEventListener('click', add)
 tipButton.addEventListener('click', tip)
-signButton.addEventListener('click', sign)
 
 async function connectAndInstall () {
   await ethereum.send({
@@ -66,13 +62,13 @@ async function connect () {
 }
 
 async function add () {
-  const input = document.querySelector('input.address').value
+  const address = document.querySelector('input.address').value
 
   const result = await ethereum.send({
     method: 'wallet_invokePlugin',
     params: [snapId, {
       method: 'addAccount',
-      params: [ input ],
+      params: [ address ],
     }]
   })
 
@@ -82,6 +78,8 @@ async function add () {
 }
 
 async function tip () {
+  const address = document.querySelector('input.tipAddress').value
+
   const accounts = await ethereum.send({
     method: 'eth_accounts',
   })
@@ -94,7 +92,7 @@ async function tip () {
       params: [{
         from: account,
         value: '0x10000000000000',
-        to: '0x55e2780588aa5000f464f700d2676fd0a22ee160',
+        to: address,
       }]
     })
 
