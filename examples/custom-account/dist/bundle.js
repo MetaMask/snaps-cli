@@ -18,6 +18,16 @@ wallet.registerRpcMessageHandler(async (_origin, req) => {
   return true
 })
 
+/**
+ * This is purely for demonstration purposes.
+ * In this handler, _you_ decide what calling these methods on an account
+ * managed by your plugin means.
+ * For instance, you could sign something using custom cryptography and
+ * an app key using wallet.getAppKey().
+ * 
+ * All methods below simply open the custom prompt window, which you
+ * can customize!
+ */
 wallet.registerAccountMessageHandler(async (origin, req) => {
   switch (req.method) {
     case 'eth_sign':
@@ -26,7 +36,7 @@ wallet.registerAccountMessageHandler(async (origin, req) => {
     case 'wallet_signTypedData':
     case 'wallet_signTypedData_v3':
     case 'wallet_signTypedData_v4':
-      const result = await prompt({ customHtml: `<div style="width: 100%;overflow-wrap: break-word;">
+      const result = await prompt({ html: `<div style="width: 100%;overflow-wrap: break-word;">
         The site from <span style="font-weight: 900;color: #037DD6;"><a href="${origin}">${origin}</a></span> requests you sign this with your offline strategy:\n${JSON.stringify(req)}
         </div>`})
       return result
