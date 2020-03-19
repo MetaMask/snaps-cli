@@ -19,7 +19,9 @@
   },
   "devDependencies": {},
   "bin": {
-    "snap2": "./snaps-cli.js"
+    "snap": "./snaps-cli.js",
+    "mm-snap": "./snaps-cli.js",
+    "mm-plugin": "./snaps-cli.js"
   },
   "dependencies": {
     "@babel/core": "^7.5.5",
