@@ -203,6 +203,7 @@ yargs
         .option('dist', builders.dist)
         .option('outfileName', builders.outfileName)
         .option('sourceMaps', builders.sourceMaps)
+        .option('stripComments', builders.stripComments)
     },
     argv => watch(argv)
   )
