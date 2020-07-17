@@ -3,13 +3,14 @@ const fs = require('fs')
 const chokidar = require('chokidar')
 const http = require('http')
 const serveHandler = require('serve-handler')
-const SES = require('ses')
+const { Worker } = require('worker_threads')
+const SES = require('ses-legacy')
 
 const { bundle } = require('./build')
 const manifestHandler = require('./manifest')
 const initHandler = require('./init')
 const {
-  logError, getOutfilePath, validateDirPath,
+  logError, getEvalWorkerPath, getOutfilePath, validateDirPath,
   validateFilePath, validateOutfileName,
 } = require('./utils')
 
@@ -193,22 +194,47 @@ function manifest (argv) {
 // eval
 
 async function snapEval (argv) {
-  const { bundle } = argv
+  const { bundle, environment } = argv
   await validateFilePath(bundle)
   try {
-    const s = SES.makeSESRootRealm({consoleMode: 'allow', errorStackMode: 'allow', mathRandomMode: 'allow'})
-    const result = s.evaluate(fs.readFileSync(bundle), {
-      // TODO: mock wallet properly
-      wallet: { registerRpcMessageHandler: () => true },
-      console
-    })
-    if (!result) {
-      throw new Error(`SES.evaluate returned falsy value.`)
+    if (environment === 'worker') {
+      await workerEval(bundle)
+    } else {
+      await legacySesEval(bundle)
     }
     console.log(`Eval Success: evaluated '${bundle}' in SES!`)
+    return true
   } catch (err) {
     logError(`Snap evaluation error: ${err.message}`, err)
     process.exit(1)
   }
-  return true
+}
+
+function legacySesEval (bundlePath) {
+  const bundleString = fs.readFileSync(bundlePath, 'utf8')
+  const s = SES.makeSESRootRealm({consoleMode: 'allow', errorStackMode: 'allow', mathRandomMode: 'allow'})
+  const result = s.evaluate(bundleString, {
+    // TODO: mock wallet properly
+    wallet: { registerRpcMessageHandler: () => true },
+    console
+  })
+  if (!result) {
+    throw new Error(`SES.evaluate returned falsy value.`)
+  }
+}
+
+function workerEval (bundlePath) {
+  return new Promise((resolve, _reject) => {
+    new Worker(getEvalWorkerPath())
+      .on('exit', (exitCode) => {
+        if (exitCode === 0) {
+          resolve()
+        } else {
+          throw new Error(`Worker exited abnormally! Code: ${exitCode}`)
+        }
+      })
+      .postMessage({
+        pluginFilePath: bundlePath,
+      })
+  })
 }

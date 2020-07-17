@@ -16,14 +16,18 @@ module.exports = {
  * @param {string} dest - The destination file path
  * @param {object} argv - argv from Yargs
  * @param {boolean} argv.sourceMaps - Whether to output sourcemaps
+ * @param {boolean} argv.sourceMaps - Whether to output sourcemaps
  */
 function bundle(src, dest, argv) {
+
+  const { sourceMaps: debug, environment } = argv
+  const isWorker = environment === 'worker'
 
   return new Promise((resolve, _reject) => {
 
     const bundleStream = createBundleStream(dest)
 
-    browserify(src, { debug: argv.sourceMaps })
+    browserify(src, { debug })
 
       // TODO: Just give up on babel, which we may not even need?
       // This creates globals that SES doesn't like
@@ -41,7 +45,7 @@ function bundle(src, dest, argv) {
         // }
         // closeBundleStream(bundleStream, code.toString())
 
-        closeBundleStream(bundleStream, bundle ? bundle.toString() : null)
+        closeBundleStream(bundleStream, bundle ? bundle.toString() : null, isWorker)
         .then(() => {
           if (bundle) {
             console.log(`Build success: '${src}' bundled as '${dest}'!`)
@@ -75,9 +79,10 @@ function createBundleStream (dest) {
  *
  * @param {object} stream - The write stream
  * @param {string} bundleString - The bundle string
+ * @param {boolean} isWorker - Whether the plugin's execution environment is a Web Worker.
  */
-async function closeBundleStream (stream, bundleString) {
-  stream.end(postProcess(bundleString), (err) => {
+async function closeBundleStream (stream, bundleString, isWorker) {
+  stream.end(postProcess(bundleString, isWorker), (err) => {
     if (err) throw err
   })
 }
@@ -91,9 +96,10 @@ async function closeBundleStream (stream, bundleString) {
  * - handles certain Babel-related edge cases
  * 
  * @param {string} bundleString - The bundle string
+ * @param {boolean} isWorker - Whether the plugin's execution environment is a Web Worker.
  * @returns {string} - The postprocessed bundle string
  */
-function postProcess (bundleString) {
+function postProcess (bundleString, isWorker) {
 
   if (typeof bundleString !== 'string') {
     return null
@@ -130,12 +136,14 @@ function postProcess (bundleString) {
     `Bundled code is empty after postprocessing.`
   )
 
-  // wrap bundle conents in anonymous function
-  if (bundleString.endsWith(';')) bundleString = bundleString.slice(0, -1)
-  if (bundleString.startsWith('(') && bundleString.endsWith(')')) {
-    bundleString = '() => ' + bundleString
-  } else {
-    bundleString = '() => (\n' + bundleString + '\n)'
+  if (!isWorker) {
+    // wrap bundle conents in anonymous function
+    if (bundleString.endsWith(';')) bundleString = bundleString.slice(0, -1)
+    if (bundleString.startsWith('(') && bundleString.endsWith(')')) {
+      bundleString = '() => ' + bundleString
+    } else {
+      bundleString = '() => (\n' + bundleString + '\n)'
+    }
   }
 
   // handle some cases by declaring missing globals

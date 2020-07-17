@@ -1,8 +1,10 @@
-() => (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+(function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 const { errors: rpcErrors } = require('eth-json-rpc-errors')
 const bls = require('noble-bls12-381')
 
 const DOMAIN = 2
+
+console.log('Hello from bls-snap!')
 
 wallet.registerRpcMessageHandler(async (_originString, requestObject) => {
   switch (requestObject.method) {
@@ -35,7 +37,6 @@ async function promptUser (message) {
   const response = await wallet.request({ method: 'confirm', params: [message] })
   return response
 }
-
 
 },{"eth-json-rpc-errors":2,"noble-bls12-381":13}],2:[function(require,module,exports){
 
@@ -24161,4 +24162,4 @@ exports.createContext = Script.createContext = function (context) {
     return copy;
 };
 
-},{}]},{},[1])
+},{}]},{},[1]);
