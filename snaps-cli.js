@@ -113,7 +113,7 @@ const builders = {
     describe: 'The execution environment of the plugin.',
     type: 'string',
     default: 'worker',
-    choices: ['worker', 'legacy-ses']
+    choices: ['worker']
   },
 }
 

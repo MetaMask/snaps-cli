@@ -2,7 +2,7 @@ const { parentPort } = require('worker_threads')
 const { readFileSync } = require('fs')
 const crypto = require('crypto')
 
-require('ses')
+require('ses/lockdown')
 lockdown({
   mathTaming: 'unsafe',
   errorTaming: 'unsafe',

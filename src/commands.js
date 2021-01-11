@@ -4,7 +4,6 @@ const chokidar = require('chokidar')
 const http = require('http')
 const serveHandler = require('serve-handler')
 const { Worker } = require('worker_threads')
-const SES = require('ses-legacy')
 
 const { bundle } = require('./build')
 const manifestHandler = require('./manifest')
@@ -194,32 +193,16 @@ function manifest (argv) {
 // eval
 
 async function snapEval (argv) {
-  const { bundle, environment } = argv
+  const { bundle } = argv
   await validateFilePath(bundle)
   try {
-    if (environment === 'worker') {
-      await workerEval(bundle)
-    } else {
-      await legacySesEval(bundle)
-    }
+    // TODO: When supporting multiple environments, evaluate them here.
+    await workerEval(bundle)
     console.log(`Eval Success: evaluated '${bundle}' in SES!`)
     return true
   } catch (err) {
     logError(`Snap evaluation error: ${err.message}`, err)
     process.exit(1)
-  }
-}
-
-function legacySesEval (bundlePath) {
-  const bundleString = fs.readFileSync(bundlePath, 'utf8')
-  const s = SES.makeSESRootRealm({consoleMode: 'allow', errorStackMode: 'allow', mathRandomMode: 'allow'})
-  const result = s.evaluate(bundleString, {
-    // TODO: mock wallet properly
-    wallet: { registerRpcMessageHandler: () => true },
-    console
-  })
-  if (!result) {
-    throw new Error(`SES.evaluate returned falsy value.`)
   }
 }
 
