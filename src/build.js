@@ -21,7 +21,6 @@ module.exports = {
 function bundle(src, dest, argv) {
 
   const { sourceMaps: debug, environment } = argv
-  const isWorker = environment === 'worker'
 
   return new Promise((resolve, _reject) => {
 
@@ -45,7 +44,7 @@ function bundle(src, dest, argv) {
         // }
         // closeBundleStream(bundleStream, code.toString())
 
-        closeBundleStream(bundleStream, bundle ? bundle.toString() : null, isWorker)
+        closeBundleStream(bundleStream, bundle ? bundle.toString() : null)
         .then(() => {
           if (bundle) {
             console.log(`Build success: '${src}' bundled as '${dest}'!`)
@@ -79,10 +78,9 @@ function createBundleStream (dest) {
  *
  * @param {object} stream - The write stream
  * @param {string} bundleString - The bundle string
- * @param {boolean} isWorker - Whether the plugin's execution environment is a Web Worker.
  */
-async function closeBundleStream (stream, bundleString, isWorker) {
-  stream.end(postProcess(bundleString, isWorker), (err) => {
+async function closeBundleStream (stream, bundleString) {
+  stream.end(postProcess(bundleString), (err) => {
     if (err) throw err
   })
 }
@@ -96,10 +94,9 @@ async function closeBundleStream (stream, bundleString, isWorker) {
  * - handles certain Babel-related edge cases
  * 
  * @param {string} bundleString - The bundle string
- * @param {boolean} isWorker - Whether the plugin's execution environment is a Web Worker.
  * @returns {string} - The postprocessed bundle string
  */
-function postProcess (bundleString, isWorker) {
+function postProcess (bundleString) {
 
   if (typeof bundleString !== 'string') {
     return null
@@ -135,16 +132,6 @@ function postProcess (bundleString, isWorker) {
   if (bundleString.length === 0) throw new Error(
     `Bundled code is empty after postprocessing.`
   )
-
-  if (!isWorker) {
-    // wrap bundle conents in anonymous function
-    if (bundleString.endsWith(';')) bundleString = bundleString.slice(0, -1)
-    if (bundleString.startsWith('(') && bundleString.endsWith(')')) {
-      bundleString = '() => ' + bundleString
-    } else {
-      bundleString = '() => (\n' + bundleString + '\n)'
-    }
-  }
 
   // handle some cases by declaring missing globals
   // Babel regeneratorRuntime
