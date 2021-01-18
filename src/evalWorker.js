@@ -1,27 +1,28 @@
-const { parentPort } = require('worker_threads')
-const { readFileSync } = require('fs')
-const crypto = require('crypto')
+const { parentPort } = require('worker_threads');
+const { readFileSync } = require('fs');
+const crypto = require('crypto');
 
-require('ses/lockdown')
+const lockdown = require('ses/lockdown');
+
 lockdown({
   mathTaming: 'unsafe',
   errorTaming: 'unsafe',
-})
+});
 
 parentPort.on('message', (message) => {
 
-  const { pluginFilePath } = message
+  const { pluginFilePath } = message;
 
-  const c = new Compartment(getMockApi())
+  const c = new Compartment(getMockApi());
   // Wrap the IIFE in an arrow function, because mocking the wallet is iffy
   c.evaluate(
     // '() => ' + readFileSync(pluginFilePath, 'utf8')
-    readFileSync(pluginFilePath, 'utf8')
+    readFileSync(pluginFilePath, 'utf8'),
   );
-  setTimeout(() => process.exit(0), 1000) // Hacky McHack
-})
+  setTimeout(() => Process.exit(0), 1000); // Hacky McHack
+});
 
-function getMockApi () {
+function getMockApi() {
   return {
     console,
     wallet: {
@@ -30,6 +31,7 @@ function getMockApi () {
     BigInt,
     setTimeout,
     crypto,
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     SubtleCrypto: () => {},
     fetch: () => true,
     XMLHttpRequest: () => true,
@@ -39,10 +41,11 @@ function getMockApi () {
 
     window: {
       crypto,
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       SubtleCrypto: () => {},
       fetch: () => true,
       XMLHttpRequest: () => true,
       WebSocket: () => true,
     },
-  }
+  };
 }
