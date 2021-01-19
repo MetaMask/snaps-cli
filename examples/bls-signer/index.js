@@ -32,13 +32,7 @@ async function getPubKey() {
   return bls.getPublicKey(PRIV_KEY);
 }
 
-<<<<<<< HEAD
 async function promptUser (message) {
   const response = await wallet.request({ method: 'confirm', params: [message] })
   return response
-=======
-async function promptUser(message) {
-  const response = await wallet.send({ method: 'confirm', params: [message] });
-  return response;
->>>>>>> add eslint and fixed related errors
 }

@@ -63,7 +63,6 @@ function validate(params) {
   }
 }
 
-<<<<<<< HEAD
 async function confirm (message) {
   const result = await wallet.request({ method: 'confirm', params: [message] });
   return result;
@@ -71,28 +70,14 @@ async function confirm (message) {
 
 async function prompt (message) {
   const result = await wallet.request({ method: 'customPrompt', params: [message] });
-=======
-async function confirm(message) {
-  const result = await wallet.send({ method: 'confirm', params: [message] });
-  return result;
-}
-
-async function prompt(message) {
-  const result = await wallet.send({ method: 'customPrompt', params: [message] });
->>>>>>> add eslint and fixed related errors
   return result;
 }
 
 function updateUi() {
   console.log('updating UI with accounts', accounts);
   accounts.forEach(async (account) => {
-<<<<<<< HEAD
     console.log('issuing add for ', account)
     wallet.request({
-=======
-    console.log('issuing add for ', account);
-    wallet.send({
->>>>>>> add eslint and fixed related errors
       method: 'wallet_manageIdentities',
       params: ['add', { address: account }],
     })

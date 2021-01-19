@@ -9,15 +9,10 @@ connectButton.addEventListener('click', connect);
 
 setBlockieButton.addEventListener('click', setBlockie);
 
-<<<<<<< HEAD
 
 
 async function connect () {
     await ethereum.request({
-=======
-async function connect() {
-  await ethereum.send({
->>>>>>> add eslint and fixed related errors
     method: 'wallet_requestPermissions',
     params: [{
       [pluginOrigin]: {},
@@ -28,17 +23,10 @@ async function connect() {
 async function setBlockie() {
   const val = document.querySelector('input[name="identicon"]:checked').value;
 
-<<<<<<< HEAD
-    try {
-    const response = await ethereum.request({
-        method: pluginOrigin,
-        params: [{
-=======
   try {
-    const response = await ethereum.send({
+    const response = await ethereum.request({
       method: pluginOrigin,
       params: [{
->>>>>>> add eslint and fixed related errors
         method: 'setUseBlockie',
         params: [JSON.parse(val)],
       }],
