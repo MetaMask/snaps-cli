@@ -173,7 +173,6 @@ async function isDirectory(pathString, createDir) {
         return true;
       } catch (mkdirError) {
         logError(`Directory '${pathString}' could not be created.`, mkdirError);
-        // eslint-disable-next-line node/no-process-exit
         process.exit(1);
       }
     }

@@ -225,7 +225,6 @@ yargs.usage('Usage: $0 <command> [options]')
     if (err?.stack && snaps.verboseErrors) {
       console.error(err.stack);
     }
-    // eslint-disable-next-line node/no-process-exit
     process.exit(1);
   })
   .argv;
