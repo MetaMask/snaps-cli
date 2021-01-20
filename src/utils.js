@@ -182,18 +182,17 @@ async function isDirectory(pathString, createDir) {
 
 /**
  * Checks whether the given path string resolves to an existing file.
- * @param {string} p - The path string to check
+ *
+ * @param {string} pathString - The path string to check
  * @returns {boolean} - Whether the given path is an existing file
  */
-function isFile(p) {
-  return new Promise((resolve, _) => {
-    fs.stat(p, (err, stats) => {
-      if (err || !stats) {
-        return resolve(false);
-      }
-      return resolve(stats.isFile());
-    });
-  });
+function isFile(pathString) {
+  try {
+    const stats = await fs.stat(pathString);
+    return stats.isFile();
+  } catch (error) {
+    return false;
+  }
 }
 
 // readline utils
