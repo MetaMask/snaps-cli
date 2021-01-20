@@ -27,7 +27,8 @@ module.exports = async function initHandler(argv) {
     await fs.writeFile('package.json', `${JSON.stringify(package, null, 2)}\n`);
   } catch (err) {
     logError(`Init Error: Fatal: Failed to write package.json`, err);
-    Process.exit();
+    // eslint-disable-next-line node/no-process-exit
+    process.exit(1);
   }
 
   console.log(`\nInit: 'package.json' web3Wallet properties set successfully!`);
@@ -40,7 +41,8 @@ module.exports = async function initHandler(argv) {
     console.log(`Init: Wrote main entry file '${main}'`);
   } catch (err) {
     logError(`Init Error: Fatal: Failed to write main .js file '${main}'`, err);
-    Process.exit();
+    // eslint-disable-next-line node/no-process-exit
+    process.exit(1);
   }
 
   // write index.html
@@ -50,7 +52,8 @@ module.exports = async function initHandler(argv) {
     console.log(`Init: Wrote 'index.html' file`);
   } catch (err) {
     logError(`Init Error: Fatal: Failed to write index.html file`, err);
-    Process.exit();
+    // eslint-disable-next-line node/no-process-exit
+    process.exit(1);
   }
 
   // write config file
@@ -85,7 +88,8 @@ async function asyncPackageInit() {
         `Init Error: Could not parse 'package.json'. Please verify that the file is correctly formatted and try again.`,
         error,
       );
-      Process.exit();
+      // eslint-disable-next-line node/no-process-exit
+      process.exit(1);
     }
   }
 
@@ -96,7 +100,8 @@ async function asyncPackageInit() {
     logError(
       `Init Error: Found a 'yarn.lock' file but no 'package.json'. Please run 'yarn init' and try again.`,
     );
-    Process.exit();
+    // eslint-disable-next-line node/no-process-exit
+    process.exit(1);
   }
 
   // run 'npm init'
@@ -133,7 +138,8 @@ async function buildWeb3Wallet(argv) {
     }
   } catch (e) {
     logError(`Init Error: Fatal`, e);
-    Process.exit();
+    // eslint-disable-next-line node/no-process-exit
+    process.exit(1);
   }
 
   // at this point, prompt the user for all values
@@ -235,7 +241,8 @@ async function validateEmptyDir() {
     const userAware = c && ['y', 'yes'].includes(c.toLowerCase());
     if (!userAware) {
       console.log(`Init: Exiting...`);
-      Process.exit();
+      // eslint-disable-next-line node/no-process-exit
+      process.exit(1);
     }
   }
 }

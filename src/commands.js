@@ -171,12 +171,14 @@ async function serve(argv) {
     } else {
       logError(`Server error: ${err.message}`, err);
     }
-    Process.exit();
+    // eslint-disable-next-line node/no-process-exit
+    process.exit(1);
   });
 
   server.on('close', () => {
     console.log('Server closed');
-    Process.exit();
+    // eslint-disable-next-line node/no-process-exit
+    process.exit(1);
   });
 }
 
@@ -186,7 +188,8 @@ function manifest(argv) {
   manifestHandler(argv)
     .catch((err) => {
       logError(err.message, err);
-      Process.exit();
+      // eslint-disable-next-line node/no-process-exit
+      process.exit(1);
     });
 }
 
@@ -202,7 +205,8 @@ async function snapEval(argv) {
     return true;
   } catch (err) {
     logError(`Snap evaluation error: ${err.message}`, err);
-    Process.exit();
+    // eslint-disable-next-line node/no-process-exit
+    process.exit(1);
   }
   return true;
 }
