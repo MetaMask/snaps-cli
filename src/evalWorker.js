@@ -13,9 +13,9 @@ parentPort.on('message', (message) => {
 
   const { pluginFilePath } = message;
 
-  const c = new Compartment(getMockApi());
+  const compartment = new Compartment(getMockApi());
   // Wrap the IIFE in an arrow function, because mocking the wallet is iffy
-  c.evaluate(
+  compartment.evaluate(
     // '() => ' + readFileSync(pluginFilePath, 'utf8')
     readFileSync(pluginFilePath, 'utf8'),
   );
@@ -31,8 +31,7 @@ function getMockApi() {
     BigInt,
     setTimeout,
     crypto,
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    SubtleCrypto: () => {},
+    SubtleCrypto: () => undefined,
     fetch: () => true,
     XMLHttpRequest: () => true,
     WebSocket: () => true,
@@ -41,8 +40,7 @@ function getMockApi() {
 
     window: {
       crypto,
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      SubtleCrypto: () => {},
+      SubtleCrypto: () => undefined,
       fetch: () => true,
       XMLHttpRequest: () => true,
       WebSocket: () => true,

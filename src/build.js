@@ -33,7 +33,7 @@ function bundle(src, dest, argv) {
       // .transform('babelify', {
       //   presets: ['@babel/preset-env'],
       // })
-      .bundle((err, bundles) => {
+      .bundle((err, bundleBuffer) => {
 
         if (err) {
           await writeError('Build error:', err);
@@ -46,9 +46,9 @@ function bundle(src, dest, argv) {
         // }
         // closeBundleStream(bundleStream, code.toString())
 
-        closeBundleStream(bundleStream, bundles ? bundles.toString() : null)
+        closeBundleStream(bundleStream, bundleBuffer ? bundleBuffer.toString() : null)
           .then(() => {
-            if (bundles) {
+            if (bundleBuffer) {
               console.log(`Build success: '${src}' bundled as '${dest}'!`);
             }
             resolve(true);
@@ -106,8 +106,7 @@ function postProcess(bundleString) {
     return null;
   }
 
-  const processedString;
-  processedString = bundleString.trim();
+  let processedString = bundleString.trim();
 
   // .import( => ["import"](
   processedString = processedString.replace(/\.import\(/gu, '["import"](');

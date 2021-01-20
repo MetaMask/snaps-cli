@@ -32,7 +32,7 @@ fs.readdir(EXAMPLES_PATH, (err, results) => {
           const pkgStat = await fs.stat(pkgPath);
           const srcStat = await fs.stat(srcPath);
 
-          if (pkgStat?.isFile() && srcStat && srcStat.isFile()) {
+          if (pkgStat?.isFile() && srcStat?.isFile()) {
             bundle(
               srcPath,
               path.resolve(exampleFile, 'dist/bundle.js'),
