@@ -27,7 +27,6 @@ module.exports = async function initHandler(argv) {
     await fs.writeFile('package.json', `${JSON.stringify(package, null, 2)}\n`);
   } catch (err) {
     logError(`Init Error: Fatal: Failed to write package.json`, err);
-    // eslint-disable-next-line node/no-process-exit
     process.exit(1);
   }
 
@@ -41,7 +40,6 @@ module.exports = async function initHandler(argv) {
     console.log(`Init: Wrote main entry file '${main}'`);
   } catch (err) {
     logError(`Init Error: Fatal: Failed to write main .js file '${main}'`, err);
-    // eslint-disable-next-line node/no-process-exit
     process.exit(1);
   }
 
@@ -52,7 +50,6 @@ module.exports = async function initHandler(argv) {
     console.log(`Init: Wrote 'index.html' file`);
   } catch (err) {
     logError(`Init Error: Fatal: Failed to write index.html file`, err);
-    // eslint-disable-next-line node/no-process-exit
     process.exit(1);
   }
 
@@ -88,7 +85,6 @@ async function asyncPackageInit() {
         `Init Error: Could not parse 'package.json'. Please verify that the file is correctly formatted and try again.`,
         error,
       );
-      // eslint-disable-next-line node/no-process-exit
       process.exit(1);
     }
   }
@@ -100,7 +96,6 @@ async function asyncPackageInit() {
     logError(
       `Init Error: Found a 'yarn.lock' file but no 'package.json'. Please run 'yarn init' and try again.`,
     );
-    // eslint-disable-next-line node/no-process-exit
     process.exit(1);
   }
 
@@ -138,7 +133,6 @@ async function buildWeb3Wallet(argv) {
     }
   } catch (e) {
     logError(`Init Error: Fatal`, e);
-    // eslint-disable-next-line node/no-process-exit
     process.exit(1);
   }
 
@@ -241,7 +235,6 @@ async function validateEmptyDir() {
     const userAware = c && ['y', 'yes'].includes(c.toLowerCase());
     if (!userAware) {
       console.log(`Init: Exiting...`);
-      // eslint-disable-next-line node/no-process-exit
       process.exit(1);
     }
   }

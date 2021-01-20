@@ -19,7 +19,6 @@ parentPort.on('message', (message) => {
     // '() => ' + readFileSync(pluginFilePath, 'utf8')
     readFileSync(pluginFilePath, 'utf8'),
   );
-  // eslint-disable-next-line node/no-process-exit
   setTimeout(() => process.exit(0), 1000); // Hacky McHack
 });
 
