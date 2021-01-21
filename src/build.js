@@ -47,19 +47,7 @@ function bundle(src, dest, argv) {
         // }
         // closeBundleStream(bundleStream, code.toString())
 
-<<<<<<< HEAD
-        closeBundleStream(bundleStream, bundle ? bundle.toString() : null, {stripComments: argv.stripComments})
-        .then(() => {
-          if (bundle) {
-            console.log(`Build success: '${src}' bundled as '${dest}'!`)
-          }
-          resolve(true)
-        })
-        .catch((err) => writeError('Write error:', err.message, err, dest))
-      })
-  })
-=======
-        closeBundleStream(bundleStream, bundleBuffer ? bundleBuffer.toString() : null)
+        closeBundleStream(bundleStream, bundleBuffer ? bundleBuffer.toString() : null, {stripComments: argv.stripComments})
           .then(() => {
             if (bundleBuffer) {
               console.log(`Build success: '${src}' bundled as '${dest}'!`);
@@ -69,7 +57,6 @@ function bundle(src, dest, argv) {
           .catch((errs) => await writeError('Write error:', errs.message, errs, dest));
       });
   });
->>>>>>> bd313ac6e66800f27161d6bffab8c087f012d937
 }
 
 /**
@@ -97,19 +84,12 @@ function createBundleStream(dest) {
  * @param {object} options - post process options
  * @param {boolean} options.stripComments
  */
-<<<<<<< HEAD
-async function closeBundleStream (stream, bundleString, options) {
+async function closeBundleStream(stream, bundleString, options) {
   stream.end(postProcess(bundleString, options), (err) => {
-    if (err) throw err
-  })
-=======
-async function closeBundleStream(stream, bundleString) {
-  stream.end(postProcess(bundleString), (err) => {
     if (err) {
       throw err;
     }
   });
->>>>>>> bd313ac6e66800f27161d6bffab8c087f012d937
 }
 
 /**
