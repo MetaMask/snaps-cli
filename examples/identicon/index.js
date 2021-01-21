@@ -1,4 +1,4 @@
-wallet.registerRpcMessageHandler(async (originString, requestObject) => {
+wallet.registerRpcMessageHandler(async (_originString, requestObject) => {
   switch (requestObject.method) {
     case 'setUseBlockie':
       return wallet.setUseBlockie(requestObject.params[0]);

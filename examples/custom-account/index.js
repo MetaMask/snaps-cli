@@ -34,13 +34,14 @@ wallet.registerAccountMessageHandler(async (origin, req) => {
     case 'personal_sign':
     case 'wallet_signTypedData':
     case 'wallet_signTypedData_v3':
-    case 'wallet_signTypedData_v4':
+    case 'wallet_signTypedData_v4': {
       const result = await prompt({
         html: `<div style="width: 100%;overflow-wrap: break-word;">
-        The site from <span style="font-weight: 900;color: #037DD6;"><a href="${origin}">${origin}</a></span> requests you sign this with your offline strategy:\n${JSON.stringify(req)}
-        </div>`,
+          The site from <span style="font-weight: 900;color: #037DD6;"><a href="${origin}">${origin}</a></span> requests you sign this with your offline strategy:\n${JSON.stringify(req)}
+          </div>`,
       });
       return result;
+    }
     default:
       throw ethErrors.rpc.methodNotFound({ data: req });
   }
@@ -63,12 +64,12 @@ function validate(params) {
   }
 }
 
-async function confirm (message) {
+async function confirm(message) {
   const result = await wallet.request({ method: 'confirm', params: [message] });
   return result;
 }
 
-async function prompt (message) {
+async function prompt(message) {
   const result = await wallet.request({ method: 'customPrompt', params: [message] });
   return result;
 }
@@ -76,13 +77,13 @@ async function prompt (message) {
 function updateUi() {
   console.log('updating UI with accounts', accounts);
   accounts.forEach(async (account) => {
-    console.log('issuing add for ', account)
+    console.log('issuing add for ', account);
     wallet.request({
       method: 'wallet_manageIdentities',
       params: ['add', { address: account }],
     })
       .catch((err) => console.log('Problem updating identity', err))
-      .then((result) => {
+      .then(() => {
         console.log('adding identity seems to have succeeded!');
       });
   });

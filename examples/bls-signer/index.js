@@ -3,7 +3,7 @@ const bls = require('noble-bls12-381');
 
 const DOMAIN = 2;
 
-console.log('Hello from bls-snap!')
+console.log('Hello from bls-snap!');
 
 wallet.registerRpcMessageHandler(async (_originString, requestObject) => {
   switch (requestObject.method) {
@@ -11,7 +11,7 @@ wallet.registerRpcMessageHandler(async (_originString, requestObject) => {
     case 'getAccount':
       return getPubKey();
 
-    case 'signMessage':
+    case 'signMessage': {
       const pubKey = await getPubKey();
       const data = requestObject.params[0];
       const approved = await promptUser(`Do you want to BLS sign ${data} with ${pubKey}?`);
@@ -21,6 +21,7 @@ wallet.registerRpcMessageHandler(async (_originString, requestObject) => {
       const PRIVATE_KEY = await wallet.getAppKey();
       const signature = await bls.sign(requestObject.params[0], PRIVATE_KEY, DOMAIN);
       return signature;
+    }
 
     default:
       throw rpcErrors.methodNotFound(requestObject);
@@ -32,7 +33,7 @@ async function getPubKey() {
   return bls.getPublicKey(PRIV_KEY);
 }
 
-async function promptUser (message) {
-  const response = await wallet.request({ method: 'confirm', params: [message] })
-  return response
+async function promptUser(message) {
+  const response = await wallet.request({ method: 'confirm', params: [message] });
+  return response;
 }

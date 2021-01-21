@@ -1,7 +1,7 @@
 function mockAuditApi(address) {
   return new Promise((resolve) => {
     const lastDigit = address.slice(address.length - 1);
-    resolve(Boolean(lastDigit.toLowerCase().match(/[a-f]/)));
+    resolve(Boolean(lastDigit.toLowerCase().match(/[a-f]/u)));
   });
 }
 

@@ -10,7 +10,7 @@ const ethers = require('ethers');
  */
 const provider = new ethers.providers.Web3Provider(wallet);
 
-wallet.registerRpcMessageHandler(async (originString, requestObject) => {
+wallet.registerRpcMessageHandler(async (_originString, requestObject) => {
   console.log('received request', requestObject);
   const privKey = await wallet.getAppKey();
   console.log(`privKey is ${privKey}`);
@@ -21,14 +21,16 @@ wallet.registerRpcMessageHandler(async (originString, requestObject) => {
     case 'address':
       return ethWallet.address;
 
-    case 'signMessage':
+    case 'signMessage': {
       const message = requestObject.params[0];
       console.log('trying to sign message', message);
       return ethWallet.signMessage(message);
+    }
 
-    case 'sign':
+    case 'sign': {
       const transaction = requestObject.params[0];
       return ethWallet.sign(transaction);
+    }
 
     default:
       throw new Error('Method not found.');

@@ -9,10 +9,8 @@ connectButton.addEventListener('click', connect);
 
 setBlockieButton.addEventListener('click', setBlockie);
 
-
-
-async function connect () {
-    await ethereum.request({
+async function connect() {
+  await ethereum.request({
     method: 'wallet_requestPermissions',
     params: [{
       [pluginOrigin]: {},
@@ -32,6 +30,7 @@ async function setBlockie() {
       }],
     });
 
+    // eslint-disable-next-line no-alert
     alert(`couldnt change it ${response.result}`);
   } catch (err) {
     console.error(err);

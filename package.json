@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "generateInitTemplate": "node ./scripts/development/generateInitTemplate.js",
-    "buildExamples": "node ./scripts/buildExamples.js"
+    "buildExamples": "node ./scripts/buildExamples.js",
+    "lint": "eslint . --ext js,json",
+    "lint:fix": "yarn lint --fix"
   },
   "author": "Erik Marks <rekmarks@protonmail.com>",
   "contributors": [
