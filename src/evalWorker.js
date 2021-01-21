@@ -1,10 +1,11 @@
-/* global Compartment, BigInt */
+/* global lockdown, Compartment, BigInt */
 
 const { parentPort } = require('worker_threads');
 const { readFileSync } = require('fs');
 const crypto = require('crypto');
 
-const lockdown = require('ses/lockdown');
+// eslint-disable-next-line import/no-unassigned-import
+require('ses/lockdown');
 
 lockdown({
   mathTaming: 'unsafe',
