@@ -1,5 +1,4 @@
-
-const { promises: fs } = require('fs');
+const { promises: fs, createWriteStream } = require('fs');
 const browserify = require('browserify');
 // const terser = require('terser')
 
@@ -65,7 +64,7 @@ function bundle(src, dest, argv) {
  * @returns {object} - The stream
  */
 function createBundleStream(dest) {
-  const stream = fs.createWriteStream(dest, {
+  const stream = createWriteStream(dest, {
     autoClose: false,
     encoding: 'utf8',
   });
