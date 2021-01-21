@@ -186,7 +186,7 @@ async function isDirectory(pathString, createDir) {
  * @param {string} pathString - The path string to check
  * @returns {boolean} - Whether the given path is an existing file
  */
-function isFile(pathString) {
+async function isFile(pathString) {
   try {
     const stats = await fs.stat(pathString);
     return stats.isFile();
