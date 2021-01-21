@@ -69,7 +69,7 @@ const builders = {
 
   stripComments: {
     alias: 'strip',
-    describe: 'Whether to remove code comments from bundle',
+    describe: 'Whether to remove code comments from the build output',
     type: 'boolean',
     default: false,
   },
