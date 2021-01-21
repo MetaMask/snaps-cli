@@ -1,4 +1,3 @@
-
 const { promises: fs } = require('fs');
 const pathUtils = require('path');
 const dequal = require('fast-deep-equal');
