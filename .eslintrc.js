@@ -16,19 +16,6 @@ module.exports = {
   overrides: [
     {
       files: [
-        '*.js',
-        '*.json',
-      ],
-      parserOptions: {
-        sourceType: 'script',
-      },
-      rules: {
-        '@typescript-eslint/no-require-imports': 'off',
-        '@typescript-eslint/no-var-requires': 'off',
-      },
-    },
-    {
-      files: [
         'snaps-cli.js',
         'src/**/*.js',
       ],
