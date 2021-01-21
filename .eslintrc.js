@@ -26,7 +26,23 @@ module.exports = {
       rules: {
         '@typescript-eslint/no-require-imports': 'off',
         '@typescript-eslint/no-var-requires': 'off',
+      },
+    },
+    {
+      files: [
+        'snaps-cli.js',
+        'src/**/*.js',
+      ],
+      rules: {
         'node/no-process-exit': 'off',
+      },
+    },
+    {
+      files: [
+        'examples/**/*.js',
+      ],
+      rules: {
+        'no-alert': 'off',
       },
     },
   ],

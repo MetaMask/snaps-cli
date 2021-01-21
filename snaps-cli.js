@@ -122,7 +122,8 @@ applyConfig();
 // application
 
 // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-yargs.usage('Usage: $0 <command> [options]')
+yargs
+  .usage('Usage: $0 <command> [options]')
   .example('$0 init', `\tInitialize Snap package from scratch`)
   .example('$0 build -s index.js -d out', `\tBuild 'index.js' as './out/bundle.js'`)
   .example('$0 build -s index.js -d out -n snap.js', `\tBuild 'index.js' as './out/snap.js'`)

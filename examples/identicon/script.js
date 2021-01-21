@@ -30,7 +30,6 @@ async function setBlockie() {
       }],
     });
 
-    // eslint-disable-next-line no-alert
     alert(`couldnt change it ${response.result}`);
   } catch (err) {
     console.error(err);
