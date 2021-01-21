@@ -204,7 +204,6 @@ async function snapEval(argv) {
     logError(`Snap evaluation error: ${err.message}`, err);
     process.exit(1);
   }
-  return true;
 }
 
 function workerEval(bundlePath) {

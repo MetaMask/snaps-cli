@@ -119,7 +119,7 @@ module.exports = async function manifest(argv) {
 
   // check web3Wallet properties
   const { bundle, initialPermissions } = pkg.web3Wallet || {};
-  if (bundle?.local) {
+  if (bundle && bundle.local) {
     if (!(await isFile(bundle.local))) {
       logManifestError(`'bundle.local' does not resolve to a file.`);
     }

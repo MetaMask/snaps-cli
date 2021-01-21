@@ -1,18 +1,17 @@
 module.exports = {
-  env: {
-    node: true,
-  },
   extends: [
     '@metamask/eslint-config',
-    '@metamask/eslint-config/config/jest',
     '@metamask/eslint-config/config/nodejs',
-    '@metamask/eslint-config/config/typescript',
   ],
   plugins: [
     'json',
   ],
   parserOptions: {
     ecmaVersion: 2018,
+  },
+  rules: {
+    semi: [2, 'always'],
+    'space-before-function-paren': 'off',
   },
   overrides: [
     {
@@ -33,6 +32,12 @@ module.exports = {
         'snaps-cli.js',
         'src/**/*.js',
       ],
+      env: {
+        node: true,
+      },
+      globals: {
+        snaps: true,
+      },
       rules: {
         'node/no-process-exit': 'off',
       },
@@ -41,6 +46,12 @@ module.exports = {
       files: [
         'examples/**/*.js',
       ],
+      env: {
+        browser: true,
+      },
+      globals: {
+        wallet: true,
+      },
       rules: {
         'no-alert': 'off',
       },

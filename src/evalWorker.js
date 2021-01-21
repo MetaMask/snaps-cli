@@ -1,3 +1,5 @@
+/* global Compartment, BigInt */
+
 const { parentPort } = require('worker_threads');
 const { readFileSync } = require('fs');
 const crypto = require('crypto');
