@@ -47,7 +47,7 @@ function bundle(src, dest, argv) {
         // }
         // closeBundleStream(bundleStream, code.toString())
 
-        closeBundleStream(bundleStream, bundleBuffer ? bundleBuffer.toString() : null, {stripComments: argv.stripComments})
+        closeBundleStream(bundleStream, bundleBuffer ? bundleBuffer.toString() : null, { stripComments: argv.stripComments })
           .then(() => {
             if (bundleBuffer) {
               console.log(`Build success: '${src}' bundled as '${dest}'!`);
@@ -105,11 +105,7 @@ async function closeBundleStream(stream, bundleString, options) {
  * @param {boolean} options.stripComments
  * @returns {string} - The postprocessed bundle string
  */
-<<<<<<< HEAD
-function postProcess (bundleString, options) {
-=======
-function postProcess(bundleString) {
->>>>>>> bd313ac6e66800f27161d6bffab8c087f012d937
+function postProcess(bundleString, options) {
 
   if (typeof bundleString !== 'string') {
     return null;
@@ -118,7 +114,7 @@ function postProcess(bundleString) {
   let processedString = bundleString.trim();
 
   if (options.stripComments) {
-    bundleString = stripComments(bundleString)
+    processedString = stripComments(processedString);
   }
 
   // .import( => ["import"](
