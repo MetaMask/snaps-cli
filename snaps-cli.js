@@ -120,7 +120,7 @@ const builders = {
 main();
 
 // application
-async function main () {
+async function main() {
   await applyConfig();
 
   // eslint-disable-next-line no-unused-expressions

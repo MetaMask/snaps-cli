@@ -10,8 +10,16 @@ module.exports = {
     ecmaVersion: 2018,
   },
   rules: {
-    semi: [2, 'always'],
-    'space-before-function-paren': 'off',
+    // TODO: Remove these once they've landed on the main config
+    semi: ['error', 'always'],
+    'space-before-function-paren': [
+      'error',
+      {
+        anonymous: 'always',
+        asyncArrow: 'always',
+        named: 'never',
+      },
+    ],
   },
   overrides: [
     {

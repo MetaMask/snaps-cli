@@ -7,7 +7,7 @@ const EXAMPLES_PATH = 'examples';
 
 buildExamples();
 
-async function buildExamples () {
+async function buildExamples() {
   const examplesDir = await fs.readdir(EXAMPLES_PATH);
 
   examplesDir.forEach(async (exampleFile) => {
