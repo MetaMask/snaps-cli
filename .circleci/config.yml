@@ -18,7 +18,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install snaps-cli deps
+          name: Install main package deps
           command: |
             .circleci/scripts/deps-install.sh
       - run:
