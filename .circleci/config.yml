@@ -34,6 +34,7 @@ jobs:
           paths:
           - node_modules
           - build-artifacts
+          - examples/*/node_modules
 
   test-lint:
     docker:
