@@ -13,7 +13,7 @@
     "buildExamples": "node ./scripts/buildExamples.js",
     "lint": "eslint . --ext js,json",
     "lint:fix": "yarn lint --fix",
-    "postinstall": "./.circleci/scripts/examples-deps-install.sh"
+    "postinstall": ".circleci/scripts/examples-deps-install.sh"
   },
   "author": "Erik Marks <rekmarks@protonmail.com>",
   "contributors": [
