@@ -12,8 +12,7 @@
     "generateInitTemplate": "node ./scripts/development/generateInitTemplate.js",
     "buildExamples": "node ./scripts/buildExamples.js",
     "lint": "eslint . --ext js,json",
-    "lint:fix": "yarn lint --fix",
-    "postinstall": ".circleci/scripts/examples-deps-install.sh"
+    "lint:fix": "yarn lint --fix"
   },
   "author": "Erik Marks <rekmarks@protonmail.com>",
   "contributors": [
