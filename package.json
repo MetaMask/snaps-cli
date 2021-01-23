@@ -1,5 +1,5 @@
 {
-  "name": "snaps-cli",
+  "name": "g",
   "version": "0.4.1",
   "description": "A CLI for developing MetaMask Snaps.",
   "main": "snaps-cli.js",
@@ -16,7 +16,7 @@
   },
   "author": "Erik Marks <rekmarks@protonmail.com>",
   "contributors": [
-    "Dan Miller <dmiller@kyokan.io"
+    "Dan Miller"
   ],
   "license": "ISC",
   "repository": {
@@ -54,5 +54,15 @@
   },
   "engines": {
     "node": ">=12.11.0"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/MetaMask/snaps-cli/issues"
+  },
+  "homepage": "https://github.com/MetaMask/snaps-cli#readme",
+  "directories": {
+    "example": "examples"
+  },
+  "keywords": [
+    "fj"
+  ]
 }

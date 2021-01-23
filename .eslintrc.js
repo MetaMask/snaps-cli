@@ -26,6 +26,7 @@ module.exports = {
       files: [
         'snaps-cli.js',
         'src/**/*.js',
+        'myapp/**/*.js',
       ],
       env: {
         node: true,
