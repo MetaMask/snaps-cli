@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* eslint-disable node/shebang */
+/* eslint-disable node/no-unpublished-require */
 
 const { applyConfig } = require('./misc.js');
 const { cli } = require('./cli.js');

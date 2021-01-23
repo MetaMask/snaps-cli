@@ -4,7 +4,7 @@
   "description": "A CLI for developing MetaMask Snaps.",
   "main": "./myapp/main.js",
   "files": [
-    "./myapp/main.js",
+    "./myapp/*",
     "src/*"
   ],
   "scripts": {
