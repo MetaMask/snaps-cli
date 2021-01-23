@@ -75,7 +75,7 @@ const builders = {
 
   eval: {
     alias: 'e',
-    describe: `Attempt to evaluate Snap bundle in SES`,
+    describe: 'Attempt to evaluate Snap bundle in SES',
     type: 'boolean',
     default: true,
   },
