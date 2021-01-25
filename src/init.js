@@ -1,5 +1,5 @@
 
-const { promises: fs } = require('fs');
+const { promises: fs, existsSync } = require('fs');
 const pathUtils = require('path');
 const packageInit = require('init-package-json');
 
@@ -69,7 +69,7 @@ async function asyncPackageInit() {
 
   // use existing package.json if found
   // eslint-disable-next-line node/no-sync
-  const hasPackage = fs.existsSync('package.json');
+  const hasPackage = existsSync('package.json');
 
   if (hasPackage) {
 
@@ -92,7 +92,7 @@ async function asyncPackageInit() {
 
   // exit if yarn.lock is found, or we'll be in trouble
   // eslint-disable-next-line node/no-sync
-  const usesYarn = fs.existsSync('yarn.lock');
+  const usesYarn = existsSync('yarn.lock');
 
   if (usesYarn) {
     logError(
