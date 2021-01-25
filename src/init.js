@@ -90,7 +90,6 @@ async function asyncPackageInit() {
   }
 
   // exit if yarn.lock is found, or we'll be in trouble
-  // eslint-disable-next-line node/no-sync
   const usesYarn = existsSync('yarn.lock');
 
   if (usesYarn) {
