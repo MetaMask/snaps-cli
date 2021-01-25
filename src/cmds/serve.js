@@ -1,5 +1,5 @@
 const { serve } = require('../commands');
-const { builders } = require('../builders.js');
+const { builders } = require('../builders');
 
 module.exports.command = ['serve', 's'];
 module.exports.desc = 'Locally serve Snap file(s) for testing';

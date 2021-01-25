@@ -1,5 +1,5 @@
 const { watch } = require('../commands');
-const { builders } = require('../builders.js');
+const { builders } = require('../builders');
 
 module.exports.command = ['watch', 'w'];
 module.exports.desc = 'Build Snap on change';

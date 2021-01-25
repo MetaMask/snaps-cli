@@ -1,7 +1,7 @@
 const { promises: fs } = require('fs');
 const pathUtils = require('path');
 const readline = require('readline');
-const { builders } = require('./builders.js');
+const { builders } = require('./builders');
 
 const permRequestKeys = [
   '@context',

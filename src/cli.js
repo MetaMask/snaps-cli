@@ -1,11 +1,8 @@
-#!/usr/bin/env node
-/* eslint-disable node/shebang */
-
 const yargs = require('yargs');
-const { builders } = require('./builders.js');
-const { assignGlobals, sanitizeInputs } = require('./utils.js');
+const { builders } = require('./builders');
+const { assignGlobals, sanitizeInputs } = require('./utils');
 
-function cli(commands) {
+module.exports = function cli(commands) {
   // eslint-disable-next-line no-unused-expressions
   yargs(process.argv.slice(2))
     .usage('Usage: $0 <command> [options]')
@@ -43,6 +40,4 @@ function cli(commands) {
     .alias('help', 'h')
 
     .argv;
-}
-
-module.exports = { cli };
+};

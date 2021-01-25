@@ -1,10 +1,8 @@
 #!/usr/bin/env node
-/* eslint-disable node/shebang */
-/* eslint-disable node/no-unpublished-require */
 
-const { cli } = require('./cli.js');
-const { applyConfig } = require('./utils.js');
+const cli = require('./cli');
 const commands = require('./cmds');
+const { applyConfig } = require('./utils');
 
 main();
 

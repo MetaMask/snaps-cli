@@ -1,8 +1,8 @@
-const initialize = require('./initialize.js');
-const build = require('./build.js');
-const evaluate = require('./evaluate.js');
-const manifest = require('./manifest.js');
-const serve = require('./serve.js');
-const watch = require('./watch.js');
+const initialize = require('./initialize');
+const build = require('./build');
+const evaluate = require('./evaluate');
+const manifest = require('./manifest');
+const serve = require('./serve');
+const watch = require('./watch');
 
 module.exports = [initialize, build, evaluate, manifest, serve, watch];

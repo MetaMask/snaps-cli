@@ -1,5 +1,5 @@
 const { manifest } = require('../commands');
-const { builders } = require('../builders.js');
+const { builders } = require('../builders');
 
 module.exports.command = ['manifest', 'm'];
 module.exports.desc = 'Validate project package.json as a Snap manifest';

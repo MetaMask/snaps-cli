@@ -1,5 +1,5 @@
 const { build } = require('../commands');
-const { builders } = require('../builders.js');
+const { builders } = require('../builders');
 
 module.exports.command = ['build', 'b'];
 module.exports.desc = 'Build Snap from source';

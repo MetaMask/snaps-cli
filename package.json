@@ -31,9 +31,7 @@
     "execa": "^5.0.0"
   },
   "bin": {
-    "snap": "./src/main.js",
-    "mm-snap": "./src/main.js",
-    "mm-plugin": "./src/main.js"
+    "mm-snap": "./src/main.js"
   },
   "dependencies": {
     "@babel/core": "^7.5.5",

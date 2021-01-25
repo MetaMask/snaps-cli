@@ -1,5 +1,5 @@
 const { init } = require('../commands');
-const { builders } = require('../builders.js');
+const { builders } = require('../builders');
 
 module.exports.command = ['init', 'i'];
 module.exports.desc = 'Initialize Snap package';
