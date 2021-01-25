@@ -1,4 +1,4 @@
-const { snapEval } = require('../../src/commands');
+const { snapEval } = require('../commands');
 const { builders } = require('../builders.js');
 
 module.exports.command = ['eval', 'e'];

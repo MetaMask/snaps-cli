@@ -1,4 +1,4 @@
-const { serve } = require('../../src/commands');
+const { serve } = require('../commands');
 const { builders } = require('../builders.js');
 
 module.exports.command = ['serve', 's'];

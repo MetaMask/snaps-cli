@@ -1,4 +1,4 @@
-const { manifest } = require('../../src/commands');
+const { manifest } = require('../commands');
 const { builders } = require('../builders.js');
 
 module.exports.command = ['manifest', 'm'];
