@@ -1,4 +1,3 @@
-
 const { promises: fs, existsSync } = require('fs');
 const pathUtils = require('path');
 const packageInit = require('init-package-json');
