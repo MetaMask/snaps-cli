@@ -1,5 +1,5 @@
 const { promises: fs } = require('fs');
-const { CONFIG_PATHS, logWarning } = require('../src/utils');
+const { CONFIG_PATHS, logWarning } = require('./utils');
 const { builders } = require('./builders.js');
 
 module.exports = {
