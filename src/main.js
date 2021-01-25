@@ -3,7 +3,7 @@
 /* eslint-disable node/no-unpublished-require */
 
 const { cli } = require('./cli.js');
-const { applyConfig } = require('./misc.js');
+const { applyConfig } = require('./utils.js');
 
 main();
 

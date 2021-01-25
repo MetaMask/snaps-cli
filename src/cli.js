@@ -1,6 +1,6 @@
 const yargs = require('yargs');
 const { builders } = require('./builders.js');
-const { assignGlobals, sanitizeInputs } = require('./misc.js');
+const { assignGlobals, sanitizeInputs } = require('./utils.js');
 
 function cli() {
   // eslint-disable-next-line no-unused-expressions
