@@ -4,7 +4,7 @@
 
 const { cli } = require('./cli.js');
 const { applyConfig } = require('./utils.js');
-const { commands } = require('./cmds');
+const commands = require('./cmds');
 
 main();
 

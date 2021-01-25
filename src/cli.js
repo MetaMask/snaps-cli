@@ -2,13 +2,12 @@
 /* eslint-disable node/shebang */
 
 const yargs = require('yargs');
-const { hideBin } = require('yargs/helpers');
 const { builders } = require('./builders.js');
 const { assignGlobals, sanitizeInputs } = require('./utils.js');
 
 function cli(commands) {
   // eslint-disable-next-line no-unused-expressions
-  yargs(hideBin(process.argv.slice(2)))
+  yargs(process.argv.slice(2))
     .usage('Usage: $0 <command> [options]')
 
     .example('$0 init', `\tInitialize Snap package from scratch`)
