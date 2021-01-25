@@ -68,7 +68,6 @@ module.exports = async function initHandler(argv) {
 async function asyncPackageInit() {
 
   // use existing package.json if found
-  // eslint-disable-next-line node/no-sync
   const hasPackage = existsSync('package.json');
 
   if (hasPackage) {
