@@ -681,6 +681,11 @@
     "@types/insert-module-globals" "*"
     "@types/node" "*"
 
+"@types/init-package-json@^1.10.0":
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/@types/init-package-json/-/init-package-json-1.10.0.tgz#8cb7c57dc4009e9897d7a7de89162f632b73e09a"
+  integrity sha512-AsLKZh6ioTqP1GBooLUvRm1C9Xo5v+2+O7PxNif4dV8qFidtbPdDefnvywTscbF3eIaEudz4b8a2e6tsqHa6qg==
+
 "@types/insert-module-globals@*":
   version "7.0.1"
   resolved "https://registry.yarnpkg.com/@types/insert-module-globals/-/insert-module-globals-7.0.1.tgz#234f9263f6b315088287e3597d7e98033804a031"
