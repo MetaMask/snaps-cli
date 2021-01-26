@@ -1,4 +1,4 @@
-const builders = {
+export const builders = {
   src: {
     alias: 's',
     describe: 'Source file',
@@ -102,4 +102,3 @@ const builders = {
   },
 };
 
-module.exports = builders;
