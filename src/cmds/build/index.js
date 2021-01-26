@@ -3,8 +3,8 @@ const {
   getOutfilePath, validateDirPath,
   validateFilePath, validateOutfileName,
 } = require('../../utils');
-const { snapEval } = require('../eval');
-const { manifest } = require('../manifest');
+const { handler: snapEval } = require('../eval');
+const { handler: manifest } = require('../manifest');
 const { bundle } = require('./bundle');
 
 module.exports.command = ['build', 'b'];

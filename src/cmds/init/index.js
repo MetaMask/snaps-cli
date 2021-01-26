@@ -1,5 +1,5 @@
 const builders = require('../../builders');
-const { build } = require('../build');
+const { handler: build } = require('../build');
 const initHandler = require('./initialize');
 
 module.exports.command = ['init', 'i'];
