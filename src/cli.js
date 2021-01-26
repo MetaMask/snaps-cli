@@ -1,5 +1,5 @@
 const yargs = require('yargs');
-const { builders } = require('./builders');
+const builders = require('./builders');
 const { assignGlobals, sanitizeInputs } = require('./utils');
 
 module.exports = function cli(commands) {

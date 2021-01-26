@@ -1,7 +1,7 @@
 const { Worker } = require('worker_threads');
 const pathUtils = require('path');
 
-const { builders } = require('../../builders');
+const builders = require('../../builders');
 const { logError, validateFilePath } = require('../../utils');
 
 module.exports.command = ['eval', 'e'];

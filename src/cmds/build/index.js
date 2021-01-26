@@ -1,4 +1,4 @@
-const { builders } = require('../../builders');
+const builders = require('../../builders');
 const {
   getOutfilePath, validateDirPath,
   validateFilePath, validateOutfileName,

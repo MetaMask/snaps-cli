@@ -1,4 +1,4 @@
-const { builders } = require('../../builders');
+const builders = require('../../builders');
 const { logError } = require('../../utils');
 const manifest = require('./manifest');
 

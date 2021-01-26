@@ -1,7 +1,7 @@
 const http = require('http');
 const serveHandler = require('serve-handler');
 
-const { builders } = require('../../builders');
+const builders = require('../../builders');
 const { logError, validateDirPath } = require('../../utils');
 
 module.exports.command = ['serve', 's'];

@@ -103,4 +103,4 @@ const builders = {
   },
 };
 
-module.exports = { builders };
+module.exports = builders;

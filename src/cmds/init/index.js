@@ -1,4 +1,4 @@
-const { builders } = require('../../builders');
+const builders = require('../../builders');
 const { build } = require('../build');
 const initHandler = require('./initialize');
 
