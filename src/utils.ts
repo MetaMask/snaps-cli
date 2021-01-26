@@ -3,7 +3,7 @@ const pathUtils = require('path');
 const readline = require('readline');
 const builders = require('./builders');
 
-const permRequestKeys = [
+export const permRequestKeys = [
   '@context',
   'id',
   'parentCapability',
@@ -13,55 +13,9 @@ const permRequestKeys = [
   'proof',
 ];
 
-const CONFIG_PATHS = [
+export const CONFIG_PATHS = [
   'snap.config.json',
 ];
-
-module.exports = {
-  CONFIG_PATHS,
-  isFile,
-  isDirectory,
-  getOutfilePath,
-  logError,
-  logWarning,
-  permRequestKeys,
-  validateDirPath,
-  validateFilePath,
-  validateOutfileName,
-  prompt,
-  closePrompt,
-  trimPathString,
-  assignGlobals,
-  sanitizeInputs,
-  applyConfig,
-};
-
-export{};
-declare global {
-  namespace NodeJS {
-    interface Global {
-      snaps: {
-            verboseErrors: boolean,
-            suppressWarnings: boolean,
-            isWatching: boolean
-          }
-    } 
-  }
-}
-
-// interface SnapsGlobal extends NodeJS.Global {
-//   snaps: {
-//     verboseErrors: boolean,
-//     suppressWarnings: boolean,
-//     isWatching: boolean
-//   }
-// }
-
-// (global as unknown as SnapsGlobal).snaps = {
-//   verboseErrors: false,
-//   suppressWarnings: false,
-//   isWatching: false,
-// };
 
 /**
  * Trims leading and trailing periods "." and forward slashes "/" from the
@@ -70,7 +24,7 @@ declare global {
  * @param {string} pathString - The path string to trim.
  * @returns {string} The trimmed path string.
  */
-function trimPathString(pathString: string) {
+export function trimPathString(pathString: string) {
   return pathString.replace(/^[./]+|[./]+$/gu, '');
 }
 
@@ -81,7 +35,7 @@ function trimPathString(pathString: string) {
  * @param {string} msg - The error message
  * @param {Error} err - The original error
  */
-function logError(msg: string, err: Error) {
+export function logError(msg: string, err: Error) {
   console.error(msg);
     if (err && global.snaps.verboseErrors) {
       console.error(err);
@@ -93,7 +47,7 @@ function logError(msg: string, err: Error) {
  *
  * @param {string} msg - The warning message
  */
-function logWarning(msg: string, error: Error) {
+export function logWarning(msg: string, error: Error) {
   if (msg && !global.snaps.suppressWarnings) {
     console.warn(msg);
     if (error && global.snaps.verboseErrors) {
@@ -110,7 +64,7 @@ function logWarning(msg: string, error: Error) {
  * @param {string} outDir - The out file directory
  * @returns {string} - The complete out file path
  */
-function getOutfilePath(outDir: string, outFileName: string): string {
+export function getOutfilePath(outDir: string, outFileName: string): string {
   return pathUtils.join(outDir, outFileName || 'bundle.js');
 }
 
@@ -121,7 +75,7 @@ function getOutfilePath(outDir: string, outFileName: string): string {
  * @param {string} str - The file name to validate
  * @returns {boolean} - True if validation succeeded
  */
-function validateOutfileName(str: string): boolean {
+export function validateOutfileName(str: string): boolean {
   if (!str.endsWith('.js') || str.indexOf('/') !== -1) {
     throw new Error(`Invalid outfile name: ${str}`);
   }
@@ -135,7 +89,7 @@ function validateOutfileName(str: string): boolean {
  * @param {string} filePath - The file path to validate
  * @returns {Promise<boolean>} - True if validation succeeded
  */
-async function validateFilePath(filePath: string): Promise<boolean> {
+export async function validateFilePath(filePath: string): Promise<boolean> {
 
   const exists = await isFile(filePath);
 
@@ -154,7 +108,7 @@ async function validateFilePath(filePath: string): Promise<boolean> {
  * @param {boolean} createDir - Whether to create the directory if it doesn't exist
  * @returns {Promise<boolean>} - True if validation succeeded
  */
-async function validateDirPath(dirName: string, createDir: boolean): Promise<boolean> {
+export async function validateDirPath(dirName: string, createDir: boolean): Promise<boolean> {
 
   const exists = await isDirectory(dirName, createDir);
 
@@ -173,7 +127,7 @@ async function validateDirPath(dirName: string, createDir: boolean): Promise<boo
  * @param {boolean} createDir - Whether to create the directory if it doesn't exist
  * @returns {Promise<boolean>} - Whether the given path is an existing directory
  */
-async function isDirectory(pathString: string, createDir: boolean): Promise<boolean> {
+export async function isDirectory(pathString: string, createDir: boolean): Promise<boolean> {
   try {
     const stats = await fs.stat(pathString);
     return stats.isDirectory();
@@ -200,7 +154,7 @@ async function isDirectory(pathString: string, createDir: boolean): Promise<bool
  * @param {string} pathString - The path string to check
  * @returns {boolean} - Whether the given path is an existing file
  */
-async function isFile(pathString: string): Promise<boolean> {
+export async function isFile(pathString: string): Promise<boolean> {
   try {
     const stats = await fs.stat(pathString);
     return stats.isFile();
@@ -220,7 +174,7 @@ function openPrompt() {
   });
 }
 
-function prompt(question: string, def: string, shouldClose: boolean) {
+export function prompt(question: string, def: string, shouldClose: boolean) {
   if (!rl) {
     openPrompt();
   }
@@ -241,13 +195,13 @@ function prompt(question: string, def: string, shouldClose: boolean) {
   });
 }
 
-function closePrompt() {
+export function closePrompt() {
   if (rl) {
     rl.close();
   }
 }
 
-function assignGlobals(argv) {
+export function assignGlobals(argv) {
   if (['w', 'watch'].includes(argv._[0])) {
     global.snaps.isWatching = true;
   }
@@ -263,7 +217,7 @@ function assignGlobals(argv) {
  * Sanitizes inputs. Currently:
  * - normalizes paths
  */
-function sanitizeInputs(argv) {
+export function sanitizeInputs(argv) {
   Object.keys(argv).forEach((key) => {
     if (typeof argv[key] === 'string') {
       if (argv[key] === './') {
@@ -279,7 +233,7 @@ function sanitizeInputs(argv) {
  * Attempts to read the config file and apply the config to
  * globals.
  */
-async function applyConfig() {
+export async function applyConfig() {
   
   // first, attempt to read and apply config from package.json
 
