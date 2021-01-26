@@ -40,7 +40,6 @@ const builders = {
   },
 
   sourceMaps: {
-    alias: 'debug', // backwards compatibility
     describe: 'Whether builds include sourcemaps',
     type: 'boolean',
     default: false,

@@ -317,14 +317,6 @@ async function applyConfig() {
   }
 
   Object.keys(cfg).forEach((key) => {
-    let k = key;
-    // backwards compatibility
-    if (k === 'verbose') {
-      k = 'verboseErrors';
-    } else if (k === 'debug') {
-      k = 'sourceMaps';
-    }
-
-    builders[k].default = cfg[k];
+    builders[key].default = cfg[key];
   });
 }
