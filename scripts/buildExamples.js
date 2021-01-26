@@ -3,7 +3,7 @@ const path = require('path');
 
 const execa = require('execa');
 
-const { build } = require('../src/commands');
+const { build } = require('../src/cmds/build');
 
 // mock the snaps global
 global.snaps = {};
