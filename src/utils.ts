@@ -36,13 +36,29 @@ module.exports = {
   applyConfig,
 };
 
+export{};
+declare global {
+
+  type CustomSnap = {
+    verboseErrors: boolean,
+    suppressWarnings: boolean,
+    isWatching: boolean,
+  }
+
+  namespace NodeJS {
+    interface Global {
+      snaps: CustomSnap; 
+    }
+  }
+
+  const snaps: CustomSnap; 
+}
+
 global.snaps = {
   verboseErrors: false,
   suppressWarnings: false,
   isWatching: false,
 };
-
-// misc utils
 
 /**
  * Trims leading and trailing periods "." and forward slashes "/" from the
@@ -51,7 +67,7 @@ global.snaps = {
  * @param {string} pathString - The path string to trim.
  * @returns {string} The trimmed path string.
  */
-function trimPathString(pathString) {
+function trimPathString(pathString: string) {
   return pathString.replace(/^[./]+|[./]+$/gu, '');
 }
 
@@ -62,19 +78,11 @@ function trimPathString(pathString) {
  * @param {string} msg - The error message
  * @param {Error} err - The original error
  */
-function logError(msg, err) {
-  if (msg instanceof Error) {
-    if (snaps.verboseErrors) {
-      console.error(msg);
-    } else {
-      console.error(msg.message);
-    }
-  } else if (typeof msg === 'string') {
-    console.error(msg);
+function logError(msg: string, err: Error) {
+  console.error(msg);
     if (err && snaps.verboseErrors) {
       console.error(err);
     }
-  }
 }
 
 /**
@@ -82,9 +90,12 @@ function logError(msg, err) {
  *
  * @param {string} msg - The warning message
  */
-function logWarning(msg) {
-  if (msg && !snaps.supressWarnings) {
+function logWarning(msg: string, error: Error) {
+  if (msg && !snaps.suppressWarnings) {
     console.warn(msg);
+    if (error && snaps.verboseErrors) {
+      console.error(error);
+    }
   }
 }
 
@@ -96,7 +107,7 @@ function logWarning(msg) {
  * @param {string} outDir - The out file directory
  * @returns {string} - The complete out file path
  */
-function getOutfilePath(outDir, outFileName) {
+function getOutfilePath(outDir: string, outFileName: string): string {
   return pathUtils.join(outDir, outFileName || 'bundle.js');
 }
 
@@ -107,7 +118,7 @@ function getOutfilePath(outDir, outFileName) {
  * @param {string} str - The file name to validate
  * @returns {boolean} - True if validation succeeded
  */
-function validateOutfileName(str) {
+function validateOutfileName(str: string): boolean {
   if (!str.endsWith('.js') || str.indexOf('/') !== -1) {
     throw new Error(`Invalid outfile name: ${str}`);
   }
@@ -119,9 +130,9 @@ function validateOutfileName(str) {
  * Throws on validation failure
  *
  * @param {string} filePath - The file path to validate
- * @returns {boolean} - True if validation succeeded
+ * @returns {Promise<boolean>} - True if validation succeeded
  */
-async function validateFilePath(filePath) {
+async function validateFilePath(filePath: string): Promise<boolean> {
 
   const exists = await isFile(filePath);
 
@@ -137,9 +148,10 @@ async function validateFilePath(filePath) {
  * Throws on validation failure
  *
  * @param {string} dirPath - The directory path to validate
- * @returns {boolean} - True if validation succeeded
+ * @param {boolean} createDir - Whether to create the directory if it doesn't exist
+ * @returns {Promise<boolean>} - True if validation succeeded
  */
-async function validateDirPath(dirName, createDir) {
+async function validateDirPath(dirName: string, createDir: boolean): Promise<boolean> {
 
   const exists = await isDirectory(dirName, createDir);
 
@@ -156,9 +168,9 @@ async function validateDirPath(dirName, createDir) {
  *
  * @param {string} pathString - The path string to check
  * @param {boolean} createDir - Whether to create the directory if it doesn't exist
- * @returns {boolean} - Whether the given path is an existing directory
+ * @returns {Promise<boolean>} - Whether the given path is an existing directory
  */
-async function isDirectory(pathString, createDir) {
+async function isDirectory(pathString: string, createDir: boolean): Promise<boolean> {
   try {
     const stats = await fs.stat(pathString);
     return stats.isDirectory();
@@ -185,7 +197,7 @@ async function isDirectory(pathString, createDir) {
  * @param {string} pathString - The path string to check
  * @returns {boolean} - Whether the given path is an existing file
  */
-async function isFile(pathString) {
+async function isFile(pathString: string): Promise<boolean> {
   try {
     const stats = await fs.stat(pathString);
     return stats.isFile();
@@ -194,15 +206,9 @@ async function isFile(pathString) {
   }
 }
 
-// readline utils
+/* Readline Utils */
 
-let rl;
-
-function closePrompt() {
-  if (rl) {
-    rl.close();
-  }
-}
+let rl: any;
 
 function openPrompt() {
   rl = readline.createInterface({
@@ -211,7 +217,7 @@ function openPrompt() {
   });
 }
 
-function prompt(question, def, shouldClose) {
+function prompt(question: string, def: string, shouldClose: boolean) {
   if (!rl) {
     openPrompt();
   }
@@ -230,6 +236,12 @@ function prompt(question, def, shouldClose) {
       }
     });
   });
+}
+
+function closePrompt() {
+  if (rl) {
+    rl.close();
+  }
 }
 
 function assignGlobals(argv) {
@@ -265,8 +277,21 @@ function sanitizeInputs(argv) {
  * globals.
  */
 async function applyConfig() {
+  
   // first, attempt to read and apply config from package.json
-  let pkg = {};
+
+  interface Wallet {
+    bundle: { local: string, url: string };
+    initialPermissions: object;
+    requiredPermissions: object;
+  };
+  
+  interface JSONPackage {
+    main: string;
+    web3Wallet: Wallet;
+  }
+
+  let pkg: JSONPackage;
 
   try {
     pkg = JSON.parse(await fs.readFile('package.json'));
@@ -280,7 +305,7 @@ async function applyConfig() {
       if (bundle && bundle.local) {
         const { local: bundlePath } = bundle;
         builders.bundle.default = bundlePath;
-        let dist;
+        let dist: string;
         if (bundlePath.indexOf('/') === -1) {
           dist = '.';
         } else {
@@ -297,14 +322,14 @@ async function applyConfig() {
 
   // second, attempt to read and apply config from config file,
   // which will always be preferred if it exists
-  let cfg = {};
+  let cfg: object = {};
   for (const configPath of CONFIG_PATHS) {
     try {
       cfg = JSON.parse(await fs.readFile(configPath));
       break;
     } catch (err) {
       if (err.code !== 'ENOENT') {
-        logWarning(`Warning: '${configPath}' exists but could not be parsed.`);
+        logWarning(`Warning: '${configPath}' exists but could not be parsed.`, err);
       }
     }
   }
