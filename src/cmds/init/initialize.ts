@@ -1,29 +1,31 @@
 const { promises: fs, existsSync } = require('fs');
 const pathUtils = require('path');
-const packageInit = require('init-package-json');
+import init_package_json = require('init-package-json');
 
-const {
+import {
   CONFIG_PATHS, logError, logWarning, prompt, closePrompt, trimPathString,
-} = require('../../utils');
+} from '../../utils';
 const template = require('./initTemplate.json');
+
+import { Argument } from '../../types/yargs';
 
 const CONFIG_PATH = CONFIG_PATHS[0];
 
-module.exports = async function initialize(argv) {
+export async function initialize(argv: Argument) {
 
   console.log(`Init: Begin building 'package.json'\n`);
 
-  const package = await asyncPackageInit();
+  const pkg = await asyncPackageInit();
 
   await validateEmptyDir();
 
   console.log(`\nInit: Set 'package.json' web3Wallet properties\n`);
 
   const [_web3Wallet, newArgs] = await buildWeb3Wallet(argv);
-  package.web3Wallet = _web3Wallet;
+  pkg.web3Wallet = _web3Wallet;
 
   try {
-    await fs.writeFile('package.json', `${JSON.stringify(package, null, 2)}\n`);
+    await fs.writeFile('package.json', `${JSON.stringify(pkg, null, 2)}\n`);
   } catch (err) {
     logError(`Init Error: Fatal: Failed to write package.json`, err);
     process.exit(1);
@@ -32,8 +34,8 @@ module.exports = async function initialize(argv) {
   console.log(`\nInit: 'package.json' web3Wallet properties set successfully!`);
 
   // write main js entry file
-  const { main } = package;
-  newArgs.src = main;
+  const { main } = pkg;
+  (newArgs as any).src = main;
   try {
     await fs.writeFile(main, template.js);
     console.log(`Init: Wrote main entry file '${main}'`);
@@ -75,9 +77,9 @@ async function asyncPackageInit() {
 
     try {
 
-      const package = JSON.parse(await fs.readFile('package.json', 'utf8'));
+      const pkg = JSON.parse(await fs.readFile('package.json', 'utf8'));
       console.log(`Init: Successfully parsed 'package.json'!`);
-      return package;
+      return pkg;
     } catch (error) {
 
       logError(
@@ -92,15 +94,13 @@ async function asyncPackageInit() {
   const usesYarn = existsSync('yarn.lock');
 
   if (usesYarn) {
-    logError(
-      `Init Error: Found a 'yarn.lock' file but no 'package.json'. Please run 'yarn init' and try again.`,
-    );
+    logError(`Init Error: Found a 'yarn.lock' file but no 'package.json'. Please run 'yarn init' and try again.`);
     process.exit(1);
   }
 
   // run 'npm init'
   return new Promise((resolve, reject) => {
-    packageInit(process.cwd(), '', {}, (err, data) => {
+    init_package_json(process.cwd(), '', {}, (err, data) => {
       if (err) {
         reject(err);
       } else {
@@ -110,15 +110,16 @@ async function asyncPackageInit() {
   });
 }
 
-async function buildWeb3Wallet(argv) {
+async function buildWeb3Wallet(argv: Argument) {
 
   const { outfileName } = argv;
   const defaultPerms = { alert: {} };
   let { port, dist } = argv;
-  let initialPermissions = defaultPerms;
+  let initialPermissions = defaultPerms as unknown as string;
+  let finalPermissions: object;
 
   try {
-    const c = await prompt(`Use all default Snap manifest values?`, 'yes');
+    const c = await prompt(`Use all default Snap manifest values?`, 'yes', false);
     if (c && ['y', 'yes'].includes(c.toLowerCase())) {
       console.log('Using default values...');
       try {
@@ -139,10 +140,10 @@ async function buildWeb3Wallet(argv) {
   let noValidPort = true;
   while (noValidPort) {
     // eslint-disable-next-line require-atomic-updates
-    port = await prompt(`local server port:`, port);
+    port = (await prompt(`local server port:`, port as unknown as string)) as unknown as number;
     let err;
     try {
-      const parsedPort = Number.parseInt(port, 10);
+      const parsedPort = Number.parseInt(port as unknown as string, 10);
       if (parsedPort && parsedPort > 0) {
         port = parsedPort;
         noValidPort = false;
@@ -174,11 +175,11 @@ async function buildWeb3Wallet(argv) {
 
   let invalidPermissions = true;
   while (invalidPermissions) {
-    initialPermissions = await prompt(`initialPermissions: [perm1 perm2 ...] ([alert])`);
+    let initialPermissions = (await prompt(`initialPermissions: [perm1 perm2 ...] ([alert])`));
     let err;
     try {
       if (!initialPermissions) {
-        initialPermissions = defaultPerms;
+        initialPermissions = defaultPerms as unknown as string;
         break;
       }
       const splitPermissions = initialPermissions.split(' ')
@@ -192,7 +193,7 @@ async function buildWeb3Wallet(argv) {
           return acc;
         }, {});
 
-      initialPermissions = splitPermissions || defaultPerms;
+      finalPermissions = splitPermissions as any;
       invalidPermissions = false;
       break;
     } catch (e) {
@@ -211,7 +212,7 @@ async function buildWeb3Wallet(argv) {
           // url: `http://localhost:${port}/${dist}/${outfileName}`
           url: (new URL(`/${dist}/${outfileName}`, `http://localhost:${port}`)).toString(),
         },
-        initialPermissions,
+        finalPermissions,
       },
       { port, dist, outfileName },
     ];
