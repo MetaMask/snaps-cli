@@ -245,9 +245,9 @@ function assignGlobals(argv) {
 }
 
 /**
-   * Sanitizes inputs. Currently:
-   * - normalizes paths
-   */
+ * Sanitizes inputs. Currently:
+ * - normalizes paths
+ */
 function sanitizeInputs(argv) {
   Object.keys(argv).forEach((key) => {
     if (typeof argv[key] === 'string') {
@@ -261,9 +261,9 @@ function sanitizeInputs(argv) {
 }
 
 /**
-   * Attempts to read the config file and apply the config to
-   * globals.
-   */
+ * Attempts to read the config file and apply the config to
+ * globals.
+ */
 async function applyConfig() {
 
   // first, attempt to read and apply config from package.json
