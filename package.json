@@ -28,7 +28,8 @@
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-json": "^2.1.2",
     "eslint-plugin-node": "^11.1.0",
-    "execa": "^5.0.0"
+    "execa": "^5.0.0",
+    "typescript": "^4.1.3"
   },
   "bin": {
     "mm-snap": "./src/main.js"
