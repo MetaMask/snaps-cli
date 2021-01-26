@@ -35,7 +35,7 @@ export function trimPathString(pathString: string) {
  * @param {string} msg - The error message
  * @param {Error} err - The original error
  */
-export function logError(msg: string, err: Error) {
+export function logError(msg: string, err?: Error) {
   console.error(msg);
     if (err && global.snaps.verboseErrors) {
       console.error(err);
@@ -174,7 +174,7 @@ function openPrompt() {
   });
 }
 
-export function prompt(question: string, def: string, shouldClose: boolean) {
+export function prompt(question: string, def: string, shouldClose: boolean): Promise<string> {
   if (!rl) {
     openPrompt();
   }

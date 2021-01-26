@@ -2,6 +2,7 @@ const { promises: filesystem, createWriteStream } = require('fs');
 import browserify = require('browserify');
 import { stripComments } from 'strip-comments';
 import { logError } from '../../utils';
+import { Argument, Option } from '../../types/yargs';
 
 module.exports = { bundle };
 
@@ -10,11 +11,11 @@ module.exports = { bundle };
  *
  * @param {string} src - The source file path
  * @param {string} dest - The destination file path
- * @param {object} argv - argv from Yargs
+ * @param {Arguments} argv - argv from Yargs
  * @param {boolean} argv.sourceMaps - Whether to output sourcemaps
  * @param {boolean} argv.stripComments - Whether to remove comments from code
  */
-function bundle(src: string, dest: string, argv: Arguments) {
+function bundle(src: string, dest: string, argv: Argument) {
 
   const { sourceMaps: debug } = argv;
 
@@ -79,7 +80,7 @@ function createBundleStream(dest: string): NodeJS.WritableStream {
  * @param {object} options - post process options
  * @param {boolean} options.stripComments
  */
-async function closeBundleStream(stream: NodeJS.WritableStream, bundleString: string, options: Options) {
+async function closeBundleStream(stream: NodeJS.WritableStream, bundleString: string, options: Option) {
   stream.end(postProcess(bundleString, options));
 }
 
@@ -96,7 +97,7 @@ async function closeBundleStream(stream: NodeJS.WritableStream, bundleString: st
  * @param {boolean} options.stripComments
  * @returns {string} - The postprocessed bundle string
  */
-function postProcess(bundleString: string, options: Options): string {
+function postProcess(bundleString: string, options: Option): string {
 
   if (typeof bundleString !== 'string') {
     return null;
