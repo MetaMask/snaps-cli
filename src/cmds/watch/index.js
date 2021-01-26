@@ -3,8 +3,11 @@ const chokidar = require('chokidar');
 const builders = require('../../builders');
 const { bundle } = require('../build/bundle');
 const {
-  logError, getOutfilePath, validateDirPath,
-  validateFilePath, validateOutfileName,
+  logError,
+  getOutfilePath,
+  validateDirPath,
+  validateFilePath,
+  validateOutfileName,
 } = require('../../utils');
 
 module.exports.command = ['watch', 'w'];

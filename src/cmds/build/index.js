@@ -1,7 +1,9 @@
 const builders = require('../../builders');
 const {
-  getOutfilePath, validateDirPath,
-  validateFilePath, validateOutfileName,
+  getOutfilePath,
+  validateDirPath,
+  validateFilePath,
+  validateOutfileName,
 } = require('../../utils');
 const { handler: snapEval } = require('../eval');
 const { handler: manifest } = require('../manifest');

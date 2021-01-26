@@ -1,6 +1,5 @@
 const { promises: fs } = require('fs');
 const path = require('path');
-
 const execa = require('execa');
 
 const { handler: build } = require('../src/cmds/build');
