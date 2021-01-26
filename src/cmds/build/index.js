@@ -7,8 +7,6 @@ const { snapEval } = require('../eval');
 const { manifest } = require('../manifest');
 const { bundle } = require('./bundle');
 
-module.exports = { build };
-
 module.exports.command = ['build', 'b'];
 module.exports.desc = 'Build Snap from source';
 module.exports.builder = (yarg) => {

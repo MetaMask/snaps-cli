@@ -4,8 +4,6 @@ const pathUtils = require('path');
 const { builders } = require('../../builders');
 const { logError, validateFilePath } = require('../../utils');
 
-module.exports = { snapEval };
-
 module.exports.command = ['eval', 'e'];
 module.exports.desc = 'Attempt to evaluate Snap bundle in SES';
 module.exports.builder = (yarg) => {
