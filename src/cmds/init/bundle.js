@@ -2,10 +2,10 @@ const { promises: fs, existsSync } = require('fs');
 const pathUtils = require('path');
 const packageInit = require('init-package-json');
 
-const template = require('./initTemplate.json');
 const {
   CONFIG_PATHS, logError, logWarning, prompt, closePrompt, trimPathString,
-} = require('./utils');
+} = require('../../utils');
+const template = require('./initTemplate.json');
 
 const CONFIG_PATH = CONFIG_PATHS[0];
 

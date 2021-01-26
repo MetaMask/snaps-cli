@@ -4,7 +4,7 @@ const dequal = require('fast-deep-equal');
 const isUrl = require('is-url');
 const deepClone = require('rfdc')({ proto: false, circles: false });
 
-const { isFile, permRequestKeys } = require('./utils');
+const { isFile, permRequestKeys } = require('../../utils');
 
 const LOCALHOST_START = 'http://localhost';
 
