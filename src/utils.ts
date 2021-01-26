@@ -47,7 +47,7 @@ export function logError(msg: string, err?: Error) {
  *
  * @param {string} msg - The warning message
  */
-export function logWarning(msg: string, error: Error) {
+export function logWarning(msg: string, error?: Error) {
   if (msg && !global.snaps.suppressWarnings) {
     console.warn(msg);
     if (error && global.snaps.verboseErrors) {
@@ -174,7 +174,7 @@ function openPrompt() {
   });
 }
 
-export function prompt(question: string, def: string, shouldClose: boolean): Promise<string> {
+export function prompt(question: string, def?: string, shouldClose?: boolean): Promise<string> {
   if (!rl) {
     openPrompt();
   }
