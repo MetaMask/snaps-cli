@@ -15,16 +15,12 @@ const permRequestKeys = [
 
 const CONFIG_PATHS = [
   'snap.config.json',
-  // backwards compatibility
-  'mm-plugin.config.json',
-  '.mm-plugin.json',
 ];
 
 module.exports = {
   CONFIG_PATHS,
   isFile,
   isDirectory,
-  getEvalWorkerPath,
   getOutfilePath,
   logError,
   logWarning,
@@ -47,13 +43,6 @@ global.snaps = {
 };
 
 // misc utils
-
-/**
- * @returns {string} The path to the eval worker file.
- */
-function getEvalWorkerPath() {
-  return pathUtils.join(__dirname, 'evalWorker.js');
-}
 
 /**
  * Trims leading and trailing periods "." and forward slashes "/" from the

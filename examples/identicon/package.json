@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "mm-plugin serve"
+    "start": "mm-snap serve"
   },
   "author": "",
   "license": "ISC",
@@ -19,7 +19,6 @@
     }
   },
   "dependencies": {
-    "serve-handler": "^6.1.2",
-    "mm-plugin": "^0.3.13"
+    "serve-handler": "^6.1.2"
   }
 }

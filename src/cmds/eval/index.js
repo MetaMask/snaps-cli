@@ -1,7 +1,8 @@
 const { Worker } = require('worker_threads');
+const pathUtils = require('path');
 
 const { builders } = require('../../builders');
-const { logError, getEvalWorkerPath, validateFilePath } = require('../../utils');
+const { logError, validateFilePath } = require('../../utils');
 
 module.exports = { snapEval };
 
@@ -42,4 +43,11 @@ function workerEval(bundlePath) {
         pluginFilePath: bundlePath,
       });
   });
+}
+
+/**
+ * @returns {string} The path to the eval worker file.
+ */
+function getEvalWorkerPath() {
+  return pathUtils.join(__dirname, 'evalWorker.js');
 }

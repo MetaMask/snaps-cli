@@ -9,7 +9,7 @@ const template = require('./initTemplate.json');
 
 const CONFIG_PATH = CONFIG_PATHS[0];
 
-module.exports = async function initHandler(argv) {
+module.exports = async function initialize(argv) {
 
   console.log(`Init: Begin building 'package.json'\n`);
 

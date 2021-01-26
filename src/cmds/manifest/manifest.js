@@ -13,7 +13,6 @@ const LOCALHOST_START = 'http://localhost';
  * Exits with success message or gathers all errors before throwing at the end.
  */
 module.exports = async function manifest(argv) {
-
   let isInvalid = false;
   let hasWarnings = false;
   let didUpdate = false;

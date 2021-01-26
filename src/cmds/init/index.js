@@ -1,8 +1,6 @@
 const { builders } = require('../../builders');
 const { build } = require('../build');
-const initHandler = require('./bundle');
-
-console.log(build);
+const initHandler = require('./initialize');
 
 module.exports.command = ['init', 'i'];
 module.exports.desc = 'Initialize Snap package';
