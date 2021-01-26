@@ -38,27 +38,30 @@ module.exports = {
 
 export{};
 declare global {
-
-  type CustomSnap = {
-    verboseErrors: boolean,
-    suppressWarnings: boolean,
-    isWatching: boolean,
-  }
-
   namespace NodeJS {
     interface Global {
-      snaps: CustomSnap; 
-    }
+      snaps: {
+            verboseErrors: boolean,
+            suppressWarnings: boolean,
+            isWatching: boolean
+          }
+    } 
   }
-
-  const snaps: CustomSnap; 
 }
 
-global.snaps = {
-  verboseErrors: false,
-  suppressWarnings: false,
-  isWatching: false,
-};
+// interface SnapsGlobal extends NodeJS.Global {
+//   snaps: {
+//     verboseErrors: boolean,
+//     suppressWarnings: boolean,
+//     isWatching: boolean
+//   }
+// }
+
+// (global as unknown as SnapsGlobal).snaps = {
+//   verboseErrors: false,
+//   suppressWarnings: false,
+//   isWatching: false,
+// };
 
 /**
  * Trims leading and trailing periods "." and forward slashes "/" from the
@@ -80,7 +83,7 @@ function trimPathString(pathString: string) {
  */
 function logError(msg: string, err: Error) {
   console.error(msg);
-    if (err && snaps.verboseErrors) {
+    if (err && global.snaps.verboseErrors) {
       console.error(err);
     }
 }
@@ -91,9 +94,9 @@ function logError(msg: string, err: Error) {
  * @param {string} msg - The warning message
  */
 function logWarning(msg: string, error: Error) {
-  if (msg && !snaps.suppressWarnings) {
+  if (msg && !global.snaps.suppressWarnings) {
     console.warn(msg);
-    if (error && snaps.verboseErrors) {
+    if (error && global.snaps.verboseErrors) {
       console.error(error);
     }
   }
@@ -246,13 +249,13 @@ function closePrompt() {
 
 function assignGlobals(argv) {
   if (['w', 'watch'].includes(argv._[0])) {
-    snaps.isWatching = true;
+    global.snaps.isWatching = true;
   }
   if (Object.prototype.hasOwnProperty.call(argv, 'verboseErrors')) {
-    snaps.verboseErrors = Boolean(argv.verboseErrors);
+    global.snaps.verboseErrors = Boolean(argv.verboseErrors);
   }
   if (Object.prototype.hasOwnProperty.call(argv, 'suppressWarnings')) {
-    snaps.suppressWarnings = Boolean(argv.suppressWarnings);
+    global.snaps.suppressWarnings = Boolean(argv.suppressWarnings);
   }
 }
 
