@@ -11,4 +11,3 @@ async function main() {
   await applyConfig();
   cli(commands);
 }
-

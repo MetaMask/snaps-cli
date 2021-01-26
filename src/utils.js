@@ -265,9 +265,9 @@ function sanitizeInputs(argv) {
  * globals.
  */
 async function applyConfig() {
-
   // first, attempt to read and apply config from package.json
   let pkg = {};
+
   try {
     pkg = JSON.parse(await fs.readFile('package.json'));
 
