@@ -74,5 +74,6 @@
     "./src/cmds/build/index.ts", 
     "./src/cmds/init/initialize.ts",
     "./src/cmds/init/index.ts", 
+    "./src/cmds/manifest/manifest.ts"
   ],
 }

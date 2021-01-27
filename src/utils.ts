@@ -3,6 +3,10 @@ const pathUtils = require('path');
 const readline = require('readline');
 const builders = require('./builders');
 
+import yargs from "yargs";
+import { JSONPackage } from "./types/package"; 
+import { Argument } from "./types/yargs";
+
 export const permRequestKeys = [
   '@context',
   'id',
@@ -183,7 +187,7 @@ export function prompt(question: string, def?: string, shouldClose?: boolean): P
     if (def) {
       queryString += `(${def}) `;
     }
-    rl.question(queryString, (answer) => {
+    rl.question(queryString, (answer: string) => {
       if (!answer || !answer.trim()) {
         resolve(def);
       }
@@ -201,8 +205,8 @@ export function closePrompt() {
   }
 }
 
-export function assignGlobals(argv) {
-  if (['w', 'watch'].includes(argv._[0])) {
+export function assignGlobals(argv: Argument) {
+  if (['w', 'watch'].includes(argv._[0] as string)) {
     global.snaps.isWatching = true;
   }
   if (Object.prototype.hasOwnProperty.call(argv, 'verboseErrors')) {
@@ -217,13 +221,13 @@ export function assignGlobals(argv) {
  * Sanitizes inputs. Currently:
  * - normalizes paths
  */
-export function sanitizeInputs(argv) {
+export function sanitizeInputs(argv: Argument) {
   Object.keys(argv).forEach((key) => {
     if (typeof argv[key] === 'string') {
       if (argv[key] === './') {
         argv[key] = '.';
-      } else if (argv[key].startsWith('./')) {
-        argv[key] = argv[key].substring(2);
+      } else if ((argv[key] as string).startsWith('./')) {
+        argv[key] = (argv[key] as string).substring(2);
       }
     }
   });
@@ -236,17 +240,6 @@ export function sanitizeInputs(argv) {
 export async function applyConfig() {
   
   // first, attempt to read and apply config from package.json
-
-  interface Wallet {
-    bundle: { local: string, url: string };
-    initialPermissions: object;
-    requiredPermissions: object;
-  };
-  
-  interface JSONPackage {
-    main: string;
-    web3Wallet: Wallet;
-  }
 
   let pkg: JSONPackage;
 
@@ -279,7 +272,7 @@ export async function applyConfig() {
 
   // second, attempt to read and apply config from config file,
   // which will always be preferred if it exists
-  let cfg: object = {};
+  let cfg: JSONPackage = {};
   for (const configPath of CONFIG_PATHS) {
     try {
       cfg = JSON.parse(await fs.readFile(configPath));

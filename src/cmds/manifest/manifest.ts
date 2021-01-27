@@ -1,3 +1,6 @@
+import { Argument } from "../../types/yargs";
+import { JSONPackage } from "../../types/package"; 
+
 const { promises: fs } = require('fs');
 const pathUtils = require('path');
 const dequal = require('fast-deep-equal');
@@ -12,7 +15,7 @@ const LOCALHOST_START = 'http://localhost';
  * Validates a Snap package.json file.
  * Exits with success message or gathers all errors before throwing at the end.
  */
-module.exports = async function manifest(argv) {
+module.exports = async function manifest(argv: Argument) {
   let isInvalid = false;
   let hasWarnings = false;
   let didUpdate = false;
@@ -23,7 +26,7 @@ module.exports = async function manifest(argv) {
   }
 
   // read the package.json file
-  let pkg;
+  let pkg: JSONPackage;
   try {
     pkg = JSON.parse(await fs.readFile('package.json'));
   } catch (err) {
@@ -33,7 +36,7 @@ module.exports = async function manifest(argv) {
         `you are running the command in the project root directory.`,
       );
     }
-    throw new Error(`Could not parse package.json`, err);
+    throw new Error(`Could not parse package.json`);
   }
 
   if (!pkg || typeof pkg !== 'object') {
@@ -74,10 +77,10 @@ module.exports = async function manifest(argv) {
 
     // sort web3Wallet object keys
     Object.entries(pkg.web3Wallet).forEach(([k, v]) => {
-      if (typeof v === 'object' && !Array.isArray(v)) {
+      if (typeof v === 'object' && !Array.isArray(v) && pkg.web3Wallet !== undefined) {
         pkg.web3Wallet[k] = Object.keys(v).sort().reduce(
           (acc, l) => {
-            acc[l] = v[l];
+            (acc as any)[l] = (v as any)[l];
             return acc;
           }, {},
         );
@@ -125,10 +128,12 @@ module.exports = async function manifest(argv) {
     logManifestError(`Missing required 'web3Wallet' property 'bundle.local'.`);
   }
 
-  if (!bundle.url) {
-    logManifestError(`Missing required 'bundle.url' property.`);
-  } else if (!isUrl(bundle.url)) {
-    logManifestError(`'bundle.url' does not resolve to a URL.`);
+  if (bundle !== undefined) {
+    if (!bundle.url) {
+      logManifestError(`Missing required 'bundle.url' property.`);
+    } else if (!isUrl(bundle.url)) {
+      logManifestError(`'bundle.url' does not resolve to a URL.`);
+    }
   }
 
   if (Object.prototype.hasOwnProperty.call(pkg.web3Wallet, 'initialPermissions')) {
@@ -169,7 +174,7 @@ module.exports = async function manifest(argv) {
         console.log(`Manifest: Updated '${pkg.name}' package.json!`);
       }
     } catch (err) {
-      throw new Error(`Could not write package.json`, err);
+      throw new Error(`Could not write package.json`);
     }
   }
 
@@ -181,16 +186,16 @@ module.exports = async function manifest(argv) {
     console.log(`Manifest Success: Validated '${pkg.name}' package.json!`);
   }
 
-  function logManifestError(message, err) {
+  function logManifestError(message: string, err?: Error) {
     isInvalid = true;
     console.error(`Manifest Error: ${message}`);
-    if (err && snaps.verboseErrors) {
+    if (err && global.snaps.verboseErrors) {
       console.error(err);
     }
   }
 
-  function logManifestWarning(message) {
-    if (!snaps.suppressWarnings) {
+  function logManifestWarning(message: string) {
+    if (!global.snaps.suppressWarnings) {
       hasWarnings = true;
       console.warn(`Manifest Warning: ${message}`);
     }
