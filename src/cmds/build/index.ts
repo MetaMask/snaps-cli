@@ -1,4 +1,4 @@
-import { builders } from '../../builders';
+const builders = require('../../builders');
 const {
   getOutfilePath,
   validateDirPath,
@@ -9,9 +9,12 @@ const { handler: snapEval } = require('../eval');
 const { handler: manifest } = require('../manifest');
 const { bundle } = require('./bundle');
 
+import yargs = require("../../../node_modules/@types/yargs");
+import { Argument } from "../../types/yargs";
+
 module.exports.command = ['build', 'b'];
 module.exports.desc = 'Build Snap from source';
-module.exports.builder = (yarg) => {
+module.exports.builder = (yarg: yargs.Argv) => {
   yarg
     .option('src', builders.src)
     .option('dist', builders.dist)
@@ -25,7 +28,7 @@ module.exports.builder = (yarg) => {
     .option('environment', builders.environment)
     .implies('populate', 'manifest');
 };
-module.exports.handler = (argv) => build(argv);
+module.exports.handler = (argv: Argument) => build(argv);
 
 /**
  * Builds all files in the given source directory to the given destination
@@ -38,7 +41,7 @@ module.exports.handler = (argv) => build(argv);
  * @param {string} argv.dist - The output directory path
  * @param {string} argv.outfileName - The output file name
  */
-async function build(argv) {
+async function build(argv: Argument) {
 
   const { src, dist, outfileName } = argv;
   if (outfileName) {

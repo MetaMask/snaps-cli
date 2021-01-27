@@ -1,10 +1,21 @@
-const { promises: filesystem, createWriteStream } = require('fs');
-import browserify = require('browserify');
-import { stripComments } from 'strip-comments';
+import { promises as filesystem, createWriteStream } from 'fs';
+import browserify from 'browserify';
+import stripComments from 'strip-comments';
 import { logError } from '../../utils';
-import { Argument, Option } from '../../types/yargs';
 
-module.exports = { bundle };
+import yargs = require("../../../node_modules/@types/yargs");
+import { Argument, Option } from '../../types/yargs';
+declare global {
+  namespace NodeJS {
+    interface Global {
+      snaps: {
+            verboseErrors: boolean,
+            suppressWarnings: boolean,
+            isWatching: boolean
+          }
+    } 
+  }
+}
 
 /**
  * Builds a Snap bundle JSON file from its JavaScript source.
@@ -30,7 +41,7 @@ function bundle(src: string, dest: string, argv: Argument) {
       // .transform('babelify', {
       //   presets: ['@babel/preset-env'],
       // })
-      .bundle(async (bundleError: any, bundleBuffer: Buffer) => {
+      .bundle(async (bundleError, bundleBuffer: Buffer) => {
 
         if (bundleError) {
           await writeError('Build error:', bundleError.message, bundleError);
@@ -80,7 +91,7 @@ function createBundleStream(dest: string): NodeJS.WritableStream {
  * @param {object} options - post process options
  * @param {boolean} options.stripComments
  */
-async function closeBundleStream(stream: NodeJS.WritableStream, bundleString: string, options: Option) {
+async function closeBundleStream(stream: NodeJS.WritableStream, bundleString: string | null, options: Option) {
   stream.end(postProcess(bundleString, options));
 }
 
@@ -97,10 +108,11 @@ async function closeBundleStream(stream: NodeJS.WritableStream, bundleString: st
  * @param {boolean} options.stripComments
  * @returns {string} - The postprocessed bundle string
  */
-function postProcess(bundleString: string, options: Option): string {
+function postProcess(bundleString: string | null, options: Option): string {
 
   if (typeof bundleString !== 'string') {
-    return null;
+    console.log(bundleString + 'is not an acceptable bundleString');
+    return "";
   }
 
   let processedString = bundleString.trim();

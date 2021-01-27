@@ -1,4 +1,4 @@
-const { promises: fs, existsSync } = require('fs');
+import { promises as fs, existsSync } from 'fs';
 const pathUtils = require('path');
 import init_package_json = require('init-package-json');
 
@@ -186,7 +186,7 @@ async function buildWeb3Wallet(argv: Argument) {
         .reduce((acc, p) => {
           console.log(p);
           if (typeof p === 'string' && p.match(/^[\w\d_]+$/u)) {
-            acc[p] = {};
+            (acc as any)[p] = {};
           } else {
             logWarning(`Invalid permissions: ${p}`);
           }

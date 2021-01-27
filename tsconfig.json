@@ -67,5 +67,12 @@
     "skipLibCheck": false,                     /* Skip type checking of declaration files. */
     "forceConsistentCasingInFileNames": true,  /* Disallow inconsistently-cased references to the same file. */
   },
-  "include": ["./src/util.ts", "./src/builders.ts", "./src/cmds/bundle.ts", "./src/cmds/index.ts"],
+  "include": [
+    "./src/util.ts", 
+    "./src/builders.ts", 
+    "./src/cmds/build/bundle.ts", 
+    "./src/cmds/build/index.ts", 
+    "./src/cmds/init/initialize.ts",
+    "./src/cmds/init/index.ts", 
+  ],
 }

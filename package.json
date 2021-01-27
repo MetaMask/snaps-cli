@@ -41,6 +41,7 @@
     "@babel/core": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
     "@types/init-package-json": "^1.10.0",
+    "@types/strip-comments": "^2.0.0",
     "babelify": "^10.0.0",
     "browserify": "^17.0.0",
     "chokidar": "^3.0.2",
