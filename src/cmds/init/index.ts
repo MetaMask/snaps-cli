@@ -2,6 +2,9 @@ const builders = require('../../builders');
 const { handler: build } = require('../build');
 const initHandler = require('./initialize');
 
+import { Options } from "yargs";
+import { Argument } from "../../types/yargs";
+
 module.exports.command = ['init', 'i'];
 module.exports.desc = 'Initialize Snap package';
 module.exports.builder = (yarg) => {
