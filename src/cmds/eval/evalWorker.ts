@@ -2,17 +2,19 @@
 
 const { parentPort } = require('worker_threads');
 const { readFileSync } = require('fs');
-const crypto = require('crypto');
+const cryptography = require('crypto');
 
-// eslint-disable-next-line import/no-unassigned-import
 require('ses/lockdown');
+
+declare var lockdown: any;
+declare var Compartment: any;
 
 lockdown({
   mathTaming: 'unsafe',
   errorTaming: 'unsafe',
 });
 
-parentPort.on('message', (message) => {
+parentPort.on('message', (message: any) => {
 
   const { pluginFilePath } = message;
 
@@ -33,7 +35,7 @@ function getMockApi() {
     },
     BigInt,
     setTimeout,
-    crypto,
+    cryptography,
     SubtleCrypto: () => undefined,
     fetch: () => true,
     XMLHttpRequest: () => true,
@@ -42,7 +44,7 @@ function getMockApi() {
     Date,
 
     window: {
-      crypto,
+      cryptography,
       SubtleCrypto: () => undefined,
       fetch: () => true,
       XMLHttpRequest: () => true,

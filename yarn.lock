@@ -7,10 +7,10 @@
   resolved "https://registry.yarnpkg.com/@agoric/babel-standalone/-/babel-standalone-7.9.5.tgz#1ca0c17844924199d31e49d6b67e8b2a629b8599"
   integrity sha512-1Aa23oPuRi4kywUyZODo8zey9Gq2NpD2xUnNvgJLoT8orMQRlVOtvbG3JeHq5sjJERlF/q6csg4/P8t8/5IABA==
 
-"@agoric/make-hardener@^0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@agoric/make-hardener/-/make-hardener-0.1.0.tgz#59539b611228ad8e9652cf6cc80925fdcd97ee9a"
-  integrity sha512-2nyT18UcAzwxw/C0Kf2fp5oI9BLf8YD9MmTvbHD0/FvjsK4FwnfGAk7P8f+eE9KgRoyfH8lqcnVO5ltwJrtmbw==
+"@agoric/make-hardener@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@agoric/make-hardener/-/make-hardener-0.1.2.tgz#b9a72d98ae23a4c6918cd7dc4a9a72deebafde45"
+  integrity sha512-l5O7TCVDcl6NcWW5Rp/lAQaFLmje97wHrKPJbYV08M4TNDgSiMlesYtar40OnAR2pnzgsyilSQc+hU5mEvCJWg==
 
 "@agoric/transform-module@^0.4.1":
   version "0.4.1"
@@ -702,6 +702,11 @@
   version "14.14.22"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.22.tgz#0d29f382472c4ccf3bd96ff0ce47daf5b7b84b18"
   integrity sha512-g+f/qj/cNcqKkc3tFqlXOYjrmZA+jNBiDzbP3kH+B+otKFqAdPgVTGP1IeKRdMml/aE69as5S4FqtxAbl+LaMw==
+
+"@types/strip-comments@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@types/strip-comments/-/strip-comments-2.0.0.tgz#2b2760af4b4e718c6f06c8ff5cf545c6224a814d"
+  integrity sha512-B0PNDZ+50qubrXFZsLN+DVnJdSqv1u80YiLIZuFmrtmf/yC57R2C2S3fUjsuqjFuFcu2kCNOoImVhXNK/+xBvQ==
 
 "@types/yargs-parser@*":
   version "20.2.0"
@@ -2979,13 +2984,13 @@ serve-handler@^6.1.1:
     path-to-regexp "2.2.1"
     range-parser "1.2.0"
 
-ses@^0.11.0:
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/ses/-/ses-0.11.0.tgz#1e470112ed320d169f0b850525858129c0be0881"
-  integrity sha512-3HH+23C4bijk9VegfiP+cBMqkGim/TMsj/DK5nh/pJFiNrCMfi5euvVluIV66ry202+uckg7nXKrgrEcBwU8SA==
+ses@^0.11.1:
+  version "0.11.1"
+  resolved "https://registry.yarnpkg.com/ses/-/ses-0.11.1.tgz#9ba6103c25721cd000dc685f50d03487bdd3700f"
+  integrity sha512-ulorTzYygfVpvlKiAf/ZlnGFhJ7wngGHdJgi6hBrYwoV1tPsQNvBse9gfXMc7b0W8t98N9qagIYYveBkN+SiVA==
   dependencies:
     "@agoric/babel-standalone" "^7.9.5"
-    "@agoric/make-hardener" "^0.1.0"
+    "@agoric/make-hardener" "^0.1.2"
     "@agoric/transform-module" "^0.4.1"
 
 sha.js@^2.4.0, sha.js@^2.4.8:
