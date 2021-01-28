@@ -80,6 +80,8 @@
     "./src/cmds/eval/index.ts",
     "./src/cmds/serve/index.ts",
     "./src/cmds/watch/index.ts",
-    "./src/cmds/index.ts"
+    "./src/cmds/index.ts",
+    "./src/main.ts",
+    "./src/cli.ts"
   ],
 }

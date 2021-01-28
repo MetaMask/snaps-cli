@@ -5,17 +5,6 @@ import { logError } from '../../utils';
 
 import yargs = require("../../../node_modules/@types/yargs");
 import { Argument, Option } from '../../types/yargs';
-declare global {
-  namespace NodeJS {
-    interface Global {
-      snaps: {
-            verboseErrors: boolean,
-            suppressWarnings: boolean,
-            isWatching: boolean
-          }
-    } 
-  }
-}
 
 /**
  * Builds a Snap bundle JSON file from its JavaScript source.

@@ -1,8 +1,23 @@
-const yargs = require('yargs');
+import yargs from "yargs";
+import { Argument } from "./types/yargs";
+
 const builders = require('./builders');
 const { assignGlobals, sanitizeInputs } = require('./utils');
 
-module.exports = function cli(commands) {
+export{};
+declare global {
+  namespace NodeJS {
+    interface Global {
+      snaps: {
+            verboseErrors: boolean,
+            suppressWarnings: boolean,
+            isWatching: boolean
+          }
+    } 
+  }
+}
+
+module.exports = function cli(commands: any) {
   // eslint-disable-next-line no-unused-expressions
   yargs(process.argv.slice(2))
     .usage('Usage: $0 <command> [options]')
@@ -26,9 +41,9 @@ module.exports = function cli(commands) {
       sanitizeInputs(argv);
     })
 
-    .fail((msg, err, _yargs) => {
+    .fail((msg: string, err: Error, _yargs: yargs.Argv) => {
       console.error(msg || err.message);
-      if (err && err.stack && snaps.verboseErrors) {
+      if (err && err.stack && global.snaps.verboseErrors) {
         console.error(err.stack);
       }
       process.exit(1);
