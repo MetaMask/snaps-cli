@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const cli = require('./cli');
+import { cli } from './cli';
 const commands = require('./cmds');
 const { applyConfig } = require('./utils');
 

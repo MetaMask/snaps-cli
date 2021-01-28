@@ -189,7 +189,9 @@ export function prompt(question: string, def?: string, shouldClose?: boolean): P
     }
     rl.question(queryString, (answer: string) => {
       if (!answer || !answer.trim()) {
-        resolve(def);
+        if (def !== undefined) {
+          resolve(def);
+        }
       }
       resolve(answer.trim());
       if (shouldClose) {

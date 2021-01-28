@@ -34,7 +34,7 @@ function workerEval(bundlePath: string) {
     new WorkerThread(getEvalWorkerPath())
       .on('exit', (exitCode: number) => {
         if (exitCode === 0) {
-          resolve();
+          resolve(null);
         } else {
           throw new Error(`Worker exited abnormally! Code: ${exitCode}`);
         }

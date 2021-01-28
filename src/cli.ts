@@ -1,5 +1,4 @@
 import yargs from "yargs";
-import { Argument } from "./types/yargs";
 
 const builders = require('./builders');
 const { assignGlobals, sanitizeInputs } = require('./utils');
@@ -17,7 +16,7 @@ declare global {
   }
 }
 
-module.exports = function cli(commands: any) {
+export function cli(commands: any) {
   // eslint-disable-next-line no-unused-expressions
   yargs(process.argv.slice(2))
     .usage('Usage: $0 <command> [options]')
