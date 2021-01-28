@@ -1,17 +1,19 @@
-const http = require('http');
+import http from 'http';
 const serveHandler = require('serve-handler');
-
 const builders = require('../../builders');
 const { logError, validateDirPath } = require('../../utils');
 
+import yargs from "yargs";
+import { Argument } from "../../types/yargs";
+
 module.exports.command = ['serve', 's'];
 module.exports.desc = 'Locally serve Snap file(s) for testing';
-module.exports.builder = (yarg) => {
+module.exports.builder = (yarg: yargs.Argv) => {
   yarg
     .option('root', builders.root)
     .option('port', builders.port);
 };
-module.exports.handler = (argv) => serve(argv);
+module.exports.handler = (argv: Argument) => serve(argv);
 
 /**
  * Starts a local, static HTTP server on the given port with the given root
@@ -21,7 +23,7 @@ module.exports.handler = (argv) => serve(argv);
  * @param {string} argv.root - The root directory path string
  * @param {number} argv.port - The server port
  */
-async function serve(argv) {
+async function serve(argv: Argument) {
 
   const { port, root } = argv;
 
@@ -44,7 +46,7 @@ async function serve(argv) {
   });
 
   server.on('error', (err) => {
-    if (err.code === 'EADDRINUSE') {
+    if ((err as any).code === 'EADDRINUSE') {
       logError(`Server error: Port ${port} already in use.`);
     } else {
       logError(`Server error: ${err.message}`, err);

@@ -5,6 +5,7 @@ interface Argument extends Arguments{
     stripComments: boolean,
     port: number,
     dist: string,
+    src: string
 }
 
 interface Option extends Options{

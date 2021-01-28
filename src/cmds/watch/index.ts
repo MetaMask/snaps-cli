@@ -10,9 +10,12 @@ const {
   validateOutfileName,
 } = require('../../utils');
 
+import yargs from "yargs";
+import { Argument } from "../../types/yargs";
+
 module.exports.command = ['watch', 'w'];
 module.exports.desc = 'Build Snap on change';
-module.exports.builder = (yarg) => {
+module.exports.builder = (yarg: yargs.Argv) => {
   yarg
     .option('src', builders.src)
     .option('dist', builders.dist)
@@ -21,7 +24,7 @@ module.exports.builder = (yarg) => {
     .option('environment', builders.environment)
     .option('stripComments', builders.stripComments);
 };
-module.exports.handler = (argv) => watch(argv);
+module.exports.handler = (argv: Argument) => watch(argv);
 
 /**
  * Watch a directory and its subdirectories for changes, and build when files
@@ -35,7 +38,7 @@ module.exports.handler = (argv) => watch(argv);
  * @param {string} argv.dist - The output directory path
  * @param {string} argv.'outfileName' - The output file name
  */
-async function watch(argv) {
+async function watch(argv: Argument) {
 
   const { src, dist, outfileName } = argv;
   if (outfileName) {
@@ -55,7 +58,7 @@ async function watch(argv) {
       `**/${dist}/**`,
       `**/test/**`,
       `**/tests/**`,
-      (str) => str !== '.' && str.startsWith('.'),
+      (str: string) => str !== '.' && str.startsWith('.'),
     ],
   });
 
@@ -63,16 +66,16 @@ async function watch(argv) {
     .on('ready', () => {
       bundle(src, outfilePath, argv);
     })
-    .on('add', (path) => {
+    .on('add', (path: string) => {
       console.log(`File added: ${path}`);
       bundle(src, outfilePath, argv);
     })
-    .on('change', (path) => {
+    .on('change', (path: string) => {
       console.log(`File changed: ${path}`);
       bundle(src, outfilePath, argv);
     })
-    .on('unlink', (path) => console.log(`File removed: ${path}`))
-    .on('error', (err) => {
+    .on('unlink', (path: string) => console.log(`File removed: ${path}`))
+    .on('error', (err: Error) => {
       logError(`Watcher error: ${err.message}`, err);
     });
 

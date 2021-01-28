@@ -77,6 +77,9 @@
     "./src/cmds/manifest/manifest.ts",
     "./src/cmds/manifest/index.ts",
     "./src/cmds/eval/evalWorker.ts",
-    "./src/cmds/eval/index.ts"
+    "./src/cmds/eval/index.ts",
+    "./src/cmds/serve/index.ts",
+    "./src/cmds/watch/index.ts",
+    "./src/cmds/index.ts"
   ],
 }
