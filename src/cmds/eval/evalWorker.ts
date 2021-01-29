@@ -1,8 +1,8 @@
 /* global lockdown, Compartment, BigInt */
 
-const { parentPort } = require('worker_threads');
-const { readFileSync } = require('fs');
-const cryptography = require('crypto');
+import { parentPort } from 'worker_threads';
+import { readFileSync } from 'fs';
+import cryptography from 'crypto';
 
 require('ses/lockdown');
 
@@ -14,18 +14,21 @@ lockdown({
   errorTaming: 'unsafe',
 });
 
-parentPort.on('message', (message: any) => {
+if (parentPort !== null) {
+  parentPort.on('message', (message: any) => {
 
-  const { pluginFilePath } = message;
-
-  const compartment = new Compartment(getMockApi());
-  // Wrap the IIFE in an arrow function, because mocking the wallet is iffy
-  compartment.evaluate(
-    // '() => ' + readFileSync(pluginFilePath, 'utf8')
-    readFileSync(pluginFilePath, 'utf8'),
-  );
-  setTimeout(() => process.exit(0), 1000); // Hacky McHack
-});
+    const { pluginFilePath } = message;
+  
+    const compartment = new Compartment(getMockApi());
+    // Wrap the IIFE in an arrow function, because mocking the wallet is iffy
+    compartment.evaluate(
+      // '() => ' + readFileSync(pluginFilePath, 'utf8')
+      readFileSync(pluginFilePath, 'utf8'),
+    );
+    setTimeout(() => process.exit(0), 1000); // Hacky McHack
+    
+  });
+}
 
 function getMockApi() {
   return {
