@@ -1,13 +1,14 @@
-import { Argument } from "../../types/yargs";
-import { JSONPackage } from "../../types/package"; 
+import { promises as fs } from 'fs';
+import { isFile, permRequestKeys } from '../../utils';
+import pathUtils from 'path';
+import dequal from 'fast-deep-equal';
+import isUrl from 'is-url';
 
-const { promises: fs } = require('fs');
-const pathUtils = require('path');
-const dequal = require('fast-deep-equal');
-const isUrl = require('is-url');
 const deepClone = require('rfdc')({ proto: false, circles: false });
 
-const { isFile, permRequestKeys } = require('../../utils');
+/* Custom Type Imports */
+import { Argument } from "../../types/yargs";
+import { JSONPackage } from '../../types/package';
 
 const LOCALHOST_START = 'http://localhost';
 
@@ -15,7 +16,8 @@ const LOCALHOST_START = 'http://localhost';
  * Validates a Snap package.json file.
  * Exits with success message or gathers all errors before throwing at the end.
  */
-module.exports = async function manifest(argv: Argument) {
+export async function manifest(argv: Argument) {
+  
   let isInvalid = false;
   let hasWarnings = false;
   let didUpdate = false;
@@ -28,7 +30,7 @@ module.exports = async function manifest(argv: Argument) {
   // read the package.json file
   let pkg: JSONPackage;
   try {
-    pkg = JSON.parse(await fs.readFile('package.json'));
+    pkg = JSON.parse(await fs.readFile('package.json', 'utf-8'));
   } catch (err) {
     if (err.code === 'ENOENT') {
       throw new Error(
@@ -61,7 +63,7 @@ module.exports = async function manifest(argv: Argument) {
     const { bundle } = pkg.web3Wallet;
 
     const bundlePath = pathUtils.join(
-      dist, outfileName || 'bundle.js',
+      dist, outfileName as string|| 'bundle.js',
     );
     if (bundle.local !== bundlePath) {
       bundle.local = bundlePath;
@@ -77,7 +79,7 @@ module.exports = async function manifest(argv: Argument) {
 
     // sort web3Wallet object keys
     Object.entries(pkg.web3Wallet).forEach(([k, v]) => {
-      if (typeof v === 'object' && !Array.isArray(v) && pkg.web3Wallet !== undefined) {
+      if (typeof v === 'object' && !Array.isArray(v) && v !== null && pkg.web3Wallet !== undefined) {
         pkg.web3Wallet[k] = Object.keys(v).sort().reduce(
           (acc, l) => {
             (acc as any)[l] = (v as any)[l];
