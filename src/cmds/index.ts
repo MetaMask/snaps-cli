@@ -1,8 +1,8 @@
-const init = require('./init');
-const build = require('./build');
-const evaluate = require('./eval');
-const manifest = require('./manifest');
-const serve = require('./serve');
-const watch = require('./watch');
+import * as init from './init';
+import * as build from './build';
+import * as evaluate from './eval';
+import * as manifest from './manifest';
+import * as serve from './serve';
+import * as watch from './watch';
 
-module.exports = [init, build, evaluate, manifest, serve, watch];
+export default [init, build, evaluate, manifest, serve, watch];
