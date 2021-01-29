@@ -2,7 +2,7 @@
   "name": "snaps-cli",
   "version": "0.4.1",
   "description": "A CLI for developing MetaMask Snaps.",
-  "main": "./dist/main.js",
+  "main": "./main.ts",
   "files": [
     "src/*"
   ],
@@ -36,10 +36,11 @@
     "eslint-plugin-json": "^2.1.2",
     "eslint-plugin-node": "^11.1.0",
     "execa": "^5.0.0",
+    "ts-node": "^9.1.1",
     "typescript": "^4.1.3"
   },
   "bin": {
-    "mm-snap": "./dist/main.js"
+    "mm-snap": "./main.ts"
   },
   "dependencies": {
     "@babel/core": "^7.5.5",
