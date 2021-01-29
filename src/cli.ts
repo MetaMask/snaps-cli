@@ -1,9 +1,9 @@
-import yargs from "yargs";
+#!/usr/bin/env node
 
-const builders = require('./builders');
+import yargs = require('yargs/yargs');
+import builders from './builders';
 const { assignGlobals, sanitizeInputs } = require('./utils');
 
-export{};
 declare global {
   namespace NodeJS {
     interface Global {
@@ -19,6 +19,7 @@ declare global {
 export function cli(commands: any) {
   // eslint-disable-next-line no-unused-expressions
   yargs(process.argv.slice(2))
+
     .usage('Usage: $0 <command> [options]')
 
     .example('$0 init', `\tInitialize Snap package from scratch`)
@@ -30,9 +31,21 @@ export function cli(commands: any) {
 
     .command(commands)
 
-    .option('verboseErrors', builders.verboseErrors)
-    .option('suppressWarnings', builders.suppressWarnings)
-
+    .option('verboseErrors', {
+      alias: ['v', 'verbose'],
+      type: 'boolean',
+      describe: 'Display original errors',
+      required: false,
+      default: false,
+    })
+    .option('suppressWarnings', {
+      alias: 'w',
+      type: 'boolean',
+      describe: 'Suppress warnings',
+      required: false,
+      default: false,
+    })
+    
     .strict()
 
     .middleware((argv) => {
@@ -40,7 +53,7 @@ export function cli(commands: any) {
       sanitizeInputs(argv);
     })
 
-    .fail((msg: string, err: Error, _yargs: yargs.Argv) => {
+    .fail((msg: string, err: Error, _yargs: any) => {
       console.error(msg || err.message);
       if (err && err.stack && global.snaps.verboseErrors) {
         console.error(err.stack);
@@ -53,5 +66,5 @@ export function cli(commands: any) {
     .help()
     .alias('help', 'h')
 
-    .argv;
+  .argv;
 };

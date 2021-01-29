@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 import { cli } from './cli';
-const commands = require('./cmds');
-const { applyConfig } = require('./utils');
+import { applyConfig } from './utils';
+import commands from './cmds';
 
 main();
 
