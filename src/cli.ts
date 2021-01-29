@@ -1,7 +1,4 @@
-#!/usr/bin/env node
-
 import yargs = require('yargs/yargs');
-import builders from './builders';
 const { assignGlobals, sanitizeInputs } = require('./utils');
 
 declare global {

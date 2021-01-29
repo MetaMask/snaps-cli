@@ -20,6 +20,13 @@ export const CONFIG_PATHS = [
   'snap.config.json',
 ];
 
+// let globalvariable = global.snaps;
+global.snaps = {
+  verboseErrors: false,
+  suppressWarnings: false,
+  isWatching: false
+}
+
 /**
  * Trims leading and trailing periods "." and forward slashes "/" from the
  * given path string.
