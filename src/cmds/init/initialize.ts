@@ -1,17 +1,17 @@
 import { promises as fs, existsSync } from 'fs';
-const pathUtils = require('path');
-import init_package_json = require('init-package-json');
-
+import pathUtils from 'path';
+import init_package_json from 'init-package-json';
+import template from './initTemplate.json';
 import {
   CONFIG_PATHS, logError, logWarning, prompt, closePrompt, trimPathString,
 } from '../../utils';
-const template = require('./initTemplate.json');
 
+/* Custom Type Imports */
 import { Argument } from '../../types/yargs';
 
 const CONFIG_PATH = CONFIG_PATHS[0];
 
-export async function initialize(argv: Argument) {
+export async function initHandler(argv: Argument) {
 
   console.log(`Init: Begin building 'package.json'\n`);
 
@@ -47,7 +47,7 @@ export async function initialize(argv: Argument) {
   // write index.html
   try {
     await fs.writeFile('index.html', template.html.toString()
-      .replace(/_PORT_/gu, newArgs.port || argv.port));
+      .replace(/_PORT_/gu, newArgs.port as unknown as string|| argv.port as unknown as string)); // port is a number but we want `replace` to treat it as a string 
     console.log(`Init: Wrote 'index.html' file`);
   } catch (err) {
     logError(`Init Error: Fatal: Failed to write index.html file`, err);
@@ -208,7 +208,7 @@ async function buildWeb3Wallet(argv: Argument) {
     return [
       {
         bundle: {
-          local: pathUtils.join(dist, outfileName),
+          local: pathUtils.join(dist, outfileName as string),
           // url: `http://localhost:${port}/${dist}/${outfileName}`
           url: (new URL(`/${dist}/${outfileName}`, `http://localhost:${port}`)).toString(),
         },
