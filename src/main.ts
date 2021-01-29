@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env ts-node-script
 
 import { cli } from './cli';
 import { applyConfig } from './utils';
