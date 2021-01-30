@@ -2,7 +2,6 @@ module.exports = {
   extends: [
     '@metamask/eslint-config',
     '@metamask/eslint-config/config/nodejs',
-    '@metamask/eslint-config/config/typescript',
   ],
   plugins: [
     'json',
@@ -10,22 +9,13 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 2018,
   },
-  rules: {
-    // TODO: Remove these once they've landed on the main config
-    semi: ['error', 'always'],
-    'space-before-function-paren': [
-      'error',
-      {
-        anonymous: 'always',
-        asyncArrow: 'always',
-        named: 'never',
-      },
-    ],
-  },
   overrides: [
     {
       files: [
-        'src/**/*.js',
+        'src/**/*.ts',
+      ],
+      extends: [
+        '@metamask/eslint-config/config/typescript',
       ],
       env: {
         node: true,
@@ -35,6 +25,19 @@ module.exports = {
       },
       rules: {
         'node/no-process-exit': 'off',
+      },
+    },
+    {
+      files: [
+        '*.js',
+        '*.json',
+      ],
+      parserOptions: {
+        sourceType: 'script',
+      },
+      rules: {
+        '@typescript-eslint/no-require-imports': 'off',
+        '@typescript-eslint/no-var-requires': 'off',
       },
     },
     {
@@ -57,6 +60,15 @@ module.exports = {
       },
       rules: {
         'no-alert': 'off',
+        semi: ['error', 'always'],
+        'space-before-function-paren': [
+          'error',
+          {
+            anonymous: 'always',
+            asyncArrow: 'always',
+            named: 'never',
+          },
+        ],
       },
     },
   ],
@@ -65,4 +77,4 @@ module.exports = {
     'dist/',
     'node_modules/',
   ],
-};
+}
