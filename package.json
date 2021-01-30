@@ -63,11 +63,5 @@
   },
   "engines": {
     "node": ">=12.11.0"
-  },
-  "web3Wallet": {
-    "bundle": {
-      "local": "dist/bundle.js",
-      "url": "http://localhost:8081/dist/bundle.js"
-    }
   }
 }
