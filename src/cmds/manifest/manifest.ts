@@ -8,7 +8,7 @@ const deepClone = require('rfdc')({ proto: false, circles: false });
 
 /* Custom Type Imports */
 import { Argument } from "../../types/yargs";
-import { JSONPackage } from '../../types/package';
+import { JSONPackage, Wallet } from '../../types/package';
 
 const LOCALHOST_START = 'http://localhost';
 
@@ -77,17 +77,20 @@ export async function manifest(argv: Argument) {
       bundle.url = `${LOCALHOST_START}:${port}/${bundlePath}`;
     }
 
-    // sort web3Wallet object keys
-    Object.entries(pkg.web3Wallet).forEach(([k, v]) => {
-      if (typeof v === 'object' && !Array.isArray(v) && v !== null && pkg.web3Wallet !== undefined) {
-        pkg.web3Wallet[k] = Object.keys(v).sort().reduce(
-          (acc, l) => {
-            (acc as any)[l] = (v as any)[l];
-            return acc;
-          }, {},
-        );
-      }
-    });
+    if (pkg.web3Wallet) {
+      // sort web3Wallet object keys
+      Object.keys(pkg.web3Wallet).sort().forEach((k) => {
+        const v = (pkg.web3Wallet as unknown as Wallet)[k];
+        if (typeof v === 'object' && !Array.isArray(v) && v !== null) {
+          (pkg.web3Wallet as unknown as Wallet)[k] = Object.keys(v).sort().reduce(
+            (acc, l) => {
+              (acc as any)[l] = (v as any)[l];
+              return acc;
+            }, {},
+          );
+        }
+      });
+    }
 
     if (!dequal(old, pkg.web3Wallet)) {
       didUpdate = true;
