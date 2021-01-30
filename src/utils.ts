@@ -20,7 +20,6 @@ export const CONFIG_PATHS = [
   'snap.config.json',
 ];
 
-// let globalvariable = global.snaps;
 global.snaps = {
   verboseErrors: false,
   suppressWarnings: false,
