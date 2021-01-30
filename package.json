@@ -7,6 +7,9 @@
     "dist/"
   ],
   "scripts": {
+    "build:typescript": "tsc --project .",
+    "build:chmod": "chmod +x ./dist/main.js",
+    "build": "yarn build:typescript && yarn build:chmod",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev:gen-init-template": "node ./scripts/generateInitTemplate.js",
     "dev:build-examples": "node ./scripts/buildExamples.js",
