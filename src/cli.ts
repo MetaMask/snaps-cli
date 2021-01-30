@@ -1,5 +1,5 @@
 import yargs = require('yargs/yargs');
-const { assignGlobals, sanitizeInputs } = require('./utils');
+import { assignGlobals, sanitizeInputs } from './utils';
 
 declare global {
   namespace NodeJS {
@@ -45,7 +45,7 @@ export function cli(commands: any) {
     
     .strict()
 
-    .middleware((argv) => {
+    .middleware((argv: any) => {
       assignGlobals(argv);
       sanitizeInputs(argv);
     })
@@ -53,6 +53,7 @@ export function cli(commands: any) {
     .fail((msg: string, err: Error, _yargs: any) => {
       console.error(msg || err.message);
       if (err && err.stack && global.snaps.verboseErrors) {
+        global.process.abort
         console.error(err.stack);
       }
       process.exit(1);
