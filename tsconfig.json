@@ -83,6 +83,8 @@
     "./src/cmds/watch/index.ts",
     "./src/cmds/index.ts",
     "./src/main.ts",
-    "./src/cli.ts"
+    "./src/cli.ts",
+    "./scripts/buildExamples.ts",
+    "./scripts/generateInitTemplate.ts"
   ],
 }
