@@ -2,13 +2,13 @@
   "name": "snaps-cli",
   "version": "0.4.1",
   "description": "A CLI for developing MetaMask Snaps.",
-  "main": "./dist/main.js",
+  "main": "./dist/src/main.js",
   "files": [
     "dist/"
   ],
   "scripts": {
     "build:typescript": "tsc --project .",
-    "build:chmod": "chmod +x ./dist/main.js",
+    "build:chmod": "chmod +x ./dist/src/main.js",
     "build": "yarn build:typescript && yarn build:chmod",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev:gen-init-template": "node ./scripts/generateInitTemplate.js",
@@ -43,7 +43,7 @@
     "typescript": "^4.1.3"
   },
   "bin": {
-    "mm-snap": "./dist/main.js"
+    "mm-snap": "./dist/src/main.js"
   },
   "dependencies": {
     "@babel/core": "^7.5.5",
