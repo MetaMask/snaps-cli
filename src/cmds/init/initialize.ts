@@ -140,10 +140,10 @@ async function buildWeb3Wallet(argv: Argument) {
   let noValidPort = true;
   while (noValidPort) {
     // eslint-disable-next-line require-atomic-updates
-    port = (await prompt(`local server port:`, port as unknown as string)) as unknown as number;
+    const inputPort = (await prompt(`local server port:`, port as unknown as string));
     let err;
     try {
-      const parsedPort = Number.parseInt(port as unknown as string, 10);
+      const parsedPort = Number.parseInt(inputPort, 10);
       if (parsedPort && parsedPort > 0) {
         port = parsedPort;
         noValidPort = false;
