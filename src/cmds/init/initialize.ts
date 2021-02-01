@@ -1,13 +1,13 @@
 import { promises as fs, existsSync } from 'fs';
 import pathUtils from 'path';
-import init_package_json from 'init-package-json';
-import template from './initTemplate.json';
+import initPackageJson from 'init-package-json';
 import {
   CONFIG_PATHS, logError, logWarning, prompt, closePrompt, trimPathString,
 } from '../../utils';
 
 /* Custom Type Imports */
 import { Argument } from '../../types/yargs';
+import template from './initTemplate.json';
 
 const CONFIG_PATH = CONFIG_PATHS[0];
 
@@ -47,7 +47,7 @@ export async function initHandler(argv: Argument) {
   // write index.html
   try {
     await fs.writeFile('index.html', template.html.toString()
-      .replace(/_PORT_/gu, newArgs.port as unknown as string|| argv.port as unknown as string)); // port is a number but we want `replace` to treat it as a string 
+      .replace(/_PORT_/gu, newArgs.port as unknown as string || argv.port as unknown as string)); // port is a number but we want `replace` to treat it as a string
     console.log(`Init: Wrote 'index.html' file`);
   } catch (err) {
     logError(`Init Error: Fatal: Failed to write index.html file`, err);
@@ -64,7 +64,7 @@ export async function initHandler(argv: Argument) {
 
   closePrompt();
   return { ...argv, ...newArgs };
-};
+}
 
 async function asyncPackageInit() {
 
@@ -100,7 +100,7 @@ async function asyncPackageInit() {
 
   // run 'npm init'
   return new Promise((resolve, reject) => {
-    init_package_json(process.cwd(), '', {}, (err, data) => {
+    initPackageJson(process.cwd(), '', {}, (err, data) => {
       if (err) {
         reject(err);
       } else {
@@ -115,8 +115,7 @@ async function buildWeb3Wallet(argv: Argument) {
   const { outfileName } = argv;
   const defaultPerms = { alert: {} };
   let { port, dist } = argv;
-  let initialPermissions = defaultPerms as unknown as string;
-  let finalPermissions: object;
+  let finalPermissions: Record<string, unknown>;
 
   try {
     const c = await prompt(`Use all default Snap manifest values?`, 'yes', false);
@@ -141,11 +140,11 @@ async function buildWeb3Wallet(argv: Argument) {
   while (noValidPort) {
     // eslint-disable-next-line require-atomic-updates
     const inputPort = (await prompt(`local server port:`, port as unknown as string));
-    let err;
+    let err, tempPort;
     try {
       const parsedPort = Number.parseInt(inputPort, 10);
       if (parsedPort && parsedPort > 0) {
-        port = parsedPort;
+        tempPort = parsedPort;
         noValidPort = false;
         break;
       }
@@ -153,6 +152,9 @@ async function buildWeb3Wallet(argv: Argument) {
       err = e;
     }
     logError(`Invalid port '${port}, please retry.`, err);
+    if (tempPort !== undefined) {
+      port = tempPort;
+    }
   }
 
   let invalidDist = true;

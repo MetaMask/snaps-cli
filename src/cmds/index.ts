@@ -5,4 +5,5 @@ import * as manifest from './manifest';
 import * as serve from './serve';
 import * as watch from './watch';
 
-export default [init, build, evaluate, manifest, serve, watch];
+const commands = [init, build, evaluate, manifest, serve, watch];
+export default commands;

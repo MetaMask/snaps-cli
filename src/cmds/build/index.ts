@@ -2,10 +2,10 @@ import builders from '../../builders';
 import { getOutfilePath, validateDirPath, validateFilePath, validateOutfileName } from '../../utils';
 import { snapEval } from '../eval';
 import { manifest } from '../manifest/manifest';
+import { Argument } from '../../types/yargs';
 import { bundle } from './bundle';
 
 /* Custom Type Imports */
-import { Argument } from "../../types/yargs";
 
 module.exports.command = ['build', 'b'];
 module.exports.desc = 'Build Snap from source';

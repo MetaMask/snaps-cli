@@ -1,4 +1,4 @@
-import { Builder } from "./types/package";
+import { Builder } from './types/package';
 
 const builders: Builder = {
   src: {

@@ -1,14 +1,15 @@
 import { promises as fs } from 'fs';
-import { isFile, permRequestKeys } from '../../utils';
 import pathUtils from 'path';
 import dequal from 'fast-deep-equal';
 import isUrl from 'is-url';
-
-const deepClone = require('rfdc')({ proto: false, circles: false });
+import rfdc from 'rfdc';
+import { isFile, permRequestKeys } from '../../utils';
 
 /* Custom Type Imports */
-import { Argument } from "../../types/yargs";
+import { Argument } from '../../types/yargs';
 import { JSONPackage, Wallet } from '../../types/package';
+
+const deepClone = rfdc({ proto: false, circles: false });
 
 const LOCALHOST_START = 'http://localhost';
 
@@ -17,7 +18,7 @@ const LOCALHOST_START = 'http://localhost';
  * Exits with success message or gathers all errors before throwing at the end.
  */
 export async function manifest(argv: Argument) {
-  
+
   let isInvalid = false;
   let hasWarnings = false;
   let didUpdate = false;
@@ -63,7 +64,7 @@ export async function manifest(argv: Argument) {
     const { bundle } = pkg.web3Wallet;
 
     const bundlePath = pathUtils.join(
-      dist, outfileName as string|| 'bundle.js',
+      dist, outfileName as string || 'bundle.js',
     );
     if (bundle.local !== bundlePath) {
       bundle.local = bundlePath;
@@ -125,7 +126,7 @@ export async function manifest(argv: Argument) {
 
   // check web3Wallet properties
   const { bundle, initialPermissions } = pkg.web3Wallet || {};
-  if (bundle && bundle.local) {
+  if (bundle?.local) {
     if (!(await isFile(bundle.local))) {
       logManifestError(`'bundle.local' does not resolve to a file.`);
     }
@@ -154,15 +155,14 @@ export async function manifest(argv: Argument) {
         if (typeof o !== 'object' || Array.isArray(o)) {
           logManifestError(`inital permission '${k}' must be an object`);
 
-        } else {
-
+        } else if (o !== null) {
           Object.keys(o).forEach((_k) => {
             if (!permRequestKeys.includes(_k)) {
               logManifestError(`inital permission '${k}' has unrecognized key '${_k}'`);
             }
 
             if (_k === 'parentCapability' && k !== _k) {
-              logManifestError(`inital permissions '${k}' has mismatched 'parentCapability' field '${o[_k]}'`);
+              logManifestError(`inital permissions '${k}' has mismatched 'parentCapability' field '${(o as Record<string, unknown>)[_k]}'`);
             }
           });
         }
@@ -205,4 +205,4 @@ export async function manifest(argv: Argument) {
       console.warn(`Manifest Warning: ${message}`);
     }
   }
-};
+}

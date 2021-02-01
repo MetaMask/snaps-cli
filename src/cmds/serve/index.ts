@@ -4,7 +4,7 @@ import builders from '../../builders';
 import { logError, validateDirPath } from '../../utils';
 
 /* Custom Type Imports */
-import { Argument } from "../../types/yargs";
+import { Argument } from '../../types/yargs';
 
 module.exports.command = ['serve', 's'];
 module.exports.desc = 'Locally serve Snap file(s) for testing';

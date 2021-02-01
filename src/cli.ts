@@ -1,20 +1,21 @@
-import yargs = require('yargs/yargs');
+import yargs from 'yargs/yargs';
 import { assignGlobals, sanitizeInputs } from './utils';
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace NodeJS {
     interface Global {
       snaps: {
-            verboseErrors: boolean,
-            suppressWarnings: boolean,
-            isWatching: boolean
-          }
-    } 
+        verboseErrors: boolean;
+        suppressWarnings: boolean;
+        isWatching: boolean;
+      };
+    }
   }
 }
 
 export function cli(commands: any) {
-  // eslint-disable-next-line no-unused-expressions
+  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
   yargs(process.argv.slice(2))
 
     .usage('Usage: $0 <command> [options]')
@@ -42,7 +43,7 @@ export function cli(commands: any) {
       required: false,
       default: false,
     })
-    
+
     .strict()
 
     .middleware((argv: any) => {
@@ -52,8 +53,9 @@ export function cli(commands: any) {
 
     .fail((msg: string, err: Error, _yargs: any) => {
       console.error(msg || err.message);
-      if (err && err.stack && global.snaps.verboseErrors) {
-        global.process.abort
+      if (err?.stack && global.snaps.verboseErrors) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        global.process.abort;
         console.error(err.stack);
       }
       process.exit(1);
@@ -64,5 +66,5 @@ export function cli(commands: any) {
     .help()
     .alias('help', 'h')
 
-  .argv;
-};
+    .argv;
+}

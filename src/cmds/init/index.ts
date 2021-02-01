@@ -1,9 +1,9 @@
 import builders from '../../builders';
 import { build } from '../build';
+import { Argument } from '../../types/yargs';
 import { initHandler } from './initialize';
 
 /* Custom Type Imports */
-import { Argument } from '../../types/yargs';
 
 module.exports.command = ['init', 'i'];
 module.exports.desc = 'Initialize Snap package';

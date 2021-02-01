@@ -1,10 +1,10 @@
 import pathUtils from 'path';
-import builders from '../../builders';
 import { Worker } from 'worker_threads';
+import builders from '../../builders';
 import { logError, validateFilePath } from '../../utils';
 
 /* Custom Type Imports */
-import { Argument } from "../../types/yargs";
+import { Argument } from '../../types/yargs';
 
 module.exports.command = ['eval', 'e'];
 module.exports.desc = 'Attempt to evaluate Snap bundle in SES';

@@ -1,9 +1,9 @@
 import builders from '../../builders';
-import { manifest } from './manifest';
 import { logError } from '../../utils';
 
 /* Custom Type Imports */
-import { Argument } from "../../types/yargs";
+import { Argument } from '../../types/yargs';
+import { manifest } from './manifest';
 
 module.exports.command = ['manifest', 'm'];
 module.exports.desc = 'Validate project package.json as a Snap manifest';

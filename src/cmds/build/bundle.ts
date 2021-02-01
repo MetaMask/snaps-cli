@@ -1,7 +1,7 @@
 import { promises as filesystem, createWriteStream } from 'fs';
-import { logError } from '../../utils';
 import browserify from 'browserify';
 import stripComments from 'strip-comments';
+import { logError } from '../../utils';
 
 /* Custom Type Imports */
 import { Argument, Option } from '../../types/yargs';
@@ -23,7 +23,7 @@ export function bundle(src: string, dest: string, argv: Argument) {
 
     const bundleStream = createBundleStream(dest);
 
-    browserify (src, { debug })
+    browserify(src, { debug })
 
       // TODO: Just give up on babel, which we may not even need?
       // This creates globals that SES doesn't like
@@ -100,8 +100,8 @@ async function closeBundleStream(stream: NodeJS.WritableStream, bundleString: st
 function postProcess(bundleString: string | null, options: Option): string {
 
   if (typeof bundleString !== 'string') {
-    console.log(bundleString + 'is not an acceptable bundleString');
-    return "";
+    console.log(`${bundleString}is not an acceptable bundleString`);
+    return '';
   }
 
   let processedString = bundleString.trim();
