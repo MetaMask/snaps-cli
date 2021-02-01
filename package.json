@@ -4,15 +4,16 @@
   "description": "A CLI for developing MetaMask Snaps.",
   "main": "./dist/src/main.js",
   "files": [
-    "dist/"
+    "dist/",
+    "!dist/development"
   ],
   "scripts": {
     "build:typescript": "tsc --project .",
     "build:chmod": "chmod +x ./dist/src/main.js",
     "build": "yarn build:typescript && yarn build:chmod",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev:gen-init-template": "node ./scripts/generateInitTemplate.js",
-    "dev:build-examples": "node ./scripts/buildExamples.js",
+    "dev:gen-init-template": "node ./dist/development/generateInitTemplate.js",
+    "dev:build-examples": "node ./dist/development/buildExamples.js",
     "lint": "eslint . --ext js,json,ts",
     "lint:fix": "yarn lint --fix"
   },
