@@ -81,7 +81,7 @@ function createBundleStream(dest: string): NodeJS.WritableStream {
  * @param {boolean} options.stripComments
  */
 async function closeBundleStream(stream: NodeJS.WritableStream, bundleString: string | null, options: Option) {
-  stream.end(postProcess(bundleString, options));
+  stream.end(postProcess(bundleString, options) as string);
 }
 
 /**
@@ -97,11 +97,10 @@ async function closeBundleStream(stream: NodeJS.WritableStream, bundleString: st
  * @param {boolean} options.stripComments
  * @returns {string} - The postprocessed bundle string
  */
-function postProcess(bundleString: string | null, options: Option): string {
+function postProcess(bundleString: string | null, options: Option) {
 
   if (typeof bundleString !== 'string') {
-    console.log(`${bundleString}is not an acceptable bundleString`);
-    return '';
+    return null;
   }
 
   let processedString = bundleString.trim();
