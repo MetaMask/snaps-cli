@@ -36,6 +36,7 @@ export function cli(commands: any) {
       required: false,
       default: false,
     })
+
     .option('suppressWarnings', {
       alias: 'w',
       type: 'boolean',
@@ -46,16 +47,14 @@ export function cli(commands: any) {
 
     .strict()
 
-    .middleware((argv: any) => {
+    .middleware((argv) => {
       assignGlobals(argv);
       sanitizeInputs(argv);
     })
 
-    .fail((msg: string, err: Error, _yargs: any) => {
+    .fail((msg: string, err: Error, _yargs) => {
       console.error(msg || err.message);
       if (err?.stack && global.snaps.verboseErrors) {
-        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-        global.process.abort;
         console.error(err.stack);
       }
       process.exit(1);
