@@ -4,8 +4,6 @@ import dequal from 'fast-deep-equal';
 import isUrl from 'is-url';
 import rfdc from 'rfdc';
 import { isFile, permRequestKeys } from '../../utils';
-
-/* Custom Type Imports */
 import { Argument } from '../../types/yargs';
 import { JSONPackage, Wallet } from '../../types/package';
 

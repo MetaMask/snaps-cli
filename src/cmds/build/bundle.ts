@@ -2,8 +2,6 @@ import { promises as filesystem, createWriteStream } from 'fs';
 import browserify from 'browserify';
 import stripComments from 'strip-comments';
 import { logError } from '../../utils';
-
-/* Custom Type Imports */
 import { Argument, Option } from '../../types/yargs';
 
 /**

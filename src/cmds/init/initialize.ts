@@ -4,8 +4,6 @@ import initPackageJson from 'init-package-json';
 import {
   CONFIG_PATHS, logError, logWarning, prompt, closePrompt, trimPathString,
 } from '../../utils';
-
-/* Custom Type Imports */
 import { Argument } from '../../types/yargs';
 import template from './initTemplate.json';
 

@@ -3,8 +3,6 @@ import { build } from '../build';
 import { Argument } from '../../types/yargs';
 import { initHandler } from './initialize';
 
-/* Custom Type Imports */
-
 module.exports.command = ['init', 'i'];
 module.exports.desc = 'Initialize Snap package';
 module.exports.builder = (yarg: any) => {

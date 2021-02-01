@@ -2,8 +2,6 @@ import http from 'http';
 import serveHandler from 'serve-handler';
 import builders from '../../builders';
 import { logError, validateDirPath } from '../../utils';
-
-/* Custom Type Imports */
 import { Argument } from '../../types/yargs';
 
 module.exports.command = ['serve', 's'];

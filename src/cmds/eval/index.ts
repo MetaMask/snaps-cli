@@ -2,8 +2,6 @@ import pathUtils from 'path';
 import { Worker } from 'worker_threads';
 import builders from '../../builders';
 import { logError, validateFilePath } from '../../utils';
-
-/* Custom Type Imports */
 import { Argument } from '../../types/yargs';
 
 module.exports.command = ['eval', 'e'];

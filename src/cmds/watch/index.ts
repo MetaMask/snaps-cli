@@ -2,8 +2,6 @@ import chokidar from 'chokidar';
 import builders from '../../builders';
 import { bundle } from '../build/bundle';
 import { logError, getOutfilePath, validateDirPath, validateFilePath, validateOutfileName } from '../../utils';
-
-/* Custom Type Imports */
 import { Argument } from '../../types/yargs';
 
 module.exports.command = ['watch', 'w'];

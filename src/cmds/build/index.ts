@@ -5,8 +5,6 @@ import { manifest } from '../manifest/manifest';
 import { Argument } from '../../types/yargs';
 import { bundle } from './bundle';
 
-/* Custom Type Imports */
-
 module.exports.command = ['build', 'b'];
 module.exports.desc = 'Build Snap from source';
 module.exports.builder = (yarg: any) => {
