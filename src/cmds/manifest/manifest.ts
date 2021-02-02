@@ -82,8 +82,8 @@ export async function manifest(argv: YargsArgs): Promise<void> {
         const value = (pkg.web3Wallet as unknown as ManifestWalletProperty)[key];
         if (typeof value === 'object' && !Array.isArray(value) && value !== null) {
           (pkg.web3Wallet as unknown as ManifestWalletProperty)[key] = Object.keys(value).sort().reduce(
-            (propertyValue, l) => {
-              (propertyValue as any)[l] = (value as any)[l];
+            (propertyValue: Record<string, unknown>, innerKey) => {
+              propertyValue[innerKey] = value[innerKey];
               return propertyValue;
             }, {},
           );
