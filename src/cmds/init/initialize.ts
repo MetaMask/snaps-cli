@@ -5,11 +5,26 @@ import {
   CONFIG_PATHS, logError, logWarning, prompt, closePrompt, trimPathString,
 } from '../../utils';
 import { YargsArgs } from '../../types/yargs';
+import { NodePackageManifest } from '../../types/package';
 import template from './initTemplate.json';
 
 const CONFIG_PATH = CONFIG_PATHS[0];
 
-export async function initHandler(argv: YargsArgs) {
+export async function initHandler(argv: YargsArgs): Promise<{
+  bundle: {
+    local: string;
+    url: string;
+  };
+  finalPermissions: Record<string, unknown>;
+  port: number;
+  dist: string;
+  outfileName?: undefined;
+  sourceMaps: boolean;
+  stripComments: boolean;
+  src: string;
+  _: (string | number)[];
+  $0: string;
+}> {
 
   console.log(`Init: Begin building 'package.json'\n`);
 
@@ -33,13 +48,15 @@ export async function initHandler(argv: YargsArgs) {
 
   // write main js entry file
   const { main } = pkg;
-  (newArgs as any).src = main;
-  try {
-    await fs.writeFile(main, template.js);
-    console.log(`Init: Wrote main entry file '${main}'`);
-  } catch (err) {
-    logError(`Init Error: Fatal: Failed to write main .js file '${main}'`, err);
-    process.exit(1);
+  if (main !== undefined) {
+    newArgs.src = main;
+    try {
+      await fs.writeFile(main, template.js);
+      console.log(`Init: Wrote main entry file '${main}'`);
+    } catch (err) {
+      logError(`Init Error: Fatal: Failed to write main .js file '${main}'`, err);
+      process.exit(1);
+    }
   }
 
   // write index.html
@@ -64,7 +81,7 @@ export async function initHandler(argv: YargsArgs) {
   return { ...argv, ...newArgs };
 }
 
-async function asyncPackageInit() {
+async function asyncPackageInit(): Promise<NodePackageManifest> {
 
   // use existing package.json if found
   const hasPackage = existsSync('package.json');
@@ -108,7 +125,7 @@ async function asyncPackageInit() {
   });
 }
 
-async function buildWeb3Wallet(argv: YargsArgs) {
+async function buildWeb3Wallet(argv: YargsArgs): Promise<any> {
 
   const { outfileName } = argv;
   const defaultPerms = { alert: {} };
@@ -204,7 +221,22 @@ async function buildWeb3Wallet(argv: YargsArgs) {
 
   return endWeb3Wallet();
 
-  function endWeb3Wallet() {
+  function endWeb3Wallet(): ({
+    bundle: {
+      local: string;
+      url: string;
+    };
+    finalPermissions: Record<string, unknown>;
+    port?: undefined;
+    dist?: undefined;
+    outfileName?: undefined;
+  } | {
+    port: number;
+    dist: string;
+    outfileName: unknown;
+    bundle?: undefined;
+    finalPermissions?: undefined;
+  })[] {
     return [
       {
         bundle: {
@@ -219,7 +251,7 @@ async function buildWeb3Wallet(argv: YargsArgs) {
   }
 }
 
-async function validateEmptyDir() {
+async function validateEmptyDir(): Promise<void> {
   const existing = (await fs.readdir(process.cwd())).filter((item) => [
     'index.js', 'index.html', CONFIG_PATH, 'dist',
   ].includes(item.toString()));
