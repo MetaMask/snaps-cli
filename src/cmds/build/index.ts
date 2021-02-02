@@ -3,7 +3,7 @@ import builders from '../../builders';
 import { getOutfilePath, validateDirPath, validateFilePath, validateOutfileName } from '../../utils';
 import { snapEval } from '../eval';
 import { manifest } from '../manifest/manifest';
-import { Argument } from '../../types/yargs';
+import { YargsArgs } from '../../types/yargs';
 import { bundle } from './bundle';
 
 module.exports.command = ['build', 'b'];
@@ -22,7 +22,7 @@ module.exports.builder = (yarg: yargs.Argv) => {
     .option('environment', builders.environment)
     .implies('populate', 'manifest');
 };
-module.exports.handler = (argv: Argument) => build(argv);
+module.exports.handler = (argv: YargsArgs) => build(argv);
 
 /**
  * Builds all files in the given source directory to the given destination
@@ -35,7 +35,7 @@ module.exports.handler = (argv: Argument) => build(argv);
  * @param {string} argv.dist - The output directory path
  * @param {string} argv.outfileName - The output file name
  */
-export async function build(argv: Argument) {
+export async function build(argv: YargsArgs) {
 
   const { src, dist, outfileName } = argv;
   if (outfileName) {

@@ -3,7 +3,7 @@ import { Worker } from 'worker_threads';
 import yargs from 'yargs';
 import builders from '../../builders';
 import { logError, validateFilePath } from '../../utils';
-import { Argument } from '../../types/yargs';
+import { YargsArgs } from '../../types/yargs';
 
 module.exports.command = ['eval', 'e'];
 module.exports.desc = 'Attempt to evaluate Snap bundle in SES';
@@ -12,9 +12,9 @@ module.exports.builder = (yarg: yargs.Argv) => {
     .option('bundle', builders.bundle)
     .option('environment', builders.environment);
 };
-module.exports.handler = (argv: Argument) => snapEval(argv);
+module.exports.handler = (argv: YargsArgs) => snapEval(argv);
 
-export async function snapEval(argv: Argument) {
+export async function snapEval(argv: YargsArgs) {
   const { bundle: bundlePath } = argv;
   await validateFilePath(bundlePath as string);
   try {

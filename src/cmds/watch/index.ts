@@ -3,7 +3,7 @@ import yargs from 'yargs';
 import builders from '../../builders';
 import { bundle } from '../build/bundle';
 import { logError, getOutfilePath, validateDirPath, validateFilePath, validateOutfileName } from '../../utils';
-import { Argument } from '../../types/yargs';
+import { YargsArgs } from '../../types/yargs';
 
 module.exports.command = ['watch', 'w'];
 module.exports.desc = 'Build Snap on change';
@@ -16,7 +16,7 @@ module.exports.builder = (yarg: yargs.Argv) => {
     .option('environment', builders.environment)
     .option('stripComments', builders.stripComments);
 };
-module.exports.handler = (argv: Argument) => watch(argv);
+module.exports.handler = (argv: YargsArgs) => watch(argv);
 
 /**
  * Watch a directory and its subdirectories for changes, and build when files
@@ -30,7 +30,7 @@ module.exports.handler = (argv: Argument) => watch(argv);
  * @param {string} argv.dist - The output directory path
  * @param {string} argv.'outfileName' - The output file name
  */
-async function watch(argv: Argument) {
+async function watch(argv: YargsArgs) {
 
   const { src, dist, outfileName } = argv;
   if (outfileName) {

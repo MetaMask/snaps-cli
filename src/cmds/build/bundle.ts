@@ -2,7 +2,7 @@ import { promises as filesystem, createWriteStream } from 'fs';
 import browserify from 'browserify';
 import stripComments from 'strip-comments';
 import { logError } from '../../utils';
-import { Argument, Option } from '../../types/yargs';
+import { YargsArgs, Option } from '../../types/yargs';
 
 /**
  * Builds a Snap bundle JSON file from its JavaScript source.
@@ -13,7 +13,7 @@ import { Argument, Option } from '../../types/yargs';
  * @param {boolean} argv.sourceMaps - Whether to output sourcemaps
  * @param {boolean} argv.stripComments - Whether to remove comments from code
  */
-export function bundle(src: string, dest: string, argv: Argument) {
+export function bundle(src: string, dest: string, argv: YargsArgs) {
 
   const { sourceMaps: debug } = argv;
 

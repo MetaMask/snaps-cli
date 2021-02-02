@@ -1,9 +1,7 @@
 import yargs from 'yargs';
 import builders from '../../builders';
 import { logError } from '../../utils';
-
-/* Custom Type Imports */
-import { Argument } from '../../types/yargs';
+import { YargsArgs } from '../../types/yargs';
 import { manifest } from './manifest';
 
 module.exports.command = ['manifest', 'm'];
@@ -15,7 +13,7 @@ module.exports.builder = (yarg: yargs.Argv) => {
     .option('populate', builders.populate);
 };
 
-module.exports.handler = async (argv: Argument) => {
+module.exports.handler = async (argv: YargsArgs) => {
   try {
     await manifest(argv);
   } catch (err) {

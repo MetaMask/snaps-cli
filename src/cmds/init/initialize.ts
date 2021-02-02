@@ -4,12 +4,12 @@ import initPackageJson from 'init-package-json';
 import {
   CONFIG_PATHS, logError, logWarning, prompt, closePrompt, trimPathString,
 } from '../../utils';
-import { Argument } from '../../types/yargs';
+import { YargsArgs } from '../../types/yargs';
 import template from './initTemplate.json';
 
 const CONFIG_PATH = CONFIG_PATHS[0];
 
-export async function initHandler(argv: Argument) {
+export async function initHandler(argv: YargsArgs) {
 
   console.log(`Init: Begin building 'package.json'\n`);
 
@@ -108,7 +108,7 @@ async function asyncPackageInit() {
   });
 }
 
-async function buildWeb3Wallet(argv: Argument) {
+async function buildWeb3Wallet(argv: YargsArgs) {
 
   const { outfileName } = argv;
   const defaultPerms = { alert: {} };

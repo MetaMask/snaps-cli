@@ -1,6 +1,6 @@
 import { Arguments, Options } from 'yargs';
 
-interface Argument extends Arguments{
+interface YargsArgs extends Arguments{
   sourceMaps: boolean;
   stripComments: boolean;
   port: number;

@@ -4,8 +4,8 @@ import dequal from 'fast-deep-equal';
 import isUrl from 'is-url';
 import rfdc from 'rfdc';
 import { isFile, permRequestKeys } from '../../utils';
-import { Argument } from '../../types/yargs';
-import { JSONPackage, Wallet } from '../../types/package';
+import { YargsArgs } from '../../types/yargs';
+import { NodePackageManifest, ManifestWalletProperty } from '../../types/package';
 
 const deepClone = rfdc({ proto: false, circles: false });
 
@@ -15,7 +15,7 @@ const LOCALHOST_START = 'http://localhost';
  * Validates a Snap package.json file.
  * Exits with success message or gathers all errors before throwing at the end.
  */
-export async function manifest(argv: Argument) {
+export async function manifest(argv: YargsArgs) {
 
   let isInvalid = false;
   let hasWarnings = false;
@@ -27,7 +27,7 @@ export async function manifest(argv: Argument) {
   }
 
   // read the package.json file
-  let pkg: JSONPackage;
+  let pkg: NodePackageManifest;
   try {
     pkg = JSON.parse(await fs.readFile('package.json', 'utf-8'));
   } catch (err) {
@@ -79,9 +79,9 @@ export async function manifest(argv: Argument) {
     if (pkg.web3Wallet) {
       // sort web3Wallet object keys
       Object.keys(pkg.web3Wallet).sort().forEach((key) => {
-        const value = (pkg.web3Wallet as unknown as Wallet)[key];
+        const value = (pkg.web3Wallet as unknown as ManifestWalletProperty)[key];
         if (typeof value === 'object' && !Array.isArray(value) && value !== null) {
-          (pkg.web3Wallet as unknown as Wallet)[key] = Object.keys(value).sort().reduce(
+          (pkg.web3Wallet as unknown as ManifestWalletProperty)[key] = Object.keys(value).sort().reduce(
             (propertyValue, l) => {
               (propertyValue as any)[l] = (value as any)[l];
               return propertyValue;
