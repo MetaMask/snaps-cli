@@ -14,7 +14,7 @@
     "build:typescript": "tsc --project .",
     "build:chmod": "chmod +x ./dist/src/main.js",
     "build": "yarn build:typescript && yarn build:chmod",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "yarn build && jest",
     "dev:gen-init-template": "node ./dist/development/generateInitTemplate.js",
     "dev:build-examples": "node ./dist/development/buildExamples.js",
     "lint": "eslint . --ext js,json,d.ts,ts",
