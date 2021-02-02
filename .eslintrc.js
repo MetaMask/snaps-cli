@@ -2,6 +2,8 @@ module.exports = {
   extends: [
     '@metamask/eslint-config',
     '@metamask/eslint-config/config/nodejs',
+    '@metamask/eslint-config/config/jest',
+    '@metamask/eslint-config/config/typescript',
   ],
   plugins: [
     'json',
