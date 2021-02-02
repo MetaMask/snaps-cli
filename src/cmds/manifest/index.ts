@@ -1,3 +1,4 @@
+import yargs from 'yargs';
 import builders from '../../builders';
 import { logError } from '../../utils';
 
@@ -7,7 +8,7 @@ import { manifest } from './manifest';
 
 module.exports.command = ['manifest', 'm'];
 module.exports.desc = 'Validate project package.json as a Snap manifest';
-module.exports.builder = (yarg: any) => {
+module.exports.builder = (yarg: yargs.Argv) => {
   yarg
     .option('dist', builders.dist)
     .option('port', builders.port)

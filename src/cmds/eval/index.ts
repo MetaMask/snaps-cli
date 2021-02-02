@@ -1,12 +1,13 @@
 import pathUtils from 'path';
 import { Worker } from 'worker_threads';
+import yargs from 'yargs';
 import builders from '../../builders';
 import { logError, validateFilePath } from '../../utils';
 import { Argument } from '../../types/yargs';
 
 module.exports.command = ['eval', 'e'];
 module.exports.desc = 'Attempt to evaluate Snap bundle in SES';
-module.exports.builder = (yarg: any) => {
+module.exports.builder = (yarg: yargs.Argv) => {
   yarg
     .option('bundle', builders.bundle)
     .option('environment', builders.environment);

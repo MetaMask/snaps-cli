@@ -1,3 +1,5 @@
+import { Options } from 'yargs';
+
 interface Wallet {
   [key: string]: string | Record<string, unknown> | undefined | number;
   bundle?: { local?: string; url?: string };
@@ -11,29 +13,20 @@ export interface JSONPackage {
   web3Wallet?: Wallet;
 }
 
-interface BuilderBlock {
-  alias?: string | string[];
-  describe: string;
-  type: string;
-  required: boolean;
-  default: string | number | boolean;
-  choices?: string | string[];
-}
-
 export interface Builder {
-  [key: string]: BuilderBlock;
-  src: BuilderBlock;
-  dist: BuilderBlock;
-  bundle: BuilderBlock;
-  root: BuilderBlock;
-  port: BuilderBlock;
-  sourceMaps: BuilderBlock;
-  stripComments: BuilderBlock;
-  outfileName: BuilderBlock;
-  manifest: BuilderBlock;
-  populate: BuilderBlock;
-  eval: BuilderBlock;
-  verboseErrors: BuilderBlock;
-  suppressWarnings: BuilderBlock;
-  environment: BuilderBlock;
+  [key: string]: Options;
+  src: Options;
+  dist: Options;
+  bundle: Options;
+  root: Options;
+  port: Options;
+  sourceMaps: Options;
+  stripComments: Options;
+  outfileName: Options;
+  manifest: Options;
+  populate: Options;
+  eval: Options;
+  verboseErrors: Options;
+  suppressWarnings: Options;
+  environment: Options;
 }

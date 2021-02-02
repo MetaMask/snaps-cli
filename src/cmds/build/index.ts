@@ -1,3 +1,4 @@
+import yargs from 'yargs';
 import builders from '../../builders';
 import { getOutfilePath, validateDirPath, validateFilePath, validateOutfileName } from '../../utils';
 import { snapEval } from '../eval';
@@ -7,7 +8,7 @@ import { bundle } from './bundle';
 
 module.exports.command = ['build', 'b'];
 module.exports.desc = 'Build Snap from source';
-module.exports.builder = (yarg: any) => {
+module.exports.builder = (yarg: yargs.Argv) => {
   yarg
     .option('src', builders.src)
     .option('dist', builders.dist)

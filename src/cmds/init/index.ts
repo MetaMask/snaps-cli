@@ -1,3 +1,4 @@
+import yargs from 'yargs';
 import builders from '../../builders';
 import { build } from '../build';
 import { Argument } from '../../types/yargs';
@@ -5,7 +6,7 @@ import { initHandler } from './initialize';
 
 module.exports.command = ['init', 'i'];
 module.exports.desc = 'Initialize Snap package';
-module.exports.builder = (yarg: any) => {
+module.exports.builder = (yarg: yargs.Argv) => {
   yarg
     .option('src', builders.src)
     .option('dist', builders.dist)

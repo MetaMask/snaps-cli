@@ -1,12 +1,13 @@
 import http from 'http';
 import serveHandler from 'serve-handler';
+import yargs from 'yargs';
 import builders from '../../builders';
 import { logError, validateDirPath } from '../../utils';
 import { Argument } from '../../types/yargs';
 
 module.exports.command = ['serve', 's'];
 module.exports.desc = 'Locally serve Snap file(s) for testing';
-module.exports.builder = (yarg: any) => {
+module.exports.builder = (yarg: yargs.Argv) => {
   yarg
     .option('root', builders.root)
     .option('port', builders.port);

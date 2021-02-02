@@ -1,4 +1,5 @@
 import chokidar from 'chokidar';
+import yargs from 'yargs';
 import builders from '../../builders';
 import { bundle } from '../build/bundle';
 import { logError, getOutfilePath, validateDirPath, validateFilePath, validateOutfileName } from '../../utils';
@@ -6,7 +7,7 @@ import { Argument } from '../../types/yargs';
 
 module.exports.command = ['watch', 'w'];
 module.exports.desc = 'Build Snap on change';
-module.exports.builder = (yarg: any) => {
+module.exports.builder = (yarg: yargs.Argv) => {
   yarg
     .option('src', builders.src)
     .option('dist', builders.dist)
