@@ -3,18 +3,14 @@ import { resolve } from 'path';
 import execa from 'execa';
 
 import { build } from '../src/cmds/build';
+import { SnapsCliGlobals } from '../src/types/package';
 
 // mock the snaps global
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace NodeJS {
-    interface Global {
-      snaps: {
-        verboseErrors: boolean;
-        suppressWarnings: boolean;
-        isWatching: boolean;
-      };
-    }
+    // eslint-disable-next-line @typescript-eslint/no-empty-interface
+    interface Global extends SnapsCliGlobals {}
   }
 }
 

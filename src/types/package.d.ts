@@ -1,5 +1,13 @@
 import { Options } from 'yargs';
 
+export interface SnapsCliGlobals {
+  snaps: {
+    verboseErrors: boolean;
+    suppressWarnings: boolean;
+    isWatching: boolean;
+  };
+}
+
 interface ManifestWalletProperty {
   [key: string]: string | Record<string, unknown> | undefined | number;
   bundle?: { local?: string; url?: string };

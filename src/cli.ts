@@ -1,16 +1,12 @@
 import yargs from 'yargs/yargs';
+import { SnapsCliGlobals } from './types/package';
 import { assignGlobals, sanitizeInputs } from './utils';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace NodeJS {
-    interface Global {
-      snaps: {
-        verboseErrors: boolean;
-        suppressWarnings: boolean;
-        isWatching: boolean;
-      };
-    }
+    // eslint-disable-next-line @typescript-eslint/no-empty-interface
+    interface Global extends SnapsCliGlobals {}
   }
 }
 
