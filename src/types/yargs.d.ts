@@ -1,6 +1,19 @@
-import { Arguments, Options } from 'yargs';
+import { Options } from 'yargs';
 
-interface YargsArgs extends Arguments{
+// eslint-disable-next-line @typescript-eslint/ban-types
+type OptionalArguments<T = {}> = T & {
+
+  /** Non-option arguments */
+  _?: (string | number)[];
+
+  /** The script name or node command */
+  $0?: string;
+
+  /** All remaining options */
+  [argName: string]: unknown;
+};
+
+interface YargsArgs extends OptionalArguments{
   sourceMaps: boolean;
   stripComments: boolean;
   port: number;
