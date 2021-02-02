@@ -7,7 +7,7 @@ import commands from './cmds';
 main();
 
 // application
-async function main() {
+async function main(): Promise<void> {
   await applyConfig();
   cli(commands);
 }

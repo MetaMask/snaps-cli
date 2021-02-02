@@ -15,7 +15,7 @@ module.exports.builder = (yarg: yargs.Argv) => {
 };
 module.exports.handler = (argv: YargsArgs) => init(argv);
 
-async function init(argv: YargsArgs) {
+async function init(argv: YargsArgs): Promise<void> {
   const newArgs = await initHandler(argv);
 
   console.log();

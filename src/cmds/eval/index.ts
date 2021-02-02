@@ -14,7 +14,7 @@ module.exports.builder = (yarg: yargs.Argv) => {
 };
 module.exports.handler = (argv: YargsArgs) => snapEval(argv);
 
-export async function snapEval(argv: YargsArgs) {
+export async function snapEval(argv: YargsArgs): Promise<boolean> {
   const { bundle: bundlePath } = argv;
   await validateFilePath(bundlePath as string);
   try {
@@ -28,7 +28,7 @@ export async function snapEval(argv: YargsArgs) {
   }
 }
 
-function workerEval(bundlePath: string) {
+function workerEval(bundlePath: string): Promise<null> {
   return new Promise((resolve, _reject) => {
     new Worker(getEvalWorkerPath())
       .on('exit', (exitCode: number) => {
@@ -44,9 +44,6 @@ function workerEval(bundlePath: string) {
   });
 }
 
-/**
- * @returns {string} The path to the eval worker file.
- */
 function getEvalWorkerPath(): string {
   return pathUtils.join(__dirname, 'evalWorker.js');
 }

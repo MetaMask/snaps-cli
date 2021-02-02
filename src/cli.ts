@@ -14,7 +14,7 @@ declare global {
   }
 }
 
-export function cli(commands: any) {
+export function cli(commands: any): void {
   // eslint-disable-next-line @typescript-eslint/no-unused-expressions
   yargs(process.argv.slice(2))
 

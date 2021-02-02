@@ -24,18 +24,7 @@ module.exports.builder = (yarg: yargs.Argv) => {
 };
 module.exports.handler = (argv: YargsArgs) => build(argv);
 
-/**
- * Builds all files in the given source directory to the given destination
- * directory.
- *
- * Creates destination directory if it doesn't exist.
- *
- * @param {object} argv - argv from Yargs
- * @param {string} argv.src - The source file path
- * @param {string} argv.dist - The output directory path
- * @param {string} argv.outfileName - The output file name
- */
-export async function build(argv: YargsArgs) {
+export async function build(argv: YargsArgs): Promise<void> {
 
   const { src, dist, outfileName } = argv;
   if (outfileName) {

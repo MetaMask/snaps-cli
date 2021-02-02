@@ -15,7 +15,7 @@ const LOCALHOST_START = 'http://localhost';
  * Validates a Snap package.json file.
  * Exits with success message or gathers all errors before throwing at the end.
  */
-export async function manifest(argv: YargsArgs) {
+export async function manifest(argv: YargsArgs): Promise<void> {
 
   let isInvalid = false;
   let hasWarnings = false;
