@@ -55,8 +55,6 @@ async function buildExamples() {
             sourceMaps: true,
             stripComments: true,
             port: 8000,
-            _: [''],
-            $0: '',
           });
         } catch (bundleError) {
           console.log(`Unexpected error while creating bundle in "${exampleFilePath}.`);
