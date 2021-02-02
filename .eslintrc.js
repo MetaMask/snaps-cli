@@ -13,7 +13,7 @@ module.exports = {
     {
       files: [
         'src/**/*.ts',
-        'development/*.ts',
+        'scripts/*.ts',
       ],
       extends: [
         '@metamask/eslint-config/config/typescript',
