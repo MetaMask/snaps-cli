@@ -44,6 +44,9 @@ function workerEval(bundlePath: string): Promise<null> {
   });
 }
 
+/**
+ * @returns {string} The path to the eval worker file.
+ */
 function getEvalWorkerPath(): string {
   return pathUtils.join(__dirname, 'evalWorker.js');
 }
