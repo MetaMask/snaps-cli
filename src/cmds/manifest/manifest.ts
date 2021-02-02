@@ -78,13 +78,13 @@ export async function manifest(argv: Argument) {
 
     if (pkg.web3Wallet) {
       // sort web3Wallet object keys
-      Object.keys(pkg.web3Wallet).sort().forEach((k) => {
-        const v = (pkg.web3Wallet as unknown as Wallet)[k];
-        if (typeof v === 'object' && !Array.isArray(v) && v !== null) {
-          (pkg.web3Wallet as unknown as Wallet)[k] = Object.keys(v).sort().reduce(
-            (acc, l) => {
-              (acc as any)[l] = (v as any)[l];
-              return acc;
+      Object.keys(pkg.web3Wallet).sort().forEach((key) => {
+        const value = (pkg.web3Wallet as unknown as Wallet)[key];
+        if (typeof value === 'object' && !Array.isArray(value) && value !== null) {
+          (pkg.web3Wallet as unknown as Wallet)[key] = Object.keys(value).sort().reduce(
+            (propertyValue, l) => {
+              (propertyValue as any)[l] = (value as any)[l];
+              return propertyValue;
             }, {},
           );
         }
