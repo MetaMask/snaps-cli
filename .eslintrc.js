@@ -13,7 +13,7 @@ module.exports = {
     {
       files: [
         'src/**/*.ts',
-        'scripts/*.ts',
+        'development/*.ts',
       ],
       extends: [
         '@metamask/eslint-config/config/typescript',
@@ -26,24 +26,6 @@ module.exports = {
       },
       rules: {
         'node/no-process-exit': 'off',
-      },
-    },
-    {
-      files: [
-        '*.js',
-        '*.json',
-      ],
-      rules: {
-        '@typescript-eslint/no-require-imports': 'off',
-        '@typescript-eslint/no-var-requires': 'off',
-      },
-    },
-    {
-      files: [
-        'scripts/**/*.js',
-      ],
-      env: {
-        node: true,
       },
     },
     {
