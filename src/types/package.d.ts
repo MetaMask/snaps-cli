@@ -12,7 +12,6 @@ interface ManifestWalletProperty {
   [key: string]: string | Record<string, unknown> | undefined | number;
   bundle?: { local?: string; url?: string };
   initialPermissions?: Record<string, unknown>;
-  requiredPermissions?: Record<string, unknown>;
 }
 
 export interface NodePackageManifest {

@@ -15,15 +15,13 @@ export async function initHandler(argv: YargsArgs): Promise<{
     local: string;
     url: string;
   };
-  finalPermissions: Record<string, unknown>;
+  initialPermissions: Record<string, unknown>;
   port: number;
   dist: string;
-  outfileName?: undefined;
+  outfileName?: string;
   sourceMaps: boolean;
   stripComments: boolean;
   src: string;
-  _: (string | number)[];
-  $0: string;
 }> {
 
   console.log(`Init: Begin building 'package.json'\n`);
@@ -130,7 +128,7 @@ async function buildWeb3Wallet(argv: YargsArgs): Promise<any> {
   const { outfileName } = argv;
   const defaultPerms = { alert: {} };
   let { port, dist } = argv;
-  let finalPermissions: Record<string, unknown>;
+  let initialPermissions: Record<string, unknown>;
 
   try {
     const c = await prompt(`Use all default Snap manifest values?`, 'yes', false);
@@ -138,15 +136,16 @@ async function buildWeb3Wallet(argv: YargsArgs): Promise<any> {
       console.log('Using default values...');
       try {
         await fs.mkdir(dist);
-      } catch (e) {
-        if (e.code !== 'EEXIST') {
-          logError(`Error: Could not write default 'dist' '${dist}'. Maybe check your local ${CONFIG_PATH} file?`);
+      } catch (err) {
+        if (err.code !== 'EEXIST') {
+          logError(`Init Error: Could not write default 'dist' '${dist}'. Maybe check your local ${CONFIG_PATH} file?`);
         }
+        throw err;
       }
       return endWeb3Wallet();
     }
-  } catch (e) {
-    logError(`Init Error: Fatal`, e);
+  } catch (err) {
+    logError(`Init Error: ${err.message}`, err);
     process.exit(1);
   }
 
@@ -154,7 +153,7 @@ async function buildWeb3Wallet(argv: YargsArgs): Promise<any> {
   let noValidPort = true;
   while (noValidPort) {
     // eslint-disable-next-line require-atomic-updates
-    const inputPort = (await prompt(`local server port:`, port as unknown as string));
+    const inputPort = (await prompt(`local server port:`, port.toString(10)));
     let err, tempPort;
     try {
       const parsedPort = Number.parseInt(inputPort, 10);
@@ -192,61 +191,58 @@ async function buildWeb3Wallet(argv: YargsArgs): Promise<any> {
 
   let invalidPermissions = true;
   while (invalidPermissions) {
-    let initialPermissions = (await prompt(`initialPermissions: [perm1 perm2 ...] ([alert])`));
-    let err;
+    const inputPermissions = (await prompt(`initialPermissions: [perm1 perm2 ...] ([alert])`));
+    let error;
     try {
-      if (!initialPermissions) {
-        initialPermissions = defaultPerms as unknown as string;
-        break;
-      }
-      const splitPermissions = initialPermissions.split(' ')
-        .reduce((acc, p) => {
-          console.log(p);
-          if (typeof p === 'string' && p.match(/^[\w\d_]+$/u)) {
-            (acc as any)[p] = {};
-          } else {
-            logWarning(`Invalid permissions: ${p}`);
-          }
-          return acc;
-        }, {});
+      if (inputPermissions) {
+        initialPermissions = inputPermissions.split(' ')
+          .reduce((allPermissions, permission) => {
+            if (typeof permission === 'string' && permission.match(/^[\w\d_]+$/u)) {
+              (allPermissions as any)[permission] = {};
+            } else {
+              throw new Error(`Invalid permission: ${permission}`);
+            }
+            return allPermissions;
+          }, {});
 
-      finalPermissions = splitPermissions as any;
-      invalidPermissions = false;
-      break;
-    } catch (e) {
-      err = e;
+        invalidPermissions = false;
+      } else {
+        initialPermissions = defaultPerms;
+        invalidPermissions = false;
+      }
+    } catch (err) {
+      error = err;
     }
-    logError(`Invalid initial permissions '${initialPermissions}', please retry.`, err);
+    if (invalidPermissions) {
+      logError(`Invalid permissions '${inputPermissions}', please retry.`, error);
+    }
   }
 
   return endWeb3Wallet();
 
-  function endWeb3Wallet(): ({
-    bundle: {
-      local: string;
-      url: string;
-    };
-    finalPermissions: Record<string, unknown>;
-    port?: undefined;
-    dist?: undefined;
-    outfileName?: undefined;
-  } | {
-    port: number;
-    dist: string;
-    outfileName: unknown;
-    bundle?: undefined;
-    finalPermissions?: undefined;
-  })[] {
+  function endWeb3Wallet(): ([
+    {
+      bundle: {
+        local: string;
+        url: string;
+      };
+      initialPermissions: Record<string, unknown>;
+    },
+    {
+      port?: number;
+      dist?: string;
+      outfileName?: string;
+    },
+  ]) {
     return [
       {
         bundle: {
           local: pathUtils.join(dist, outfileName as string),
-          // url: `http://localhost:${port}/${dist}/${outfileName}`
           url: (new URL(`/${dist}/${outfileName}`, `http://localhost:${port}`)).toString(),
         },
-        finalPermissions,
+        initialPermissions,
       },
-      { port, dist, outfileName },
+      { dist, outfileName, port },
     ];
   }
 }
@@ -263,9 +259,11 @@ async function validateEmptyDir(): Promise<void> {
           return `${acc}\t${curr}\n`;
         }, '')}`,
     );
-    const c = await prompt(`Continue?`, 'yes');
-    const userAware = c && ['y', 'yes'].includes(c.toLowerCase());
-    if (!userAware) {
+
+    const continueInput = await prompt(`Continue?`, 'yes');
+    const shouldContinue = continueInput && ['y', 'yes'].includes(continueInput.toLowerCase());
+
+    if (!shouldContinue) {
       console.log(`Init: Exiting...`);
       process.exit(1);
     }

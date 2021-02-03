@@ -13,14 +13,15 @@ type OptionalArguments<T = {}> = T & {
   [argName: string]: unknown;
 };
 
-interface YargsArgs extends OptionalArguments{
+interface YargsArgs extends OptionalArguments {
   sourceMaps: boolean;
   stripComments: boolean;
   port: number;
   dist: string;
   src: string;
+  outfileName?: string;
 }
 
-interface Option extends Options{
+interface Option extends Options {
   stripComments: boolean;
 }
