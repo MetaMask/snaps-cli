@@ -3,6 +3,9 @@
   "version": "0.4.1",
   "description": "A CLI for developing MetaMask Snaps.",
   "main": "./dist/src/cmds/index.js",
+  "bin": {
+    "mm-snap": "./dist/src/main.js"
+  },
   "files": [
     "dist/",
     "!dist/development"
@@ -36,6 +39,8 @@
     "@types/serve-handler": "^6.1.0",
     "@types/strip-comments": "^2.0.0",
     "@types/yargs": "^15.0.12",
+    "@typescript-eslint/eslint-plugin": "^4.14.2",
+    "@typescript-eslint/parser": "^4.14.2",
     "eslint": "^7.18.0",
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-json": "^2.1.2",
@@ -44,14 +49,9 @@
     "ts-node": "^9.1.1",
     "typescript": "^4.1.3"
   },
-  "bin": {
-    "mm-snap": "./dist/src/main.js"
-  },
   "dependencies": {
     "@babel/core": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
-    "@typescript-eslint/eslint-plugin": "^4.14.2",
-    "@typescript-eslint/parser": "^4.14.2",
     "babelify": "^10.0.0",
     "browserify": "^17.0.0",
     "chokidar": "^3.0.2",
