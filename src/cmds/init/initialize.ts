@@ -162,8 +162,8 @@ async function buildWeb3Wallet(argv: YargsArgs): Promise<any> {
         noValidPort = false;
         break;
       }
-    } catch (e) {
-      err = e;
+    } catch (portError) {
+      err = portError;
     }
     logError(`Invalid port '${port}, please retry.`, err);
     if (tempPort !== undefined) {
@@ -180,11 +180,11 @@ async function buildWeb3Wallet(argv: YargsArgs): Promise<any> {
       await fs.mkdir(dist);
       invalidDist = false;
       break;
-    } catch (e) {
-      if (e.code === 'EEXIST') {
+    } catch (distError) {
+      if (distError.code === 'EEXIST') {
         break;
       } else {
-        logError(`Could not make directory '${dist}', please retry.`, e);
+        logError(`Could not make directory '${dist}', please retry.`, distError);
       }
     }
   }

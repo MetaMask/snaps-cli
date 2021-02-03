@@ -108,7 +108,7 @@ export async function manifest(argv: YargsArgs): Promise<void> {
   ];
   const recommended = ['repository'];
 
-  let missing = required.filter((k) => !existing.includes(k));
+  let missing = required.filter((key) => !existing.includes(key));
   if (missing.length > 0) {
     logManifestWarning(
       `Missing required package.json properties:\n${
@@ -118,7 +118,7 @@ export async function manifest(argv: YargsArgs): Promise<void> {
     );
   }
 
-  missing = recommended.filter((k) => !existing.includes(k));
+  missing = recommended.filter((key) => !existing.includes(key));
   if (missing.length > 0) {
     logManifestWarning(
       `Missing recommended package.json properties:\n${
@@ -155,18 +155,18 @@ export async function manifest(argv: YargsArgs): Promise<void> {
 
     } else if (Object.keys(initialPermissions).length > 0) {
 
-      Object.entries(initialPermissions).forEach(([k, o]) => {
-        if (typeof o !== 'object' || Array.isArray(o)) {
-          logManifestError(`inital permission '${k}' must be an object`);
+      Object.entries(initialPermissions).forEach(([permission, value]) => {
+        if (typeof value !== 'object' || Array.isArray(value)) {
+          logManifestError(`inital permission '${permission}' must be an object`);
 
-        } else if (o !== null) {
-          Object.keys(o).forEach((_k) => {
-            if (!permRequestKeys.includes(_k)) {
-              logManifestError(`inital permission '${k}' has unrecognized key '${_k}'`);
+        } else if (value !== null) {
+          Object.keys(value).forEach((permissionKey) => {
+            if (!permRequestKeys.includes(permissionKey)) {
+              logManifestError(`inital permission '${permission}' has unrecognized key '${permissionKey}'`);
             }
 
-            if (_k === 'parentCapability' && k !== _k) {
-              logManifestError(`inital permissions '${k}' has mismatched 'parentCapability' field '${(o as Record<string, unknown>)[_k]}'`);
+            if (permissionKey === 'parentCapability' && permission !== permissionKey) {
+              logManifestError(`inital permission '${permission}' has mismatched 'parentCapability' field '${(value as Record<string, unknown>)[permissionKey]}'`);
             }
           });
         }
