@@ -2,7 +2,7 @@ module.exports = {
   extends: [
     '@metamask/eslint-config',
     '@metamask/eslint-config/config/nodejs',
-    '@metamask/eslint-config/config/jest'
+    '@metamask/eslint-config/config/jest',
   ],
   plugins: [
     'json',
@@ -41,15 +41,6 @@ module.exports = {
       },
       rules: {
         'no-alert': 'off',
-        semi: ['error', 'always'],
-        'space-before-function-paren': [
-          'error',
-          {
-            anonymous: 'always',
-            asyncArrow: 'always',
-            named: 'never',
-          },
-        ],
       },
     },
   ],
@@ -58,4 +49,4 @@ module.exports = {
     'dist/',
     'node_modules/',
   ],
-}
+};
