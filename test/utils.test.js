@@ -13,7 +13,7 @@ describe('utils', () => {
   afterEach(() => {
     delete global.snaps.verboseErrors;
     delete global.snaps.suppressWarnings;
-    jest.clearAllMocks();
+    jest.restoreAllMocks();
   });
 
   afterAll(() => {
