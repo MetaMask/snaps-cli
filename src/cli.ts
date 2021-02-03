@@ -10,9 +10,9 @@ declare global {
   }
 }
 
-export function cli(commands: any): void {
+export function cli(argv: string[], commands: any): void {
   // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-  yargs(process.argv.slice(2))
+  yargs(argv.slice(2))
 
     .usage('Usage: $0 <command> [options]')
 
@@ -43,9 +43,9 @@ export function cli(commands: any): void {
 
     .strict()
 
-    .middleware((argv) => {
-      assignGlobals(argv);
-      sanitizeInputs(argv);
+    .middleware((yargsArgv) => {
+      assignGlobals(yargsArgv);
+      sanitizeInputs(yargsArgv);
     })
 
     .fail((msg: string, err: Error, _yargs) => {

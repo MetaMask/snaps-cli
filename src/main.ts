@@ -9,5 +9,5 @@ main();
 // application
 async function main(): Promise<void> {
   await applyConfig();
-  cli(commands);
+  cli(process.argv, commands);
 }
