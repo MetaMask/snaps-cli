@@ -9,13 +9,12 @@ export interface SnapsCliGlobals {
 }
 
 interface ManifestWalletProperty {
-  [key: string]: string | Record<string, unknown> | undefined | number;
   bundle?: { local?: string; url?: string };
   initialPermissions?: Record<string, unknown>;
 }
 
 export interface NodePackageManifest {
-  [key: string]: string | Record<string, unknown> | undefined | number;
+  [key: string]: unknown;
   main?: string;
   web3Wallet?: ManifestWalletProperty;
 }

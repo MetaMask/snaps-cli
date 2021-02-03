@@ -52,14 +52,17 @@ export async function manifest(argv: YargsArgs): Promise<void> {
     if (!pkg.web3Wallet) {
       pkg.web3Wallet = {};
     }
+
+    const bundle = pkg.web3Wallet.bundle || {};
     if (!pkg.web3Wallet.bundle) {
-      pkg.web3Wallet.bundle = {};
+      pkg.web3Wallet.bundle = bundle;
     }
+
     if (!pkg.web3Wallet.initialPermissions) {
       pkg.web3Wallet.initialPermissions = {};
     }
 
-    const { bundle } = pkg.web3Wallet;
+    const { web3Wallet } = pkg;
 
     const bundlePath = pathUtils.join(
       dist, outfileName as string || 'bundle.js',
@@ -76,22 +79,24 @@ export async function manifest(argv: YargsArgs): Promise<void> {
       bundle.url = `${LOCALHOST_START}:${port}/${bundlePath}`;
     }
 
-    if (pkg.web3Wallet) {
-      // sort web3Wallet object keys
-      Object.keys(pkg.web3Wallet).sort().forEach((key) => {
-        const value = (pkg.web3Wallet as unknown as ManifestWalletProperty)[key];
-        if (typeof value === 'object' && !Array.isArray(value) && value !== null) {
-          (pkg.web3Wallet as unknown as ManifestWalletProperty)[key] = Object.keys(value).sort().reduce(
-            (propertyValue: Record<string, unknown>, innerKey) => {
-              propertyValue[innerKey] = value[innerKey];
-              return propertyValue;
-            }, {},
-          );
-        }
-      });
-    }
+    // sort web3Wallet object keys
+    Object.keys(web3Wallet).sort().forEach((_key) => {
+      const key = _key as keyof ManifestWalletProperty;
+      const property = (web3Wallet)[key];
 
-    if (!dequal(old, pkg.web3Wallet)) {
+      if (property && typeof property === 'object' && !Array.isArray(property)) {
+        web3Wallet[key] = Object.keys(property).sort().reduce(
+          (sortedProperty, _innerKey) => {
+            const innerKey = _innerKey as keyof ManifestWalletProperty[typeof key];
+            sortedProperty[innerKey] = property[innerKey];
+
+            return sortedProperty;
+          }, {} as Record<string, unknown>,
+        );
+      }
+    });
+
+    if (!dequal(old, web3Wallet)) {
       didUpdate = true;
     }
   }
@@ -112,6 +117,7 @@ export async function manifest(argv: YargsArgs): Promise<void> {
         }, '')}`,
     );
   }
+
   missing = recommended.filter((k) => !existing.includes(k));
   if (missing.length > 0) {
     logManifestWarning(

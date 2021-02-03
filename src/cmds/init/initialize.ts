@@ -5,7 +5,7 @@ import {
   CONFIG_PATHS, logError, logWarning, prompt, closePrompt, trimPathString,
 } from '../../utils';
 import { YargsArgs } from '../../types/yargs';
-import { NodePackageManifest } from '../../types/package';
+import { ManifestWalletProperty, NodePackageManifest } from '../../types/package';
 import template from './initTemplate.json';
 
 const CONFIG_PATH = CONFIG_PATHS[0];
@@ -221,13 +221,7 @@ async function buildWeb3Wallet(argv: YargsArgs): Promise<any> {
   return endWeb3Wallet();
 
   function endWeb3Wallet(): ([
-    {
-      bundle: {
-        local: string;
-        url: string;
-      };
-      initialPermissions: Record<string, unknown>;
-    },
+    ManifestWalletProperty,
     {
       port?: number;
       dist?: string;
