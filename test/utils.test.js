@@ -9,7 +9,6 @@ const setSuppressWarnings = (bool) => {
 };
 
 describe('utils', () => {
-
   afterEach(() => {
     delete global.snaps.verboseErrors;
     delete global.snaps.suppressWarnings;
@@ -72,7 +71,6 @@ describe('utils', () => {
 
   describe('validateOutfileName', () => {
     it('ensures outfile name is just a js file name', () => {
-
       expect(() => {
         validateOutfileName('file.ts');
       }).toThrow('Invalid outfile name: file.ts');
