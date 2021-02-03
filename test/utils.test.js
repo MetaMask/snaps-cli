@@ -10,6 +10,16 @@ const setSuppressWarnings = (bool) => {
 
 describe('utils', () => {
 
+  afterEach(() => {
+    delete global.snaps.verboseErrors;
+    delete global.snaps.suppressWarnings;
+    jest.clearAllMocks();
+  });
+
+  afterAll(() => {
+    delete global.snaps;
+  });
+
   describe('trimPathString', () => {
     it('trims a given path string', () => {
       expect(trimPathString('./hello')).toStrictEqual('hello');
@@ -18,12 +28,12 @@ describe('utils', () => {
       expect(trimPathString('')).toStrictEqual('');
       expect(trimPathString('hello////')).toStrictEqual('hello');
       expect(trimPathString('../hello')).toStrictEqual('hello');
+      expect(trimPathString('//////hello')).toStrictEqual('hello');
     });
   });
 
   describe('logError', () => {
     it('logs an error message to console', () => {
-
       setVerboseErrors(true);
       jest.spyOn(console, 'error').mockImplementation();
       logError('custom error message', 'verbose error message');
@@ -34,7 +44,6 @@ describe('utils', () => {
       jest.spyOn(console, 'error').mockImplementation();
       logError('error message');
       expect(global.console.error).toHaveBeenCalledWith('error message');
-
     });
   });
 
