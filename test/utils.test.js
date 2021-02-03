@@ -49,21 +49,20 @@ describe('utils', () => {
 
   describe('logWarning', () => {
     it('logs a warning message to console', () => {
-
       setSuppressWarnings(false);
       setVerboseErrors(true);
+
       jest.spyOn(console, 'warn').mockImplementation();
       jest.spyOn(console, 'error').mockImplementation();
+
       logWarning('custom warning message', 'verbose warning message');
       expect(global.console.warn).toHaveBeenCalledWith('custom warning message');
       expect(global.console.error).toHaveBeenCalledWith('verbose warning message');
-
     });
   });
 
   describe('getOutfilePath', () => {
     it('gets the complete out file path', () => {
-
       expect(getOutfilePath('./src', 'outDir')).toStrictEqual('src/outDir');
       expect(getOutfilePath('src', 'outDir')).toStrictEqual('src/outDir');
       expect(getOutfilePath('src/', './outDir/')).toStrictEqual('src/outDir/');
