@@ -1,4 +1,7 @@
-const { trimPathString, logError, logWarning, getOutfilePath, validateOutfileName } = require('../dist/src/utils');
+const fs = require('fs');
+const { trimPathString, logError, logWarning, getOutfilePath, validateOutfileName, isFile } = require('../dist/src/utils');
+
+jest.mock('fs');
 
 const setVerboseErrors = (bool) => {
   global.snaps.verboseErrors = bool;
@@ -9,6 +12,12 @@ const setSuppressWarnings = (bool) => {
 };
 
 describe('utils', () => {
+
+  beforeEach(() => {
+    jest.resetModules();
+    jest.resetAllMocks();
+  });
+
   afterEach(() => {
     delete global.snaps.verboseErrors;
     delete global.snaps.suppressWarnings;
@@ -63,9 +72,14 @@ describe('utils', () => {
   describe('getOutfilePath', () => {
     it('gets the complete out file path', () => {
       expect(getOutfilePath('./src', 'outDir')).toStrictEqual('src/outDir');
+      expect(getOutfilePath('../src', '///outDir////')).toStrictEqual('../src/outDir/');
+      expect(getOutfilePath('../src', '/lol//outDir////')).toStrictEqual('../src/lol/outDir/');
+      // expect(getOutfilePath('.../src', '///outDir////...')).toStrictEqual('../src/outDir/');
+      // expect(getOutfilePath('.nht./src', '/hnt//outDir////')).toStrictEqual('.nht./src/hnt/outDir/');
       expect(getOutfilePath('src', 'outDir')).toStrictEqual('src/outDir');
       expect(getOutfilePath('src/', './outDir/')).toStrictEqual('src/outDir/');
       expect(getOutfilePath('src/', '')).toStrictEqual('src/bundle.js');
+      expect(getOutfilePath('', '')).toStrictEqual('bundle.js');
     });
   });
 
@@ -83,9 +97,37 @@ describe('utils', () => {
         validateOutfileName('');
       }).toThrow('Invalid outfile name: ');
 
-      // expect(validateOutfileName('file.js')).toStrictEqual(true)
-      // expect(validateOutfileName('./src/file')).toStrictEqual(true)
+      // expect(() => {
+      //   validateOutfileName('./src/file');
+      // }).toThrow('Invalid outfile name: ./src/file');
+
+      // expect(() => {
+      //   validateOutfileName('.js');
+      // }).toThrow('Invalid outfile name: .js');
+
+      expect(validateOutfileName('file.js')).toStrictEqual(true);
+      expect(validateOutfileName('two.file.js')).toStrictEqual(true);
 
     });
   });
+
+  describe('isFile', () => {
+
+    const MOCK_FILE_INFO = {
+      '/path/to/file1.js': 'console.log("file1 contents");',
+      '/path/to/file2.txt': 'file2 contents',
+    };
+
+    beforeEach(() => {
+      // Set up some mocked out file info before each test
+      fs.__setMockFiles(MOCK_FILE_INFO);
+    });
+
+    it('checks whether the given path string resolves to an existing file', async () => {
+      expect.assertions(1);
+      const data = await isFile('/path/to/file1.js');
+      expect(data).toStrictEqual(true);
+    });
+  });
+
 });
