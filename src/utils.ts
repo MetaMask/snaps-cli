@@ -286,7 +286,7 @@ export async function applyConfig(): Promise<void> {
 
   // second, attempt to read and apply config from config file,
   // which will always be preferred if it exists
-  let cfg: any = {};
+  let cfg: Record<string, unknown> = {};
   for (const configPath of CONFIG_PATHS) {
     try {
       cfg = JSON.parse(await fs.readFile(configPath, 'utf8'));

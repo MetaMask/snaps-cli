@@ -10,20 +10,16 @@ import template from './initTemplate.json';
 
 const CONFIG_PATH = CONFIG_PATHS[0];
 
-export async function initHandler(argv: YargsArgs): Promise<{
-  bundle: {
-    local: string;
-    url: string;
-  };
-  initialPermissions: Record<string, unknown>;
+interface InitOutput {
   port: number;
   dist: string;
-  outfileName?: string;
+  outfileName: string;
   sourceMaps: boolean;
   stripComments: boolean;
   src: string;
-}> {
+}
 
+export async function initHandler(argv: YargsArgs): Promise<InitOutput> {
   console.log(`Init: Begin building 'package.json'\n`);
 
   const pkg = await asyncPackageInit();
@@ -32,7 +28,8 @@ export async function initHandler(argv: YargsArgs): Promise<{
 
   console.log(`\nInit: Set 'package.json' web3Wallet properties\n`);
 
-  const [web3Wallet, newArgs] = await buildWeb3Wallet(argv);
+  const [web3Wallet, _newArgs] = await buildWeb3Wallet(argv);
+  const newArgs = _newArgs as YargsArgs;
   pkg.web3Wallet = web3Wallet;
 
   try {
@@ -60,7 +57,7 @@ export async function initHandler(argv: YargsArgs): Promise<{
   // write index.html
   try {
     await fs.writeFile('index.html', template.html.toString()
-      .replace(/_PORT_/gu, newArgs.port as unknown as string || argv.port as unknown as string)); // port is a number but we want `replace` to treat it as a string
+      .replace(/_PORT_/gu, newArgs.port.toString() || argv.port.toString()));
     console.log(`Init: Wrote 'index.html' file`);
   } catch (err) {
     logError(`Init Error: Fatal: Failed to write index.html file`, err);
@@ -76,7 +73,7 @@ export async function initHandler(argv: YargsArgs): Promise<{
   }
 
   closePrompt();
-  return { ...argv, ...newArgs };
+  return { ...argv, ...newArgs } as InitOutput;
 }
 
 async function asyncPackageInit(): Promise<NodePackageManifest> {
@@ -123,9 +120,12 @@ async function asyncPackageInit(): Promise<NodePackageManifest> {
   });
 }
 
-async function buildWeb3Wallet(argv: YargsArgs): Promise<any> {
+async function buildWeb3Wallet(argv: YargsArgs): Promise<[
+  ManifestWalletProperty,
+  { port: number; dist: string; outfileName: string },
+]> {
 
-  const { outfileName } = argv;
+  const outfileName = argv.outfileName as string;
   let { port, dist } = argv;
   const defaultPerms = { alert: {} };
   let initialPermissions: Record<string, unknown> = defaultPerms;
@@ -223,9 +223,9 @@ async function buildWeb3Wallet(argv: YargsArgs): Promise<any> {
   function endWeb3Wallet(): ([
     ManifestWalletProperty,
     {
-      port?: number;
-      dist?: string;
-      outfileName?: string;
+      port: number;
+      dist: string;
+      outfileName: string;
     },
   ]) {
     return [

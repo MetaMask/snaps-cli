@@ -18,8 +18,7 @@ lockdown({
 });
 
 if (parentPort !== null) {
-  parentPort.on('message', (message: any) => {
-
+  parentPort.on('message', (message: { pluginFilePath: string }) => {
     const { pluginFilePath } = message;
 
     const compartment = new Compartment(getMockApi());
@@ -29,7 +28,6 @@ if (parentPort !== null) {
       readFileSync(pluginFilePath, 'utf8'),
     );
     setTimeout(() => process.exit(0), 1000); // Hacky McHack
-
   });
 }
 
