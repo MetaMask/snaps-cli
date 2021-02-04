@@ -1,7 +1,4 @@
-const fs = require('fs');
 const { trimPathString, logError, logWarning, getOutfilePath, validateOutfileName, isFile } = require('../dist/src/utils');
-
-jest.mock('fs');
 
 const setVerboseErrors = (bool) => {
   global.snaps.verboseErrors = bool;
@@ -113,19 +110,9 @@ describe('utils', () => {
 
   describe('isFile', () => {
 
-    const MOCK_FILE_INFO = {
-      '/path/to/file1.js': 'console.log("file1 contents");',
-      '/path/to/file2.txt': 'file2 contents',
-    };
-
-    beforeEach(() => {
-      // Set up some mocked out file info before each test
-      fs.__setMockFiles(MOCK_FILE_INFO);
-    });
-
     it('checks whether the given path string resolves to an existing file', async () => {
       expect.assertions(1);
-      const data = await isFile('/path/to/file1.js');
+      const data = await isFile('path/to/some.js');
       expect(data).toStrictEqual(true);
     });
   });
