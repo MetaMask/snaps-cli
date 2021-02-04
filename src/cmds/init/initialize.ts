@@ -32,8 +32,8 @@ export async function initHandler(argv: YargsArgs): Promise<{
 
   console.log(`\nInit: Set 'package.json' web3Wallet properties\n`);
 
-  const [_web3Wallet, newArgs] = await buildWeb3Wallet(argv);
-  pkg.web3Wallet = _web3Wallet;
+  const [web3Wallet, newArgs] = await buildWeb3Wallet(argv);
+  pkg.web3Wallet = web3Wallet;
 
   try {
     await fs.writeFile('package.json', `${JSON.stringify(pkg, null, 2)}\n`);
@@ -126,9 +126,9 @@ async function asyncPackageInit(): Promise<NodePackageManifest> {
 async function buildWeb3Wallet(argv: YargsArgs): Promise<any> {
 
   const { outfileName } = argv;
-  const defaultPerms = { alert: {} };
   let { port, dist } = argv;
-  let initialPermissions: Record<string, unknown>;
+  const defaultPerms = { alert: {} };
+  let initialPermissions: Record<string, unknown> = defaultPerms;
 
   try {
     const c = await prompt(`Use all default Snap manifest values?`, 'yes', false);
@@ -139,8 +139,8 @@ async function buildWeb3Wallet(argv: YargsArgs): Promise<any> {
       } catch (err) {
         if (err.code !== 'EEXIST') {
           logError(`Init Error: Could not write default 'dist' '${dist}'. Maybe check your local ${CONFIG_PATH} file?`);
+          throw err;
         }
-        throw err;
       }
       return endWeb3Wallet();
     }
@@ -198,12 +198,12 @@ async function buildWeb3Wallet(argv: YargsArgs): Promise<any> {
         initialPermissions = inputPermissions.split(' ')
           .reduce((allPermissions, permission) => {
             if (typeof permission === 'string' && permission.match(/^[\w\d_]+$/u)) {
-              (allPermissions as any)[permission] = {};
+              allPermissions[permission] = {};
             } else {
               throw new Error(`Invalid permission: ${permission}`);
             }
             return allPermissions;
-          }, {});
+          }, {} as Record<string, unknown>);
 
         invalidPermissions = false;
       } else {
