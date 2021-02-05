@@ -1,4 +1,4 @@
-const { trimPathString, logError, logWarning, getOutfilePath, validateOutfileName, isFile } = require('../dist/src/utils');
+const { trimPathString, logError, logWarning, getOutfilePath, validateOutfileName } = require('../dist/src/utils');
 
 const setVerboseErrors = (bool) => {
   global.snaps.verboseErrors = bool;
@@ -105,15 +105,6 @@ describe('utils', () => {
       expect(validateOutfileName('file.js')).toStrictEqual(true);
       expect(validateOutfileName('two.file.js')).toStrictEqual(true);
 
-    });
-  });
-
-  describe('isFile', () => {
-
-    it('checks whether the given path string resolves to an existing file', async () => {
-      expect.assertions(1);
-      const data = await isFile('path/to/some.js');
-      expect(data).toStrictEqual(true);
     });
   });
 
