@@ -6,3 +6,4 @@ examples/*/dist
 *.log
 package-lock.json
 dist/
+test/fs-sandbox
