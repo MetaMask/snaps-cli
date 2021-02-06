@@ -1,4 +1,4 @@
-const { promises: fs } = require('fs');
+const { promises: fs, truncate } = require('fs');
 const pathUtils = require('path');
 const rimraf = require('rimraf');
 const { isFile, isDirectory } = require('../dist/src/utils');
@@ -68,34 +68,23 @@ describe('isFile', () => {
     expect(result).toStrictEqual(false);
   });
 
-  // it('checks whether the given path string resolves to an existing directory', async () => {
-  //   let result = await isDirectory('wrong/path/', false);
-  //   expect(result).toStrictEqual(false);
+  it('checks whether the given path string resolves to an existing directory', async () => {
+    let result = await isDirectory('wrong/path/', false);
+    expect(result).toStrictEqual(false);
 
-  //   result = await isDirectory('path/to/dir/file.txt', false);
-  //   expect(result).toStrictEqual(false);
+    // eslint-disable-next-line no-empty-function
+    const mockExit = jest.spyOn(process, 'exit').mockImplementation(() => {});
+    jest.spyOn(console, 'error').mockImplementation();
+    result = await isDirectory('wrong/path/', true);
+    expect(mockExit).toHaveBeenCalledWith(1);
+    expect(global.console.error).toHaveBeenCalledWith('Directory \'wrong/path/\' could not be created.');
 
-  //   console.log('DIRNAME', __dirname)
-
-  //   // result = await isDirectory('path/to/dir/empty-dir', false);
-  //   // expect(result).toStrictEqual(true);
-
-  //   // result = await isDirectory('path/to/dir', false);
-  //   // expect(result).toStrictEqual(true);
-
-  //   // expect(await isDirectory('hthnthnt', false)).toThrow('ENOENT');
-
-  //   // eslint-disable-next-line no-empty-function
-  //   // const mockExit = jest.spyOn(process, 'exit').mockImplementation(() => {});
-  //   // result = await isDirectory('', true);
-  //   // expect(result).toStrictEqual(false);
-  //   // expect(mockExit).toHaveBeenCalledWith(1);
-
-  //   // const spy = jest.spyOn(fs, 'mkdir');
-  //   // result = await isDirectory('hnthntnht', true);
-  //   // expect(result).toStrictEqual(true);
-  //   // expect(spy).toHaveBeenCalled();
-
-  // });
+    jest.spyOn(fs, 'mkdir')
+      .mockImplementation(async () => {
+        createDir('wrong');
+      });
+    result = await isDirectory('wrong', true);
+    expect(result).toStrictEqual(true);
+  });
 
 });
