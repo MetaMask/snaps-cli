@@ -14,12 +14,6 @@ export const CONFIG_PATHS = [
   'snap.config.json',
 ];
 
-global.snaps = {
-  verboseErrors: false,
-  suppressWarnings: false,
-  isWatching: false,
-};
-
 /**
  * Sets global variable snaps which tracks user settings:
  * watch mode activation, verbose errors messages, and whether to suppress warnings.
@@ -89,4 +83,15 @@ export function logWarning(msg: string, error?: Error): void {
       console.error(error);
     }
   }
+}
+
+/**
+ * Trims leading and trailing periods "." and forward slashes "/" from the
+ * given path string.
+ *
+ * @param pathString - The path string to trim.
+ * @returns - The trimmed path string.
+ */
+export function trimPathString(pathString: string): string {
+  return pathString.replace(/^[./]+|[./]+$/gu, '');
 }
