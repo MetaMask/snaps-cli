@@ -1,7 +1,7 @@
 const { promises: fs } = require('fs');
 const pathUtils = require('path');
 const rimraf = require('rimraf');
-const { isFile, isDirectory } = require('../dist/src/utils');
+const { isFile, isDirectory } = require('../../dist/src/utils');
 
 const FS_TEST_DIR = 'fs-sandbox';
 
