@@ -1,4 +1,4 @@
-const { promises: fs, truncate } = require('fs');
+const { promises: fs } = require('fs');
 const pathUtils = require('path');
 const rimraf = require('rimraf');
 const { isFile, isDirectory } = require('../dist/src/utils');
@@ -36,55 +36,72 @@ function cleanupTestFiles() {
   rimraf.sync(getPath());
 }
 
-describe('isFile', () => {
+describe('file system checks', () => {
+  describe('isFile', () => {
+    beforeEach(async () => {
+      await createTestFiles(
+        'file.txt',
+        'empty-dir',
+        'dir',
+        'dir/file.txt',
+      );
+    });
 
-  beforeEach(async () => {
-    await createTestFiles(
-      'file.txt',
-      'empty-dir',
-      'dir',
-      'dir/file.txt',
-    );
+    afterEach(async () => {
+      cleanupTestFiles();
+    });
+
+    it('checks whether the given path string resolves to an existing file', async () => {
+      let result = await isFile(getPath('file.txt'));
+      expect(result).toStrictEqual(true);
+
+      result = await isFile(getPath('dir/file.txt'));
+      expect(result).toStrictEqual(true);
+
+      result = await isFile(getPath('dir'));
+      expect(result).toStrictEqual(false);
+
+      result = await isFile(getPath('empty-dir'));
+      expect(result).toStrictEqual(false);
+
+      result = await isFile(getPath('wrong/path'));
+      expect(result).toStrictEqual(false);
+    });
   });
 
-  afterEach(async () => {
-    cleanupTestFiles();
-  });
+  describe('isDirectory', () => {
+    beforeEach(async () => {
+      await createTestFiles(
+        'file.txt',
+        'empty-dir',
+        'dir',
+        'dir/file.txt',
+      );
+    });
 
-  it('checks whether the given path string resolves to an existing file', async () => {
-    let result = await isFile(getPath('file.txt'));
-    expect(result).toStrictEqual(true);
+    afterEach(async () => {
+      cleanupTestFiles();
+    });
 
-    result = await isFile(getPath('dir/file.txt'));
-    expect(result).toStrictEqual(true);
+    it('checks whether the given path string resolves to an existing directory', async () => {
+      let result = await isDirectory('wrong/path/', false);
+      expect(result).toStrictEqual(false);
 
-    result = await isFile(getPath('dir'));
-    expect(result).toStrictEqual(false);
+      // eslint-disable-next-line no-empty-function
+      const mockExit = jest.spyOn(process, 'exit').mockImplementation(() => {});
+      jest.spyOn(console, 'error').mockImplementation();
+      result = await isDirectory('wrong/path/', true);
+      expect(mockExit).toHaveBeenCalledWith(1);
+      expect(global.console.error).toHaveBeenCalledWith('Directory \'wrong/path/\' could not be created.');
 
-    result = await isFile(getPath('empty-dir'));
-    expect(result).toStrictEqual(false);
+      jest.spyOn(fs, 'mkdir')
+        .mockImplementation(async () => {
+          createDir('wrong');
+        });
+      result = await isDirectory('wrong', true);
+      expect(result).toStrictEqual(true);
+    });
 
-    result = await isFile(getPath('wrong/path'));
-    expect(result).toStrictEqual(false);
-  });
-
-  it('checks whether the given path string resolves to an existing directory', async () => {
-    let result = await isDirectory('wrong/path/', false);
-    expect(result).toStrictEqual(false);
-
-    // eslint-disable-next-line no-empty-function
-    const mockExit = jest.spyOn(process, 'exit').mockImplementation(() => {});
-    jest.spyOn(console, 'error').mockImplementation();
-    result = await isDirectory('wrong/path/', true);
-    expect(mockExit).toHaveBeenCalledWith(1);
-    expect(global.console.error).toHaveBeenCalledWith('Directory \'wrong/path/\' could not be created.');
-
-    jest.spyOn(fs, 'mkdir')
-      .mockImplementation(async () => {
-        createDir('wrong');
-      });
-    result = await isDirectory('wrong', true);
-    expect(result).toStrictEqual(true);
   });
 
 });
