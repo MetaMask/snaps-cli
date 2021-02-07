@@ -1,5 +1,5 @@
 import { promises as fs } from 'fs';
-import { logError } from './logs';
+import { logError } from './misc';
 
 /**
  * Checks whether the given path string resolves to an existing directory, and

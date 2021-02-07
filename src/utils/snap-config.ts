@@ -1,6 +1,6 @@
 import { promises as fs } from 'fs';
 import builders from '../builders';
-import { logWarning } from './logs';
+import { logWarning } from './misc';
 import { CONFIG_PATHS } from '.';
 
 /**
