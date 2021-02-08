@@ -1,14 +1,20 @@
 const { trimPathString, logError, logWarning } = require('../../dist/src/utils');
 
-const setVerboseErrors = (bool) => {
-  global.snaps.verboseErrors = bool;
-};
-
-const setSuppressWarnings = (bool) => {
-  global.snaps.suppressWarnings = bool;
-};
-
 describe('misc', () => {
+
+  global.snaps = {
+    verboseErrors: false,
+    suppressWarnings: false,
+    isWatching: false,
+  };
+
+  const setVerboseErrors = (bool) => {
+    global.snaps.verboseErrors = bool;
+  };
+
+  const setSuppressWarnings = (bool) => {
+    global.snaps.suppressWarnings = bool;
+  };
 
   beforeEach(() => {
     jest.resetModules();

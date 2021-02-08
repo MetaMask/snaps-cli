@@ -1,7 +1,7 @@
 const { promises: fs } = require('fs');
 const pathUtils = require('path');
 const rimraf = require('rimraf');
-const { isFile, isDirectory } = require('../../dist/src/utils');
+const { isFile, isDirectory } = require('../../dist/src/utils/fs');
 
 const FS_TEST_DIR = 'fs-sandbox';
 
@@ -70,6 +70,13 @@ describe('file system checks', () => {
   });
 
   describe('isDirectory', () => {
+
+    global.snaps = {
+      verboseErrors: false,
+      suppressWarnings: false,
+      isWatching: false,
+    };
+
     beforeEach(async () => {
       await createTestFiles(
         'file.txt',

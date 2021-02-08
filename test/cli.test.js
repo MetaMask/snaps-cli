@@ -26,6 +26,12 @@ const getMockCommands = () => {
   return [mockCommands, mockHandlerMap];
 };
 
+global.snaps = {
+  verboseErrors: false,
+  suppressWarnings: false,
+  isWatching: false,
+};
+
 describe('command line interface', () => {
 
   let mockCommands;
