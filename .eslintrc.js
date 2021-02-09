@@ -43,6 +43,14 @@ module.exports = {
         'no-alert': 'off',
       },
     },
+    {
+      files: [
+        'test/**/*.js',
+      ],
+      rules: {
+        'node/no-callback-literal': 'off',
+      },
+    },
   ],
   ignorePatterns: [
     '!.eslintrc.js',
