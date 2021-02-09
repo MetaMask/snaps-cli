@@ -11,9 +11,10 @@
     "!dist/development"
   ],
   "scripts": {
+    "build:prep": "mkdir -p dist && rm -rf dist/*",
     "build:typescript": "tsc --project .",
     "build:chmod": "chmod +x ./dist/src/main.js",
-    "build": "yarn build:typescript && yarn build:chmod",
+    "build": "yarn build:prep && yarn build:typescript && yarn build:chmod",
     "test": "yarn build && jest",
     "test:nobuild": "jest",
     "dev:gen-init-template": "node ./dist/development/generateInitTemplate.js",

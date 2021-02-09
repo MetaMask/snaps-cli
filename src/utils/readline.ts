@@ -1,16 +1,16 @@
 import readline from 'readline';
 
-let rl: readline.Interface;
+let _readlineInterface: readline.Interface;
 
 export function openPrompt(): void {
-  rl = readline.createInterface({
+  _readlineInterface = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
   });
 }
 
-export function prompt(question: string, def?: string, shouldClose?: boolean): Promise<string> {
-  if (!rl) {
+export function prompt(question: string, def?: string, shouldClose?: boolean, readlineInterface = _readlineInterface): Promise<string> {
+  if (!readlineInterface) {
     openPrompt();
   }
   return new Promise((resolve, _reject) => {
@@ -18,7 +18,7 @@ export function prompt(question: string, def?: string, shouldClose?: boolean): P
     if (def) {
       queryString += `(${def}) `;
     }
-    rl.question(queryString, (answer: string) => {
+    readlineInterface.question(queryString, (answer: string) => {
       if (!answer || !answer.trim()) {
         if (def !== undefined) {
           resolve(def);
@@ -26,14 +26,14 @@ export function prompt(question: string, def?: string, shouldClose?: boolean): P
       }
       resolve(answer.trim());
       if (shouldClose) {
-        rl.close();
+        readlineInterface.close();
       }
     });
   });
 }
 
-export function closePrompt(): void {
-  if (rl) {
-    rl.close();
+export function closePrompt(readlineInterface = _readlineInterface): void {
+  if (readlineInterface) {
+    readlineInterface.close();
   }
 }
