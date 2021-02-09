@@ -2,7 +2,7 @@ import readline from 'readline';
 
 let rl: readline.Interface;
 
-function openPrompt(): void {
+export function openPrompt(): void {
   rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
