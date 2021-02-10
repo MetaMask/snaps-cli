@@ -2,6 +2,13 @@ import readline from 'readline';
 
 let _readlineInterface: readline.Interface;
 
+interface promptNamedParameters {
+  question: string;
+  def?: string;
+  shouldClose?: boolean;
+  readlineInterface?: readline.Interface;
+}
+
 export function openPrompt(): void {
   _readlineInterface = readline.createInterface({
     input: process.stdin,
@@ -9,7 +16,7 @@ export function openPrompt(): void {
   });
 }
 
-export function prompt(question: string, def?: string, shouldClose?: boolean, readlineInterface = _readlineInterface): Promise<string> {
+export function prompt({ question, def, shouldClose, readlineInterface = _readlineInterface }: promptNamedParameters): Promise<string> {
   if (readlineInterface === undefined) {
     openPrompt();
     // eslint-disable-next-line no-param-reassign
