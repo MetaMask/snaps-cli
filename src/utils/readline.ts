@@ -10,8 +10,10 @@ export function openPrompt(): void {
 }
 
 export function prompt(question: string, def?: string, shouldClose?: boolean, readlineInterface = _readlineInterface): Promise<string> {
-  if (!readlineInterface) {
+  if (readlineInterface === undefined) {
     openPrompt();
+    // eslint-disable-next-line no-param-reassign
+    readlineInterface = _readlineInterface;
   }
   return new Promise((resolve, _reject) => {
     let queryString = `${question} `;
