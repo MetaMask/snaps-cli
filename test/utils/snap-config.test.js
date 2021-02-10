@@ -35,6 +35,10 @@ describe('snap-config', () => {
     jest.spyOn(JSON, 'parse').mockImplementation((value) => value);
   });
 
+  afterAll(() => {
+    jest.restoreAllMocks();
+  })
+
   afterEach(() => {
     Object.keys(originalBuilders).forEach((key) => {
       builders[key] = originalBuilders[key];
