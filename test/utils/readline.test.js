@@ -20,13 +20,23 @@ describe('readline', () => {
   });
 
   describe('prompt', () => {
-    it('should open a prompt, display message, and read in user input from stdin', async () => {
+    it('should open a prompt, read in user input from stdin, and return the trimmed input', async () => {
       const questionMock = jest.fn((_, cb) => cb('answer '));
       const promptResult = await prompt({
         question: 'question',
         readlineInterface: { question: questionMock },
       });
       expect(promptResult).toStrictEqual('answer');
+    });
+
+    it('if the user fails to provide an input, the default should be used', async () => {
+      const questionMock = jest.fn((_, cb) => cb(''));
+      const promptResult = await prompt({
+        question: 'question',
+        def: 'default',
+        readlineInterface: { question: questionMock },
+      });
+      expect(promptResult).toStrictEqual('default');
     });
   });
 
