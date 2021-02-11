@@ -26,7 +26,7 @@ export function cli(argv: string[], commands: any): void {
     .command(commands)
 
     .option('verboseErrors', {
-      alias: ['v', 'verbose'],
+      alias: ['v', 'verboseErrors'],
       type: 'boolean',
       describe: 'Display original errors',
       required: false,
@@ -34,7 +34,7 @@ export function cli(argv: string[], commands: any): void {
     })
 
     .option('suppressWarnings', {
-      alias: 'sw',
+      alias: ['sw', 'suppressWarnings'],
       type: 'boolean',
       describe: 'Suppress warnings',
       required: false,

@@ -13,10 +13,9 @@ describe('misc', () => {
     _: ['init'],
     verboseErrors: false,
     v: false,
-    verbose: false,
     'verbose-errors': false,
     suppressWarnings: false,
-    w: false,
+    sw: false,
     'suppress-warnings': false,
     src: 'index.js',
     s: 'index.js',
@@ -30,14 +29,13 @@ describe('misc', () => {
     '$0': '/usr/local/bin/mm-snap',
   };
 
-  // this is the yargs object created with cli command: mm-snap watch -v -w
+  // this is the yargs object created with cli command: mm-snap watch -v --sw
   const exampleArgv = {
     _: ['watch'],
     v: true,
     verboseErrors: true,
-    verbose: true,
     'verbose-errors': true,
-    w: true,
+    sw: true,
     suppressWarnings: true,
     'suppress-warnings': true,
     src: 'index.js',
@@ -71,8 +69,6 @@ describe('misc', () => {
   });
 
   afterEach(() => {
-    delete global.snaps.verboseErrors;
-    delete global.snaps.suppressWarnings;
     jest.restoreAllMocks();
   });
 
@@ -83,14 +79,14 @@ describe('misc', () => {
   describe('assignGlobals', () => {
     it('sets global variables correctly', () => {
       assignGlobals(exampleArgv);
-      // expect(global.snaps.isWatching).toStrictEqual(true);
+      expect(global.snaps.isWatching).toStrictEqual(true);
       expect(global.snaps.verboseErrors).toStrictEqual(true);
       expect(global.snaps.suppressWarnings).toStrictEqual(true);
     });
 
     it('doesnt set global variables incorrectly', () => {
       assignGlobals(defaultArgv);
-      // expect(global.snaps.isWatching).toStrictEqual(false);
+      expect(global.snaps.isWatching).toStrictEqual(false);
       expect(global.snaps.verboseErrors).toStrictEqual(false);
       expect(global.snaps.suppressWarnings).toStrictEqual(false);
     });
