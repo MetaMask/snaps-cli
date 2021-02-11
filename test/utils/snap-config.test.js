@@ -1,6 +1,7 @@
 const { promises: fs } = require('fs');
 const { default: builders } = require('../../dist/src/builders');
 const { applyConfig } = require('../../dist/src/utils/snap-config');
+const misc = require('../../dist/src/utils/misc');
 
 const originalBuilders = Object.keys(builders).reduce((snapshot, key) => {
   snapshot[key] = builders[key];
@@ -29,6 +30,13 @@ const getPackageJson = async (
   };
 };
 
+const getDefaultSnapConfig = () => {
+  return {
+    'port': 8084,
+    'outfileName': 'test.js',
+  };
+};
+
 describe('snap-config', () => {
 
   beforeAll(() => {
@@ -37,7 +45,7 @@ describe('snap-config', () => {
 
   afterAll(() => {
     jest.restoreAllMocks();
-  })
+  });
 
   afterEach(() => {
     Object.keys(originalBuilders).forEach((key) => {
@@ -45,20 +53,177 @@ describe('snap-config', () => {
     });
   });
 
-  describe('applyConfig', () => {
-    it('sets global variables correctly', async () => {
-      const expected = 'testing.js';
-
+  describe('applyConfig -- part 1: checks reads of package.json', () => {
+    it('sets default packageJSON correctly', async () => {
       const fsMock = jest.spyOn(fs, 'readFile')
-        .mockImplementationOnce(async () => getPackageJson(expected))
+        .mockImplementationOnce(async () => getPackageJson())
         .mockImplementationOnce(async () => {
           return {};
         });
 
       await applyConfig();
-      expect(builders.src.default).toStrictEqual(expected);
+      expect(builders.src.default).toStrictEqual('index.js');
+      expect(builders.bundle.default).toStrictEqual('dist/foo.js');
+      expect(builders.dist.default).toStrictEqual('dist/');
+
+      fsMock.mockRestore();
+    });
+
+    it('sets web3wallet with no local property correctly', async () => {
+      const custom = {
+        main: 'custom.js',
+        web3Wallet: {
+          'bundle': {
+            'url': 'http://localhost:8084/dist/bundle.js',
+          },
+          'initialPermissions': {
+            'confirm': {},
+          },
+        },
+      };
+
+      const fsMock = jest.spyOn(fs, 'readFile')
+        .mockImplementationOnce(async () => getPackageJson(custom.main, custom.web3Wallet))
+        .mockImplementationOnce(async () => {
+          return {};
+        });
+
+      await applyConfig();
+      expect(builders.src.default).toStrictEqual(custom.main);
+      expect(builders.bundle.default).toStrictEqual(builders.bundle.default);
+      expect(builders.dist.default).toStrictEqual(builders.dist.default);
+
+      fsMock.mockRestore();
+    });
+
+    it('sets dist field correctly in edge case', async () => {
+      const custom = {
+        main: 'custom.js',
+        web3Wallet: {
+          'bundle': {
+            'local': 'foo.js',
+            'url': 'http://localhost:8084/dist/bundle.js',
+          },
+          'initialPermissions': {
+            'confirm': {},
+          },
+        },
+      };
+
+      const fsMock = jest.spyOn(fs, 'readFile')
+        .mockImplementationOnce(async () => getPackageJson(custom.main, custom.web3Wallet))
+        .mockImplementationOnce(async () => {
+          return {};
+        });
+
+      await applyConfig();
+      expect(builders.src.default).toStrictEqual(custom.main);
+      expect(builders.bundle.default).toStrictEqual(custom.web3Wallet.bundle.local);
+      expect(builders.dist.default).toStrictEqual('.');
+
+      fsMock.mockRestore();
+    });
+
+    it('jsonpackage read error is handled correctly', async () => {
+
+      global.snaps = {
+        verboseErrors: false,
+        suppressWarnings: false,
+        isWatching: false,
+      };
+
+      const mockLogWarning = jest.spyOn(misc, 'logWarning');
+      jest.spyOn(console, 'warn').mockImplementation();
+
+      const fsMock = jest.spyOn(fs, 'readFile')
+        .mockImplementationOnce(async () => {
+          throw new Error();
+        })
+        .mockImplementationOnce(async () => {
+          return {};
+        });
+
+      await applyConfig();
+      expect(mockLogWarning).toHaveBeenCalled();
+      expect(global.console.warn).toHaveBeenCalledWith('Warning: Could not parse package.json');
+
+      fsMock.mockRestore();
+      delete global.snaps;
+    });
+  });
+
+  describe('applyConfig -- part 2: checks reads of config file', () => {
+
+    it('sets configpath correctly', async () => {
+      const fsMock = jest.spyOn(fs, 'readFile')
+        .mockImplementationOnce(async () => getPackageJson())
+        .mockImplementationOnce(async () => getDefaultSnapConfig());
+
+      await applyConfig();
+      expect(builders.port.default).toStrictEqual(8084);
+      expect(builders.outfileName.default).toStrictEqual('test.js');
+
+      fsMock.mockRestore();
+    });
+
+    it('read config file error is handled correctly', async () => {
+
+      global.snaps = {
+        verboseErrors: false,
+        suppressWarnings: false,
+        isWatching: false,
+      };
+
+      const mockLogWarning = jest.spyOn(misc, 'logWarning');
+      jest.spyOn(console, 'warn').mockImplementation();
+
+      const fsMock = jest.spyOn(fs, 'readFile')
+        .mockImplementationOnce(async () => getPackageJson())
+        .mockImplementationOnce(async () => {
+          throw new Error();
+        });
+
+      await applyConfig();
+      expect(mockLogWarning).toHaveBeenCalled();
+      expect(global.console.warn).toHaveBeenCalledWith('Warning: \'snap.config.json\' exists but could not be parsed.');
+
+      fsMock.mockRestore();
+      delete global.snaps;
+    });
+
+  });
+
+  describe('applyConfig', () => {
+
+    it('sets default packageJSON correctly', async () => {
+      const fsMock = jest.spyOn(fs, 'readFile')
+        .mockImplementationOnce(async () => getPackageJson())
+        .mockImplementationOnce(async () => {
+          return {};
+        });
+
+      await applyConfig();
+      expect(builders.src.default).toStrictEqual('index.js');
+      expect(builders.bundle.default).toStrictEqual('dist/foo.js');
+      expect(builders.dist.default).toStrictEqual('dist/');
+
+      fsMock.mockRestore();
+    });
+
+    it('configpath overrides jsonpackage fields', async () => {
+      const customConfig = {
+        'src': 'custom.js',
+      };
+
+      const fsMock = jest.spyOn(fs, 'readFile')
+        .mockImplementationOnce(async () => getPackageJson())
+        .mockImplementationOnce(async () => customConfig);
+
+      await applyConfig();
+      expect(builders.src.default).toStrictEqual('custom.js');
 
       fsMock.mockRestore();
     });
   });
+
 });
