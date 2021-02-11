@@ -96,6 +96,7 @@ describe('misc', () => {
     });
   });
 
+  // eslint-disable-next-line jest/no-commented-out-tests
   // describe('sanitizeInputs', () => {
   // });
 
