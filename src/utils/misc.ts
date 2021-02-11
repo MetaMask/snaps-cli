@@ -27,8 +27,7 @@ export function assignGlobals(argv: yargs.Arguments<{
 }>) {
   if (['w', 'watch'].includes(argv._[0] as string)) {
     global.snaps.isWatching = true;
-  }
-  else {
+  } else {
     global.snaps.isWatching = false;
   }
   if (Object.prototype.hasOwnProperty.call(argv, 'verboseErrors')) {
