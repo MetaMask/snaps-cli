@@ -22,7 +22,7 @@ export function getOutfilePath(outDir: string, outFileName: string): string {
    */
 export function validateOutfileName(filename: string): boolean {
   if (!filename.endsWith('.js') || filename.indexOf('/') !== -1) {
-    throw new Error(`Invalid outfile name: ${filename}`);
+    throw new Error(`Invalid outfile name: ${filename}. Must be a .js file`);
   }
   return true;
 }
