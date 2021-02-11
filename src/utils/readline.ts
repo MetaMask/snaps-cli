@@ -4,7 +4,7 @@ let _readlineInterface: readline.Interface;
 
 interface promptNamedParameters {
   question: string;
-  def?: string;
+  defaultValue?: string;
   shouldClose?: boolean;
   readlineInterface?: readline.Interface;
 }
@@ -16,7 +16,7 @@ export function openPrompt(): void {
   });
 }
 
-export function prompt({ question, def, shouldClose, readlineInterface = _readlineInterface }: promptNamedParameters): Promise<string> {
+export function prompt({ question, defaultValue, shouldClose, readlineInterface = _readlineInterface }: promptNamedParameters): Promise<string> {
   if (readlineInterface === undefined) {
     openPrompt();
     // eslint-disable-next-line no-param-reassign
@@ -24,13 +24,13 @@ export function prompt({ question, def, shouldClose, readlineInterface = _readli
   }
   return new Promise((resolve, _reject) => {
     let queryString = `${question} `;
-    if (def) {
-      queryString += `(${def}) `;
+    if (defaultValue) {
+      queryString += `(${defaultValue}) `;
     }
     readlineInterface.question(queryString, (answer: string) => {
       if (!answer || !answer.trim()) {
-        if (def !== undefined) {
-          resolve(def);
+        if (defaultValue !== undefined) {
+          resolve(defaultValue);
         }
       }
       resolve(answer.trim());
