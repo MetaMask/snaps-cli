@@ -9,6 +9,7 @@ describe('readline', () => {
 
   afterAll(() => {
     jest.unmock('readline');
+    jest.restoreAllMocks();
   });
 
   describe('openPrompt', () => {
@@ -20,8 +21,16 @@ describe('readline', () => {
   });
 
   describe('prompt', () => {
+
+    let questionMock;
+
+    afterEach(() => {
+      questionMock.mockRestore();
+      questionMock = null;
+    });
+
     it('should open a prompt, read in user input from stdin, and return the trimmed input', async () => {
-      const questionMock = jest.fn((_, cb) => cb('answer '));
+      questionMock = jest.fn((_, cb) => cb('answer '));
       const promptResult = await prompt({
         question: 'question',
         readlineInterface: { question: questionMock },
@@ -30,10 +39,10 @@ describe('readline', () => {
     });
 
     it('if the user fails to provide an input, the default should be used', async () => {
-      const questionMock = jest.fn((_, cb) => cb(''));
+      questionMock = jest.fn((_, cb) => cb(''));
       const promptResult = await prompt({
         question: 'question',
-        def: 'default',
+        defaultValue: 'default',
         readlineInterface: { question: questionMock },
       });
       expect(promptResult).toStrictEqual('default');
