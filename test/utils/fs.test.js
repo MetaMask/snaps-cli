@@ -68,32 +68,45 @@ describe('file system checks', () => {
   });
 
   describe('isDirectory', () => {
-    global.snaps = {
-      verboseErrors: false,
-      suppressWarnings: false,
-      isWatching: false,
-    };
 
     afterEach(() => {
       jest.restoreAllMocks();
+      delete global.snaps;
     });
 
     it('checks whether the given path string resolves to an existing directory', async () => {
-      let result = await isDirectory('wrong/path/', false);
+      const result = await isDirectory('wrong/path/', false);
       expect(result).toStrictEqual(false);
+    });
+
+    it('mkdir error is handled correctly', async () => {
+
+      global.snaps = {
+        verboseErrors: false,
+        suppressWarnings: false,
+        isWatching: false,
+      };
 
       const mockExit = jest.spyOn(process, 'exit').mockImplementation(() => undefined);
       jest.spyOn(console, 'error').mockImplementation();
-      result = await isDirectory('wrong/path/', true);
+
+      await isDirectory('wrong/path/', true);
       expect(mockExit).toHaveBeenCalledWith(1);
       expect(global.console.error).toHaveBeenCalledWith('Directory \'wrong/path/\' could not be created.');
+
+      delete global.snaps;
+
+    });
+
+    it('makes a directory when given a valid directory path that does not exist', async () => {
 
       jest.spyOn(fs, 'mkdir')
         .mockImplementationOnce(async (path) => {
           await createDir(path);
         });
-      result = await isDirectory('new-dir', true);
+      const result = await isDirectory('new-dir', true);
       expect(result).toStrictEqual(true);
     });
+
   });
 });
