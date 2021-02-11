@@ -40,15 +40,6 @@ module.exports = {
       },
       rules: {
         'no-alert': 'off',
-        semi: ['error', 'always'],
-        'space-before-function-paren': [
-          'error',
-          {
-            anonymous: 'always',
-            asyncArrow: 'always',
-            named: 'never',
-          },
-        ],
       },
     },
   ],
