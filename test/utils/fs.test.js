@@ -3,12 +3,10 @@ const pathUtils = require('path');
 const rimraf = require('rimraf');
 const { isFile, isDirectory } = require('../../dist/src/utils/fs');
 
-const FS_TEST_DIR = 'fs-sandbox';
+const BASE_PATH = pathUtils.join(__dirname, 'fs-sandbox');
 
 function getPath(path) {
-  return path
-    ? pathUtils.join(__dirname, FS_TEST_DIR, path)
-    : pathUtils.join(__dirname, FS_TEST_DIR);
+  return path ? pathUtils.join(BASE_PATH, path) : BASE_PATH;
 }
 
 async function createFile(fileName, data = 'foo') {
@@ -37,20 +35,20 @@ function cleanupTestFiles() {
 }
 
 describe('file system checks', () => {
+  beforeEach(async () => {
+    await createTestFiles(
+      'file.txt',
+      'empty-dir',
+      'dir',
+      'dir/file.txt',
+    );
+  });
+
+  afterEach(() => {
+    cleanupTestFiles();
+  });
+
   describe('isFile', () => {
-    beforeEach(async () => {
-      await createTestFiles(
-        'file.txt',
-        'empty-dir',
-        'dir',
-        'dir/file.txt',
-      );
-    });
-
-    afterEach(async () => {
-      cleanupTestFiles();
-    });
-
     it('checks whether the given path string resolves to an existing file', async () => {
       let result = await isFile(getPath('file.txt'));
       expect(result).toStrictEqual(true);
@@ -70,45 +68,32 @@ describe('file system checks', () => {
   });
 
   describe('isDirectory', () => {
-
     global.snaps = {
       verboseErrors: false,
       suppressWarnings: false,
       isWatching: false,
     };
 
-    beforeEach(async () => {
-      await createTestFiles(
-        'file.txt',
-        'empty-dir',
-        'dir',
-        'dir/file.txt',
-      );
-    });
-
-    afterEach(async () => {
-      cleanupTestFiles();
+    afterEach(() => {
+      jest.restoreAllMocks();
     });
 
     it('checks whether the given path string resolves to an existing directory', async () => {
       let result = await isDirectory('wrong/path/', false);
       expect(result).toStrictEqual(false);
 
-      // eslint-disable-next-line no-empty-function
-      const mockExit = jest.spyOn(process, 'exit').mockImplementation(() => {});
+      const mockExit = jest.spyOn(process, 'exit').mockImplementation(() => undefined);
       jest.spyOn(console, 'error').mockImplementation();
       result = await isDirectory('wrong/path/', true);
       expect(mockExit).toHaveBeenCalledWith(1);
       expect(global.console.error).toHaveBeenCalledWith('Directory \'wrong/path/\' could not be created.');
 
       jest.spyOn(fs, 'mkdir')
-        .mockImplementation(async () => {
-          createDir('wrong');
+        .mockImplementationOnce(async (path) => {
+          await createDir(path);
         });
-      result = await isDirectory('wrong', true);
+      result = await isDirectory('new-dir', true);
       expect(result).toStrictEqual(true);
     });
-
   });
-
 });
