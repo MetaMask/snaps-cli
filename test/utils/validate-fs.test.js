@@ -3,6 +3,10 @@ const filesystem = require('../../dist/src/utils/fs');
 
 describe('validate', () => {
 
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
   describe('getOutfilePath', () => {
     it('gets the complete out file path', () => {
       expect(getOutfilePath('./src', 'outDir')).toStrictEqual('src/outDir');
@@ -29,13 +33,13 @@ describe('validate', () => {
         validateOutfileName('');
       }).toThrow('Invalid outfile name: ');
 
-      // expect(() => {
-      //   validateOutfileName('./src/file');
-      // }).toThrow('Invalid outfile name: ./src/file');
+      expect(() => {
+        validateOutfileName('./src/file');
+      }).toThrow('Invalid outfile name: ./src/file');
 
-      // expect(() => {
-      //   validateOutfileName('.js');
-      // }).toThrow('Invalid outfile name: .js');
+      expect(() => {
+        validateOutfileName('.js');
+      }).toThrow('Invalid outfile name: .js');
 
       expect(validateOutfileName('file.js')).toStrictEqual(true);
       expect(validateOutfileName('two.file.js')).toStrictEqual(true);
@@ -44,40 +48,31 @@ describe('validate', () => {
 
   describe('validates a file path', () => {
     it('checks whether the given path string resolves to an existing file', async () => {
-      const mockIsFile = jest.mock();
-      mockIsFile.spyOn(filesystem, 'isFile').mockReturnValue(true);
+      jest.spyOn(filesystem, 'isFile').mockReturnValue(true);
       const result = await validateFilePath('/some/file/path.js');
       expect(result).toStrictEqual(true);
-      filesystem.isFile.mockRestore();
     });
 
     it('checks whether an invalid path string throws an error', async () => {
-      const mockIsFile = jest.mock();
-      mockIsFile.spyOn(filesystem, 'isFile').mockReturnValue(false);
+      jest.spyOn(filesystem, 'isFile').mockReturnValue(false);
       await expect(validateFilePath('/some/file/path.js'))
         .rejects
         .toThrow('Invalid params: \'/some/file/path.js\' is not a file or does not exist.');
-      filesystem.isFile.mockRestore();
     });
   });
 
   describe('validates a directory path', () => {
     it('checks whether the given path string resolves to an existing directory', async () => {
-      const mockIsFile = jest.mock();
-      mockIsFile.spyOn(filesystem, 'isDirectory').mockReturnValue(true);
+      jest.spyOn(filesystem, 'isDirectory').mockReturnValue(true);
       const result = await validateDirPath('/some/directory', true);
       expect(result).toStrictEqual(true);
-      filesystem.isDirectory.mockRestore();
     });
 
     it('checks whether an invalid path string to a directory throws an error', async () => {
-      const mockIsFile = jest.mock();
-      mockIsFile.spyOn(filesystem, 'isDirectory').mockReturnValue(false);
+      jest.spyOn(filesystem, 'isDirectory').mockReturnValue(false);
       await expect(validateDirPath('/some/directory', true))
         .rejects
         .toThrow('Invalid params: \'/some/directory\' is not a directory or could not be created.');
-      filesystem.isDirectory.mockRestore();
     });
   });
-
 });
