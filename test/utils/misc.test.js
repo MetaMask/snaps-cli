@@ -1,4 +1,4 @@
-const { trimPathString, logError, logWarning, assignGlobals } = require('../../dist/src/utils/misc');
+const { trimPathString, logError, logWarning, sanitizeInputs, assignGlobals } = require('../../dist/src/utils/misc');
 
 describe('misc', () => {
 
@@ -55,6 +55,46 @@ describe('misc', () => {
     '$0': '/usr/local/bin/mm-snap',
   };
 
+  const unsanitizedArgv = {
+    _: ['init'],
+    verboseErrors: false,
+    v: false,
+    'verbose-errors': false,
+    suppressWarnings: false,
+    sw: false,
+    'suppress-warnings': false,
+    src: './',
+    s: './index.js',
+    dist: 'dist',
+    d: 'dist',
+    outfileName: 'bundle.js',
+    n: 'bundle.js',
+    'outfile-name': 'bundle.js',
+    port: 8081,
+    p: 8081,
+    '$0': '/usr/local/bin/mm-snap',
+  };
+
+  const sanitizedArgv = {
+    _: ['init'],
+    verboseErrors: false,
+    v: false,
+    'verbose-errors': false,
+    suppressWarnings: false,
+    sw: false,
+    'suppress-warnings': false,
+    src: '.',
+    s: 'index.js',
+    dist: 'dist',
+    d: 'dist',
+    outfileName: 'bundle.js',
+    n: 'bundle.js',
+    'outfile-name': 'bundle.js',
+    port: 8081,
+    p: 8081,
+    '$0': '/usr/local/bin/mm-snap',
+  };
+
   const setVerboseErrors = (bool) => {
     global.snaps.verboseErrors = bool;
   };
@@ -92,9 +132,12 @@ describe('misc', () => {
     });
   });
 
-  // eslint-disable-next-line jest/no-commented-out-tests
-  // describe('sanitizeInputs', () => {
-  // });
+  describe('sanitizeInputs', () => {
+    it('correctly normalizes paths', () => {
+      sanitizeInputs(unsanitizedArgv);
+      expect(unsanitizedArgv).toStrictEqual(sanitizedArgv);
+    });
+  });
 
   describe('logError', () => {
     it('logs an error message to console', () => {
@@ -112,7 +155,7 @@ describe('misc', () => {
   });
 
   describe('logWarning', () => {
-    it('logs a warning message to console', () => {
+    it('logs a warning and error message to console', () => {
       setSuppressWarnings(false);
       setVerboseErrors(true);
 
@@ -122,6 +165,42 @@ describe('misc', () => {
       logWarning('custom warning message', 'verbose warning message');
       expect(global.console.warn).toHaveBeenCalledWith('custom warning message');
       expect(global.console.error).toHaveBeenCalledWith('verbose warning message');
+    });
+
+    it('if verbose errors is set to false, just logs a warning message to console', () => {
+      setSuppressWarnings(false);
+      setVerboseErrors(false);
+
+      jest.spyOn(console, 'warn').mockImplementation();
+      jest.spyOn(console, 'error').mockImplementation();
+
+      logWarning('custom warning message', 'verbose warning message');
+      expect(global.console.warn).toHaveBeenCalledWith('custom warning message');
+      expect(global.console.error).not.toHaveBeenCalled();
+    });
+
+    it('given no error, just logs a warning message to console', () => {
+      setSuppressWarnings(false);
+      setVerboseErrors(false);
+
+      jest.spyOn(console, 'warn').mockImplementation();
+      jest.spyOn(console, 'error').mockImplementation();
+
+      logWarning('custom warning message');
+      expect(global.console.warn).toHaveBeenCalledWith('custom warning message');
+      expect(global.console.error).not.toHaveBeenCalled();
+    });
+
+    it('logs no message to console', () => {
+      setSuppressWarnings(true);
+      setVerboseErrors(true);
+
+      jest.spyOn(console, 'warn').mockImplementation();
+      jest.spyOn(console, 'error').mockImplementation();
+
+      logWarning('custom warning message', 'verbose warning message');
+      expect(global.console.warn).not.toHaveBeenCalled();
+      expect(global.console.error).not.toHaveBeenCalled();
     });
   });
 
