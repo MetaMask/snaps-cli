@@ -74,12 +74,15 @@ describe('file system checks', () => {
       delete global.snaps;
     });
 
-    it('checks whether the given path string resolves to an existing directory', async () => {
-      const result = await isDirectory('wrong/path/', false);
+    it('checks whether the given path string is an existing directory', async () => {
+      const result = await isDirectory('file.txt', false);
       expect(result).toStrictEqual(false);
+
+      // result = await isDirectory('dir', false);
+      // expect(result).toStrictEqual(false);
     });
 
-    it('mkdir error is handled correctly', async () => {
+    it('logs error and exits if path does not resolve to directory and one is unable to be created', async () => {
 
       global.snaps = {
         verboseErrors: false,
@@ -98,6 +101,13 @@ describe('file system checks', () => {
 
     });
 
+    it('directory does not exist and user does not want to create a directory', async () => {
+
+      const result = await isDirectory('wrong/path/', false);
+      expect(result).toStrictEqual(false);
+
+    });
+
     it('makes a directory when given a valid directory path that does not exist', async () => {
 
       jest.spyOn(fs, 'mkdir')
@@ -106,6 +116,16 @@ describe('file system checks', () => {
         });
       const result = await isDirectory('new-dir', true);
       expect(result).toStrictEqual(true);
+    });
+
+    it('given error.code !== ENOENT, return false', async () => {
+
+      jest.spyOn(fs, 'stat')
+        .mockImplementationOnce(async () => {
+          throw new Error('BAD');
+        });
+      const result = await isDirectory('new-dir', true);
+      expect(result).toStrictEqual(false);
     });
 
   });
