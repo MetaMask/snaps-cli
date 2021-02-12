@@ -1,20 +1,15 @@
 {
   "compilerOptions": {
-    "target": "es5",                       
-    "module": "commonjs",                   
-    "outDir": "./dist",                       
-    "strict": true,                         
+    "target": "es5",
+    "module": "commonjs",
+    "outDir": "./dist",
+    "strict": true,
     "resolveJsonModule": true,
-    "typeRoots": [
-      "./node_modules/@types",
-      "src/types"
-    ], 
-    "esModuleInterop": true,               
-    "skipLibCheck": false,                     
-    "forceConsistentCasingInFileNames": true,  
+    "typeRoots": ["./node_modules/@types", "src/types"],
+    "esModuleInterop": true,
+    "skipLibCheck": false,
+    "forceConsistentCasingInFileNames": true,
+    "inlineSourceMap": true,
   },
-  "include": [
-    "./src",
-    "./development/"
-  ],
+  "include": ["./src", "./development/"]
 }
