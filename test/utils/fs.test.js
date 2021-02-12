@@ -75,11 +75,11 @@ describe('file system checks', () => {
     });
 
     it('checks whether the given path string is an existing directory', async () => {
-      const result = await isDirectory('file.txt', false);
+      let result = await isDirectory(getPath('file.txt'), false);
       expect(result).toStrictEqual(false);
 
-      // result = await isDirectory('dir', false);
-      // expect(result).toStrictEqual(false);
+      result = await isDirectory(getPath('dir'), false);
+      expect(result).toStrictEqual(true);
     });
 
     it('logs error and exits if path does not resolve to directory and one is unable to be created', async () => {
@@ -90,11 +90,12 @@ describe('file system checks', () => {
         isWatching: false,
       };
 
-      const mockExit = jest.spyOn(process, 'exit').mockImplementation(() => undefined);
+      jest.spyOn(process, 'exit').mockImplementation(() => {
+        throw new Error(1);
+      });
       jest.spyOn(console, 'error').mockImplementation();
 
-      await isDirectory('wrong/path/', true);
-      expect(mockExit).toHaveBeenCalledWith(1);
+      await expect(isDirectory('wrong/path/', true)).rejects.toStrictEqual(new Error(1));
       expect(global.console.error).toHaveBeenCalledWith('Directory \'wrong/path/\' could not be created.');
 
       delete global.snaps;
