@@ -31,6 +31,24 @@ module.exports = {
     },
     {
       files: [
+        'src/cmds/eval/evalWorker.ts',
+      ],
+      globals: {
+        lockdown: true,
+        Compartment: true,
+        BigInt: true,
+      },
+    },
+    {
+      files: [
+        'src/main.ts',
+      ],
+      rules: {
+        'node/shebang': 'off',
+      },
+    },
+    {
+      files: [
         'examples/**/*.js',
       ],
       env: {
