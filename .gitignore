@@ -7,3 +7,4 @@ examples/*/dist
 package-lock.json
 dist/
 test/fs-sandbox
+coverage
