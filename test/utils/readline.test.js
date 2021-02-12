@@ -47,6 +47,31 @@ describe('readline', () => {
       });
       expect(promptResult).toStrictEqual('default');
     });
+
+    const closeMock = jest.fn();
+
+    it('if shouldClose is true, function should call close', async () => {
+      questionMock = jest.fn((_, cb) => cb('answer '));
+      await prompt({
+        question: 'question',
+        defaultValue: 'default',
+        shouldClose: true,
+        readlineInterface: { question: questionMock, close: closeMock },
+      });
+      expect(closeMock).toHaveBeenCalled();
+    });
+
+    it('if shouldClose is false, function should not call close', async () => {
+      questionMock = jest.fn((_, cb) => cb('answer '));
+      await prompt({
+        question: 'question',
+        defaultValue: 'default',
+        shouldClose: false,
+        readlineInterface: { question: questionMock, close: closeMock },
+      });
+      // error!
+      expect(closeMock).toHaveBeenCalled();
+    });
   });
 
   describe('closePrompt', () => {
