@@ -36,7 +36,8 @@ export async function applyConfig(): Promise<void> {
     }
   } catch (err) {
     if (err.code !== 'ENOENT') {
-      logError('Error: package.json exists but could not be parsed.',
+      logError(
+        'Error: package.json exists but could not be parsed.',
         err,
       );
       process.exit(1);
