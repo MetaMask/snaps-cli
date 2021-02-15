@@ -1,8 +1,8 @@
 import readline from 'readline';
 
-let _readlineInterface: readline.Interface;
+let singletonReadlineInterface: readline.Interface;
 
-interface promptNamedParameters {
+interface PromptArgs {
   question: string;
   defaultValue?: string;
   shouldClose?: boolean;
@@ -10,24 +10,30 @@ interface promptNamedParameters {
 }
 
 export function openPrompt(): void {
-  _readlineInterface = readline.createInterface({
+  singletonReadlineInterface = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
   });
 }
 
-export function prompt({ question, defaultValue, shouldClose, readlineInterface = _readlineInterface }: promptNamedParameters): Promise<string> {
-  if (readlineInterface === undefined) {
+export function prompt({
+  question,
+  defaultValue,
+  shouldClose,
+  readlineInterface = singletonReadlineInterface,
+}: PromptArgs): Promise<string> {
+  let _readlineInterface = readlineInterface;
+  if (!_readlineInterface) {
     openPrompt();
-    // eslint-disable-next-line no-param-reassign
-    readlineInterface = _readlineInterface;
+    _readlineInterface = singletonReadlineInterface;
   }
+
   return new Promise((resolve, _reject) => {
     let queryString = `${question} `;
     if (defaultValue) {
       queryString += `(${defaultValue}) `;
     }
-    readlineInterface.question(queryString, (answer: string) => {
+    _readlineInterface.question(queryString, (answer: string) => {
       if (!answer || !answer.trim()) {
         if (defaultValue !== undefined) {
           resolve(defaultValue);
@@ -35,13 +41,13 @@ export function prompt({ question, defaultValue, shouldClose, readlineInterface 
       }
       resolve(answer.trim());
       if (shouldClose) {
-        readlineInterface.close();
+        _readlineInterface.close();
       }
     });
   });
 }
 
-export function closePrompt(readlineInterface = _readlineInterface): void {
+export function closePrompt(readlineInterface = singletonReadlineInterface): void {
   if (readlineInterface) {
     readlineInterface.close();
   }
