@@ -1,7 +1,6 @@
 const { trimPathString, logError, logWarning, sanitizeInputs, assignGlobals } = require('../../dist/src/utils/misc');
 
 describe('misc', () => {
-
   global.snaps = {
     verboseErrors: false,
     suppressWarnings: false,
@@ -215,5 +214,4 @@ describe('misc', () => {
       expect(trimPathString('//////hello')).toStrictEqual('hello');
     });
   });
-
 });

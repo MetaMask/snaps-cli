@@ -104,7 +104,7 @@ describe('file system checks', () => {
       });
       jest.spyOn(console, 'error').mockImplementation();
 
-      await expect(isDirectory('wrong/path/', true)).rejects.toStrictEqual(new Error(1));
+      await expect(isDirectory('wrong/path/', true)).rejects.toThrow(new Error(1));
       expect(global.console.error).toHaveBeenCalledWith('Directory \'wrong/path/\' could not be created.');
 
       delete global.snaps;
