@@ -140,6 +140,83 @@ describe('command line interface', () => {
       });
     });
   });
+
+  describe('eval', () => {
+    it('should work', () => {
+      cli(
+        getMockArgv('eval'),
+        mockCommands,
+      );
+      expect(mockHandlerMap.eval).toHaveBeenCalled();
+      validateCommandHandlerCall(mockHandlerMap.eval, {
+        bundle: 'dist/bundle.js',
+        environment: 'worker',
+      });
+    });
+  });
+
+  describe('init', () => {
+    it('should work', () => {
+      cli(
+        getMockArgv('init'),
+        mockCommands,
+      );
+      expect(mockHandlerMap.init).toHaveBeenCalled();
+      validateCommandHandlerCall(mockHandlerMap.init, {
+        src: 'index.js',
+        dist: 'dist',
+        outfileName: 'bundle.js',
+        port: 8081,
+      });
+    });
+  });
+
+  describe('manifest', () => {
+    it('should work', () => {
+      cli(
+        getMockArgv('manifest'),
+        mockCommands,
+      );
+      expect(mockHandlerMap.manifest).toHaveBeenCalled();
+      validateCommandHandlerCall(mockHandlerMap.manifest, {
+        dist: 'dist',
+        port: 8081,
+        populate: true,
+      });
+    });
+  });
+
+  describe('serve', () => {
+    it('should work', () => {
+      cli(
+        getMockArgv('serve'),
+        mockCommands,
+      );
+      expect(mockHandlerMap.serve).toHaveBeenCalled();
+      validateCommandHandlerCall(mockHandlerMap.serve, {
+        root: '.',
+        port: 8081,
+      });
+    });
+  });
+
+  describe('watch', () => {
+    it('should work', () => {
+      cli(
+        getMockArgv('watch'),
+        mockCommands,
+      );
+      expect(mockHandlerMap.watch).toHaveBeenCalled();
+      validateCommandHandlerCall(mockHandlerMap.watch, {
+        src: 'index.js',
+        dist: 'dist',
+        outfileName: 'bundle.js',
+        sourceMaps: false,
+        stripComments: false,
+        environment: 'worker',
+      });
+    });
+  });
 });
 
 function validateCommandHandlerCall(mockHandler, expectedValues) {
