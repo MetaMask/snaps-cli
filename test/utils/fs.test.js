@@ -3,6 +3,9 @@ const pathUtils = require('path');
 const rimraf = require('rimraf');
 const { isFile, isDirectory } = require('../../dist/src/utils/fs');
 
+/**
+ * All test files will be created in this temporary directory, which is removed during cleanup.
+ */
 const BASE_PATH = pathUtils.join(__dirname, 'fs-sandbox');
 
 function getPath(path) {
@@ -19,6 +22,11 @@ async function createDir(dirName) {
 
 const isFileRegEx = /\w+\.\w+$/u;
 
+/**
+ * Given any number of path strings, sequentially creates the given files and/or directories.
+ * - File paths with a file name including its file extension, e.g. foo.txt
+ * - Parent directories must be specified before their contents, or an error will be thrown
+ */
 async function createTestFiles(...paths) {
   await createDir();
   for (const path of paths) {
@@ -30,6 +38,9 @@ async function createTestFiles(...paths) {
   }
 }
 
+/**
+ * Removes the test file directory.
+ */
 function cleanupTestFiles() {
   rimraf.sync(getPath());
 }
@@ -68,7 +79,6 @@ describe('file system checks', () => {
   });
 
   describe('isDirectory', () => {
-
     afterEach(() => {
       jest.restoreAllMocks();
       delete global.snaps;
@@ -83,7 +93,6 @@ describe('file system checks', () => {
     });
 
     it('logs error and exits if path does not resolve to directory and one is unable to be created', async () => {
-
       global.snaps = {
         verboseErrors: false,
         suppressWarnings: false,
@@ -99,35 +108,31 @@ describe('file system checks', () => {
       expect(global.console.error).toHaveBeenCalledWith('Directory \'wrong/path/\' could not be created.');
 
       delete global.snaps;
-
     });
 
     it('directory does not exist and user does not want to create a directory', async () => {
-
       const result = await isDirectory('wrong/path/', false);
       expect(result).toStrictEqual(false);
-
     });
 
     it('makes a directory when given a valid directory path that does not exist', async () => {
-
       jest.spyOn(fs, 'mkdir')
         .mockImplementationOnce(async (path) => {
           await createDir(path);
         });
+
       const result = await isDirectory('new-dir', true);
       expect(result).toStrictEqual(true);
     });
 
     it('given error.code !== ENOENT, return false', async () => {
-
       jest.spyOn(fs, 'stat')
         .mockImplementationOnce(async () => {
           throw new Error('BAD');
         });
+
       const result = await isDirectory('new-dir', true);
       expect(result).toStrictEqual(false);
     });
-
   });
 });
