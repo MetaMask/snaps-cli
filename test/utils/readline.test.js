@@ -6,7 +6,6 @@ jest.mock('readline', () => {
 });
 
 describe('readline', () => {
-
   afterAll(() => {
     jest.unmock('readline');
     jest.restoreAllMocks();
@@ -21,7 +20,6 @@ describe('readline', () => {
   });
 
   describe('prompt', () => {
-
     let questionMock;
     const closeMock = jest.fn();
 
@@ -33,6 +31,7 @@ describe('readline', () => {
 
     it('should open a prompt, read in user input from stdin, and return the trimmed input', async () => {
       questionMock = jest.fn((_, cb) => cb('answer '));
+
       const promptResult = await prompt({
         question: 'question',
         readlineInterface: { question: questionMock },
@@ -42,6 +41,7 @@ describe('readline', () => {
 
     it('if the user fails to provide an input, the default should be used', async () => {
       questionMock = jest.fn((_, cb) => cb(''));
+
       const promptResult = await prompt({
         question: 'question',
         defaultValue: 'default',
@@ -63,6 +63,7 @@ describe('readline', () => {
 
     it('if shouldClose is false, function should not call close', async () => {
       questionMock = jest.fn((_, cb) => cb('answer '));
+
       await prompt({
         question: 'question',
         defaultValue: 'default',
@@ -76,6 +77,7 @@ describe('readline', () => {
   describe('closePrompt', () => {
     it('should close the readline interface', () => {
       const closeMock = jest.fn();
+
       closePrompt({ close: closeMock });
       expect(closeMock).toHaveBeenCalled();
     });
