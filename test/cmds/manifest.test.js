@@ -195,7 +195,7 @@ describe('manifest', () => {
       expect(global.console.error.mock.calls[0]).toEqual(['Manifest Error: initial permission \'alert\' must be an object']);
       expect(global.console.error.mock.calls[1]).toEqual(['Manifest Error: initial permission \'read\' must be an object']);
     });
-    it('checks web3Wallet initial permissions property: throws error if object\'s permission keys are invalid', async () => {
+    it('checks web3Wallet initial permissions property: handles valid and throws error if object\'s permission keys are invalid', async () => {
       jest.spyOn(JSON, 'parse').mockImplementation((value) => value);
       jest.spyOn(utils, 'isFile').mockImplementation(() => true);
       jest.spyOn(console, 'error').mockImplementation();
@@ -205,54 +205,49 @@ describe('manifest', () => {
             local: 'dist/bundle.js',
             url: 'http://localhost:8081/dist/bundle.js',
           },
-          initialPermissions: { /* approve: { invoker: 'foo', date: 4546 }, */ bad: { dangerous: 'scary' }, parent: { parentCapability: 'mother' } },
+          initialPermissions: { approve: { invoker: 'foo', date: 4546 }, bad: { dangerous: 'scary' }, parent: { parentCapability: 'mother' } },
         }));
       await expect(manifest(mockArgv)).rejects.toThrow('Manifest Error: package.json validation failed, please see above errors.');
       expect(global.console.error.mock.calls[0]).toEqual(['Manifest Error: initial permission \'bad\' has unrecognized key \'dangerous\'']);
       expect(global.console.error.mock.calls[1]).toEqual(['Manifest Error: initial permission \'parent\' has mismatched \'parentCapability\' field \'mother\'']);
     });
-    it('checks logManifestError prints according to global settings', async () => {
-      global.snaps = {
-        verboseErrors: true,
-        suppressWarnings: false,
-        isWatching: false,
-      };
-      jest.spyOn(JSON, 'parse').mockImplementation((value) => value);
-      jest.spyOn(utils, 'isFile').mockImplementation(() => true);
-      jest.spyOn(console, 'error').mockImplementation();
-      jest.spyOn(fs, 'readFile')
-        .mockImplementationOnce(async () => await getPackageJson({
-          bundle: {
-            local: 'dist/bundle.js',
-            url: 'http://localhost:8081/dist/bundle.js',
-          },
-          initialPermissions: { alert: 'foo', read: ['foo', 'bar'] },
-        }));
-      await expect(manifest(mockArgv)).rejects.toThrow('Manifest Error: package.json validation failed, please see above errors.');
-      expect(global.console.error.mock.calls[0]).toEqual(['Manifest Error: initial permission \'alert\' must be an object']);
-      expect(global.console.error.mock.calls[1]).toEqual(['Manifest Error: initial permission \'read\' must be an object']);
+    describe('checks if log error and warning aligns to global settings', () => {
+      afterEach(() => {
+        global.snaps.verboseErrors = false;
+        global.snaps.suppressWarnings = false;
+      });
+      it('checks logManifestError prints according to global settings', async () => {
+        global.snaps.verboseErrors = true;
+        console.log(global.snaps);
+        jest.spyOn(JSON, 'parse').mockImplementation((value) => value);
+        jest.spyOn(utils, 'isFile').mockImplementation(() => true);
+        jest.spyOn(console, 'error').mockImplementation();
+        jest.spyOn(fs, 'readFile')
+          .mockImplementationOnce(async () => await getPackageJson({
+            bundle: {
+              local: 'dist/bundle.js',
+              url: 'http://localhost:8081/dist/bundle.js',
+            },
+            initialPermissions: { alert: 'foo', read: ['foo', 'bar'] },
+          }));
+        await expect(manifest(mockArgv)).rejects.toThrow('Manifest Error: package.json validation failed, please see above errors.');
+        expect(global.console.error.mock.calls[0]).toEqual(['Manifest Error: initial permission \'alert\' must be an object']);
+        expect(global.console.error.mock.calls[1]).toEqual(['Manifest Error: initial permission \'read\' must be an object']);
+      });
+      it('checks logManifestWarning prints according to global settings', async () => {
+        global.snaps.suppressWarnings = true;
+        console.log(global.snaps);
+        const badJSON = {};
+        jest.spyOn(JSON, 'parse').mockImplementation((value) => value);
+        jest.spyOn(console, 'warn').mockImplementation();
+        jest.spyOn(console, 'log').mockImplementation();
+        jest.spyOn(fs, 'readFile')
+          .mockImplementationOnce(async () => badJSON);
+        await manifest(mockArgv);
+        expect(global.console.warn).not.toHaveBeenCalled();
+      });
+
     });
-    // it('checks logManifestWarning prints according to global settings', async () => {
-    //     global.snaps = {
-    //       verboseErrors: false,
-    //       suppressWarnings: false,
-    //       isWatching: false,
-    //     };
-    //     const badJSON = {};
-    //     jest.spyOn(JSON, 'parse').mockImplementation((value) => value);
-    //     jest.spyOn(console, 'warn').mockImplementation();
-    //     //   jest.spyOn(console, 'error').mockImplementation();
-    //     jest.spyOn(console, 'log').mockImplementation();
-    //     jest.spyOn(fs, 'readFile')
-    //       .mockImplementationOnce(async () => badJSON);
-    //     await manifest(mockArgv);
-    //     //   await expect(manifest(mockArgv)).rejects.toThrow('Manifest Error: package.json validation failed, please see above errors.');
-    //     expect(global.console.warn.mock.calls[0]).toEqual(['Manifest Warning: Missing required package.json properties:\n\tname\n\tversion\n\tdescription\n\tmain\n\tweb3Wallet\n']);
-    //     expect(global.console.warn.mock.calls[1]).toEqual(['Manifest Warning: Missing recommended package.json properties:\n\trepository\n']);
-    //     //   expect(global.console.error).toHaveBeenCalledWith('Manifest Error: Missing required \'web3Wallet\' property \'bundle.local\'.');
-    //     expect(global.console.log).toHaveBeenCalledWith('Manifest Warning: Validation of \'undefined\' package.json completed with warnings. See above.');
-    //     delete global.snaps;
-    //   });
 
     describe('attempt to set missing/erroneous properties if commanded', () => {
       beforeEach(() => {
@@ -328,3 +323,5 @@ describe('manifest', () => {
     });
   });
 });
+
+console.log(global.snaps);
