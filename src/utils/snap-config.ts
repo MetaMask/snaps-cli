@@ -40,7 +40,7 @@ export function applyConfig(
     key: options,
   } = (yargsInstance as any).getOptions() as {
     alias: Record<string, string[]>;
-    key: Record<string, boolean>;
+    key: Record<string, unknown>;
   };
 
   const parsedProcessArgv = yargsParse(processArgv, {
@@ -50,8 +50,10 @@ export function applyConfig(
 
   const commandOptions = new Set(Object.keys(options));
 
-  const shouldSetArg = (key: string): boolean => commandOptions.has(key) &&
-    !Object.prototype.hasOwnProperty.call(parsedProcessArgv, key);
+  const shouldSetArg = (key: string): boolean => {
+    return commandOptions.has(key) &&
+      !Object.prototype.hasOwnProperty.call(parsedProcessArgv, key);
+  };
 
   // Now, we attempt to read and apply config from the config file, if any.
   let cfg: Record<string, unknown> = {};
@@ -62,16 +64,17 @@ export function applyConfig(
       usedConfigPath = configPath;
       break;
     } catch (err) {
-      if (err.code !== 'ENOENT') {
-        logError(
-          `Error: "${configPath}" exists but could not be parsed. Ensure your config file is valid JSON and try again.`,
-          err,
-        );
-        process.exit(1);
-      } else {
+      if (err.code === 'ENOENT') {
         // If there's no config file, we're done here.
         return;
       }
+
+      logError(
+        `Error: "${configPath}" exists but could not be parsed. Ensure your config file is valid JSON and try again.`,
+        err,
+      );
+      process.exit(1);
+
     }
   }
 
