@@ -49,6 +49,15 @@ module.exports = {
     },
     {
       files: [
+        // Exports a yargs middleware function, which must be synchronous.
+        'src/utils/snap-config.ts',
+      ],
+      rules: {
+        'node/no-sync': 'off',
+      },
+    },
+    {
+      files: [
         'examples/**/*.js',
       ],
       env: {
