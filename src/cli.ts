@@ -39,12 +39,6 @@ export function cli(argv: string[], commands: any): void {
     // yargs middleware functions receive the yargs instance as a second parameter.
     // ref: https://yargs.js.org/docs/#api-reference-middlewarecallbacks-applybeforevalidation
     .middleware(((yargsArgv: Arguments, yargsInstance: typeof yargsType) => {
-      // Some globals affect error logging, and applyConfig may error.
-      // Therefore, we set globals from the yargs argv object before applying
-      // defaults from the config, and then set the globals again after, to
-      // ensure that inline options are preferred over any config files.
-      // This is ugly, but cheap.
-      setSnapGlobals(yargsArgv);
       applyConfig(rawArgv, yargsArgv, yargsInstance);
       setSnapGlobals(yargsArgv);
       sanitizeInputs(yargsArgv);
