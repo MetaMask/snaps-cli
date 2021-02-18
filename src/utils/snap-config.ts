@@ -6,17 +6,24 @@ import builders from '../builders';
 import { logError } from './misc';
 import { CONFIG_PATHS } from '.';
 
-const INVALID_CONFIG_FILE = 'Invalid config file.';
+// Note that the below function is necessary because yarg's .config() function
+// leaves much to be desired.
+//
+// In particular, it will set all properties included in the config file
+// regardless of the command, which fails during validation.
 
 /**
  * Attempts to read configuration options for package.json and the config file,
  * and apply them to argv if they weren't already set.
- * 
- * Arguments are applied from the following sources, with the following priority:
- * 1. Specified by the user on the command line
- * 2. Specified in snap-cli config file
+ *
+ * Arguments are only set per the snap-cli config file if they were not specified
+ * on the command line.
  */
-export function applyConfig(processArgv: string[], yargsArgv: Arguments, yargsInstance: typeof yargs): void {
+export function applyConfig(
+  processArgv: string[],
+  yargsArgv: Arguments,
+  yargsInstance: typeof yargs,
+): void {
   // Instances of yargs has a number of undocumented functions, including
   // getOptions. This function returns an object with properties "key" and
   // "alias", which specify the options associated with the current command and
@@ -36,16 +43,15 @@ export function applyConfig(processArgv: string[], yargsArgv: Arguments, yargsIn
     key: Record<string, boolean>;
   };
 
-  const processArgvKeys = new Set(
-    Object.keys(yargsParse(processArgv, { alias: aliases })),
-  );
-  processArgvKeys.delete('_'); // irrelevant yargs parser artifact
+  const parsedProcessArgv = yargsParse(processArgv, {
+    alias: aliases,
+  }) as Record<string, unknown>;
+  delete parsedProcessArgv._; // irrelevant yargs parser artifact
 
   const commandOptions = new Set(Object.keys(options));
 
-  const shouldSetArg = (key: string): boolean => {
-    return commandOptions.has(key) && !processArgvKeys.has(key);
-  };
+  const shouldSetArg = (key: string): boolean => commandOptions.has(key) &&
+    !Object.prototype.hasOwnProperty.call(parsedProcessArgv, key);
 
   // Now, we attempt to read and apply config from the config file, if any.
   let cfg: Record<string, unknown> = {};
@@ -58,10 +64,13 @@ export function applyConfig(processArgv: string[], yargsArgv: Arguments, yargsIn
     } catch (err) {
       if (err.code !== 'ENOENT') {
         logError(
-          `Error: "${configPath}" exists but could not be parsed`,
+          `Error: "${configPath}" exists but could not be parsed. Ensure your config file is valid JSON and try again.`,
           err,
         );
         process.exit(1);
+      } else {
+        // If there's no config file, we're done here.
+        return;
       }
     }
   }
@@ -74,8 +83,9 @@ export function applyConfig(processArgv: string[], yargsArgv: Arguments, yargsIn
         }
       } else {
         logError(
-          `Error: Encountered unrecognized config file property "${key}" in config file "${usedConfigPath as string}".`,
-          new Error(INVALID_CONFIG_FILE),
+          `Error: Encountered unrecognized config property "${key}" in config file "${
+            usedConfigPath as string
+          }". Remove the property and try again.`,
         );
         process.exit(1);
       }
@@ -84,8 +94,9 @@ export function applyConfig(processArgv: string[], yargsArgv: Arguments, yargsIn
     const cfgType = cfg === null ? 'null' : typeof cfg;
 
     logError(
-      `Error: The config file must consist of a top-level JSON object. Received "${cfgType}" from "${usedConfigPath as string}".`,
-      new Error(INVALID_CONFIG_FILE),
+      `Error: The config file must consist of a top-level JSON object. Received "${cfgType}" from "${
+        usedConfigPath as string
+      }". Fix your config file and try again.`,
     );
     process.exit(1);
   }
