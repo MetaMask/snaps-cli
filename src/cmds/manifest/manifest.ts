@@ -200,9 +200,7 @@ export async function manifest(argv: YargsArgs): Promise<void> {
   function logManifestError(message: string, err?: Error) {
     isInvalid = true;
     console.error(`Manifest Error: ${message}`);
-    console.log(global.snaps.verboseErrors);
     if (err && global.snaps.verboseErrors) {
-      console.log('hnetaohetaehnatoenha');
       console.error(err);
     }
   }
