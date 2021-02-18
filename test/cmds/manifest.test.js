@@ -137,7 +137,22 @@ describe('manifest', () => {
       expect(global.console.error.mock.calls[1]).toEqual(['Manifest Error: \'bundle.url\' does not resolve to a URL.']);
     });
 
-    it('checks web3Wallet bundle url property', async () => {
+    it('checks web3Wallet bundle local property exists', async () => {
+      jest.spyOn(JSON, 'parse').mockImplementation((value) => value);
+      jest.spyOn(utils, 'isFile').mockImplementation(() => true);
+      jest.spyOn(console, 'error').mockImplementation();
+      jest.spyOn(fs, 'readFile')
+        .mockImplementationOnce(async () => await getPackageJson({
+          bundle: {
+            url: 'http://localhost:8081/dist/bundle.js',
+          },
+          initialPermissions: { alert: {} },
+        }));
+      await expect(manifest(mockArgv)).rejects.toThrow('Manifest Error: package.json validation failed, please see above errors.');
+      expect(global.console.error).toHaveBeenCalledWith('Manifest Error: Missing required \'web3Wallet\' property \'bundle.local\'.');
+    });
+
+    it('checks web3Wallet bundle url property exists', async () => {
       jest.spyOn(JSON, 'parse').mockImplementation((value) => value);
       jest.spyOn(utils, 'isFile').mockImplementation(() => true);
       jest.spyOn(console, 'error').mockImplementation();
@@ -227,7 +242,6 @@ describe('manifest', () => {
 
       it('checks logManifestError prints according to global settings', async () => {
         global.snaps.verboseErrors = true;
-        console.log(global.snaps);
         jest.spyOn(JSON, 'parse').mockImplementation((value) => value);
         jest.spyOn(utils, 'isFile').mockImplementation(() => true);
         jest.spyOn(console, 'error').mockImplementation();
@@ -246,7 +260,6 @@ describe('manifest', () => {
 
       it('checks logManifestWarning prints according to global settings', async () => {
         global.snaps.suppressWarnings = true;
-        console.log(global.snaps);
         const badJSON = {};
         jest.spyOn(JSON, 'parse').mockImplementation((value) => value);
         jest.spyOn(console, 'warn').mockImplementation();
