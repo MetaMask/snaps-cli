@@ -1,6 +1,6 @@
 import yargs from 'yargs';
 import builders from '../../builders';
-import { build } from '../build';
+import { build } from '../build/bundle';
 import { YargsArgs } from '../../types/yargs';
 import { initHandler } from './initialize';
 
