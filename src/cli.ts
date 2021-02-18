@@ -15,7 +15,6 @@ declare global {
 
 export function cli(argv: string[], commands: any): void {
   const rawArgv = argv.slice(2);
-  console.log('RAW ARGV', argv.slice(2));
   // eslint-disable-next-line @typescript-eslint/no-unused-expressions
   yargs(rawArgv)
 
