@@ -25,6 +25,8 @@ export async function serve(argv: YargsArgs): Promise<void> {
     });
   });
 
+  console.log(server);
+
   server.listen({ port }, () => {
     console.log(`Server listening on: http://localhost:${port}`);
   });
