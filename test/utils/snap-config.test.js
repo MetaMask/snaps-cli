@@ -82,7 +82,7 @@ describe('snap-config', () => {
     expect(argv.outfileName).toStrictEqual(outfileName);
   });
 
-  it('applies a valid config file, but ignore keys given on the command line', () => {
+  it('applies a valid config file, but ignores keys given on the command line', () => {
     const outfileName = 'foo.js';
     const configDist = 'build';
     fs.readFileSync.mockReturnValueOnce({ dist: configDist, outfileName });
