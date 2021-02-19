@@ -50,5 +50,5 @@ function getMockApi() {
       XMLHttpRequest: () => true,
       WebSocket: () => true,
     },
-  }
+  };
 }
