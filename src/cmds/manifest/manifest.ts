@@ -31,6 +31,8 @@ export async function manifest(argv: YargsArgs): Promise<void> {
   try {
     pkg = JSON.parse(await fs.readFile('package.json', 'utf-8'));
   } catch (err) {
+    console.log(err);
+    console.log(err.code);
     if (err.code === 'ENOENT') {
       throw new Error(
         `Manifest error: Could not find package.json. Please ensure that ` +

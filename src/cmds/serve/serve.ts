@@ -27,25 +27,32 @@ export async function serve(argv: YargsArgs): Promise<void> {
 
   console.log(server);
 
-  server.listen({ port }, () => {
-    console.log(`Server listening on: http://localhost:${port}`);
+  server.listen({ port }, () => logServerListening(port));
+
+  server.on('request', (request) => logRequest(request));
+
+  server.on('error', (error) => logServerError(error));
+
+  server.on('close', () => {
+    console.log('Server closed');
+    process.exit(1);
   });
 
-  server.on('request', (request) => {
-    console.log(`Handling incoming request for: ${request.url}`);
-  });
+  function logServerListening(portInput: number) {
+    console.log(`Server listening on: http://localhost:${portInput}`);
+  }
 
-  server.on('error', (err) => {
+  function logRequest(requestInput: Record<string, unknown>) {
+    console.log(`Handling incoming request for: ${requestInput.url}`);
+  }
+
+  function logServerError(err: Error) {
+    console.log((err as any).code);
     if ((err as any).code === 'EADDRINUSE') {
       logError(`Server error: Port ${port} already in use.`);
     } else {
       logError(`Server error: ${err.message}`, err);
     }
     process.exit(1);
-  });
-
-  server.on('close', () => {
-    console.log('Server closed');
-    process.exit(1);
-  });
+  }
 }

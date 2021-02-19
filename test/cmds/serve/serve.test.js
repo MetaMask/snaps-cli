@@ -26,7 +26,7 @@ describe('serve', () => {
 
     it('snapEval successfully executes and logs to console', async () => {
       const mockServerObj = {
-        listen: jest.fn(),
+        listen: () => console.log('Server listening on: http://localhost:8081'),
         on: jest.fn(),
       };
       jest.spyOn(console, 'log').mockImplementation();
@@ -35,6 +35,7 @@ describe('serve', () => {
       await serve(mockArgv);
       expect(validateDirPathMock).toHaveBeenCalledTimes(1);
       expect(global.console.log).toHaveBeenCalledWith('\nStarting server...');
+      expect(global.console.log).toHaveBeenCalledWith('Server listening on: http://localhost:8081');
     });
   });
 });
