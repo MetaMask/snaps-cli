@@ -1,6 +1,9 @@
-import { parentPort } from 'worker_threads';
+import { parentPort, Worker } from 'worker_threads';
 import { readFileSync } from 'fs';
+import pathUtils from 'path';
 import crypto from 'crypto';
+import { logError, validateFilePath } from '../../utils';
+import { YargsArgs } from '../../types/yargs';
 
 // eslint-disable-next-line import/no-unassigned-import, @typescript-eslint/no-require-imports
 require('ses/lockdown');
