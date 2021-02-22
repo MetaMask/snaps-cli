@@ -17,8 +17,6 @@ import { YargsArgs } from '../../types/yargs';
  */
 export async function watch(argv: YargsArgs): Promise<void> {
 
-  console.log(argv);
-
   const { src, dist, outfileName } = argv;
   if (outfileName) {
     validateOutfileName(outfileName as string);
