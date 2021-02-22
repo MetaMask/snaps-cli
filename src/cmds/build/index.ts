@@ -1,7 +1,7 @@
 import yargs from 'yargs';
 import builders from '../../builders';
 import { YargsArgs } from '../../types/yargs';
-import { build } from './bundle';
+import { build } from './build';
 
 module.exports.command = ['build', 'b'];
 module.exports.desc = 'Build Snap from source';
