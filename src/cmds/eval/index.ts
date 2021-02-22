@@ -1,7 +1,7 @@
 import yargs from 'yargs';
 import builders from '../../builders';
 import { YargsArgs } from '../../types/yargs';
-import { snapEval } from './evalWorker';
+import { snapEval } from './eval';
 
 module.exports.command = ['eval', 'e'];
 module.exports.desc = 'Attempt to evaluate Snap bundle in SES';
