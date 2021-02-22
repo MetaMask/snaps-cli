@@ -47,7 +47,6 @@ export async function serve(argv: YargsArgs): Promise<void> {
   }
 
   function logServerError(err: Error) {
-    console.log((err as any).code);
     if ((err as any).code === 'EADDRINUSE') {
       logError(`Server error: Port ${port} already in use.`);
     } else {
