@@ -64,55 +64,55 @@
 //       watcherEmitter.emit('change');
 //     });
 
-    // it('successfully processes arguments from yargs', async () => {
-    //   let watcherEmitter;
-    //   jest.spyOn(console, 'log').mockImplementation();
-    //   const validateDirPathMock = jest.spyOn(fsUtils, 'validateDirPath').mockImplementation(() => true);
-    //   const validateFilePathMock = jest.spyOn(fsUtils, 'validateFilePath').mockImplementation(() => true);
-    //   const validateOutfileNameMock = jest.spyOn(fsUtils, 'validateOutfileName').mockImplementation(() => true);
-    //   const getOutfilePathMock = jest.spyOn(fsUtils, 'getOutfilePath').mockImplementation(() => 'dist/bundle.js');
-    //   const bundleMock = jest.spyOn(build, 'bundle').mockImplementation(() => true);
-    //   const chokidarMock = jest.spyOn(chokidar, 'watch').mockImplementation(() => {
-    //     watcherEmitter = new EventEmitter();
-    //     watcherEmitter.add = () => undefined;
-    //     jest.spyOn(watcherEmitter, 'on');
-    //     jest.spyOn(watcherEmitter, 'add');
-    //     return watcherEmitter;
-    //   });
-    //   await watch(mockArgv);
-    //   expect(validateDirPathMock).toHaveBeenCalledTimes(1);
-    //   expect(validateFilePathMock).toHaveBeenCalledTimes(1);
-    //   expect(validateOutfileNameMock).toHaveBeenCalledTimes(1);
-    //   expect(getOutfilePathMock).toHaveBeenCalledTimes(1);
-    //   expect(chokidarMock).toHaveBeenCalledWith(8081, {
-    //     ignoreInitial: true,
-    //     ignored: [
-    //       '**/node_modules/**',
-    //       `**/dist/**`,
-    //       `**/test/**`,
-    //       `**/tests/**`,
-    //       (str) => str !== '.' && str.startsWith('.'),
-    //     ],
-    //   });
-    //   expect(global.console.log).toHaveBeenCalledWith('Server listening on: http://localhost:8081');
-    // });
+// it('successfully processes arguments from yargs', async () => {
+//   let watcherEmitter;
+//   jest.spyOn(console, 'log').mockImplementation();
+//   const validateDirPathMock = jest.spyOn(fsUtils, 'validateDirPath').mockImplementation(() => true);
+//   const validateFilePathMock = jest.spyOn(fsUtils, 'validateFilePath').mockImplementation(() => true);
+//   const validateOutfileNameMock = jest.spyOn(fsUtils, 'validateOutfileName').mockImplementation(() => true);
+//   const getOutfilePathMock = jest.spyOn(fsUtils, 'getOutfilePath').mockImplementation(() => 'dist/bundle.js');
+//   const bundleMock = jest.spyOn(build, 'bundle').mockImplementation(() => true);
+//   const chokidarMock = jest.spyOn(chokidar, 'watch').mockImplementation(() => {
+//     watcherEmitter = new EventEmitter();
+//     watcherEmitter.add = () => undefined;
+//     jest.spyOn(watcherEmitter, 'on');
+//     jest.spyOn(watcherEmitter, 'add');
+//     return watcherEmitter;
+//   });
+//   await watch(mockArgv);
+//   expect(validateDirPathMock).toHaveBeenCalledTimes(1);
+//   expect(validateFilePathMock).toHaveBeenCalledTimes(1);
+//   expect(validateOutfileNameMock).toHaveBeenCalledTimes(1);
+//   expect(getOutfilePathMock).toHaveBeenCalledTimes(1);
+//   expect(chokidarMock).toHaveBeenCalledWith(8081, {
+//     ignoreInitial: true,
+//     ignored: [
+//       '**/node_modules/**',
+//       `**/dist/**`,
+//       `**/test/**`,
+//       `**/tests/**`,
+//       (str) => str !== '.' && str.startsWith('.'),
+//     ],
+//   });
+//   expect(global.console.log).toHaveBeenCalledWith('Server listening on: http://localhost:8081');
+// });
 
-    // it('successfully processes arguments from yargs', async () => {
-    //   const mockServerObj = {
-    //     listen: () => console.log('Server listening on: http://localhost:8081'),
-    //     on: jest.fn(),
-    //   };
-    //   jest.spyOn(console, 'log').mockImplementation();
-    //   jest.spyOn(http, 'createServer').mockImplementation(() => mockServerObj);
-    //   const validateDirPathMock = jest.spyOn(fsUtils, 'validateDirPath').mockImplementation(() => true);
-    //   const validateFilePathMock = jest.spyOn(fsUtils, 'validateFilePath').mockImplementation(() => true);
-    //   const validateOutfileNameMock = jest.spyOn(fsUtils, 'validateOutfileName').mockImplementation(() => true);
-    //   await watch(mockArgv);
-    //   expect(validateDirPathMock).toHaveBeenCalledTimes(1);
-    //   expect(validateFilePathMock).toHaveBeenCalledTimes(1);
-    //   expect(validateOutfileNameMock).toHaveBeenCalledTimes(1);
-    //   expect(global.console.log).toHaveBeenCalledWith('\nStarting server...');
-    //   expect(global.console.log).toHaveBeenCalledWith('Server listening on: http://localhost:8081');
-    // });
+// it('successfully processes arguments from yargs', async () => {
+//   const mockServerObj = {
+//     listen: () => console.log('Server listening on: http://localhost:8081'),
+//     on: jest.fn(),
+//   };
+//   jest.spyOn(console, 'log').mockImplementation();
+//   jest.spyOn(http, 'createServer').mockImplementation(() => mockServerObj);
+//   const validateDirPathMock = jest.spyOn(fsUtils, 'validateDirPath').mockImplementation(() => true);
+//   const validateFilePathMock = jest.spyOn(fsUtils, 'validateFilePath').mockImplementation(() => true);
+//   const validateOutfileNameMock = jest.spyOn(fsUtils, 'validateOutfileName').mockImplementation(() => true);
+//   await watch(mockArgv);
+//   expect(validateDirPathMock).toHaveBeenCalledTimes(1);
+//   expect(validateFilePathMock).toHaveBeenCalledTimes(1);
+//   expect(validateOutfileNameMock).toHaveBeenCalledTimes(1);
+//   expect(global.console.log).toHaveBeenCalledWith('\nStarting server...');
+//   expect(global.console.log).toHaveBeenCalledWith('Server listening on: http://localhost:8081');
+// });
 //   });
 // });

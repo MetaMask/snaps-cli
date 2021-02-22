@@ -16,21 +16,21 @@ import { bundle } from './bundle';
  * @param argv.outfileName - The output file name
  */
 export async function build(argv: YargsArgs): Promise<void> {
-  
-    const { src, dist, outfileName } = argv;
-    if (outfileName) {
-      validateOutfileName(outfileName as string);
-    }
-    await validateFilePath(src);
-    await validateDirPath(dist, true);
-  
-    const outfilePath = getOutfilePath(dist, outfileName as string);
-    const result = await bundle(src, outfilePath, argv);
-    if (result && argv.eval) {
-      await snapEval({ ...argv, bundle: outfilePath });
-    }
-  
-    if (argv.manifest) {
-      manifest(argv);
-    }
+
+  const { src, dist, outfileName } = argv;
+  if (outfileName) {
+    validateOutfileName(outfileName as string);
   }
+  await validateFilePath(src);
+  await validateDirPath(dist, true);
+
+  const outfilePath = getOutfilePath(dist, outfileName as string);
+  const result = await bundle(src, outfilePath, argv);
+  if (result && argv.eval) {
+    await snapEval({ ...argv, bundle: outfilePath });
+  }
+
+  if (argv.manifest) {
+    manifest(argv);
+  }
+}
