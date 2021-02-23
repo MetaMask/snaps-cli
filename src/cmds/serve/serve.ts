@@ -1,7 +1,8 @@
 import http from 'http';
 import serveHandler from 'serve-handler';
-import { logError, validateDirPath } from '../../utils';
+import { validateDirPath } from '../../utils';
 import { YargsArgs } from '../../types/yargs';
+import { logServerError, logServerListening, logRequest } from './serveutils';
 
 /**
  * Starts a local, static HTTP server on the given port with the given root
@@ -25,33 +26,14 @@ export async function serve(argv: YargsArgs): Promise<void> {
     });
   });
 
-  console.log(server);
-
   server.listen({ port }, () => logServerListening(port));
 
   server.on('request', (request) => logRequest(request));
 
-  server.on('error', (error) => logServerError(error));
+  server.on('error', (error) => logServerError(error, argv.port));
 
   server.on('close', () => {
     console.log('Server closed');
     process.exit(1);
   });
-
-  function logServerListening(portInput: number) {
-    console.log(`Server listening on: http://localhost:${portInput}`);
-  }
-
-  function logRequest(requestInput: Record<string, unknown>) {
-    console.log(`Handling incoming request for: ${requestInput.url}`);
-  }
-
-  function logServerError(err: Error) {
-    if ((err as any).code === 'EADDRINUSE') {
-      logError(`Server error: Port ${port} already in use.`);
-    } else {
-      logError(`Server error: ${err.message}`, err);
-    }
-    process.exit(1);
-  }
 }
