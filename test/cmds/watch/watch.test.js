@@ -6,37 +6,37 @@ const build = require('../../../dist/src/cmds/build/bundle');
 const fsUtils = require('../../../dist/src/utils/validate-fs');
 // const miscUtils = require('../../../dist/src/utils/misc');
 
-const mockArgv = {
-  _: ['watch'],
-  verboseErrors: false,
-  v: false,
-  'verbose-errors': false,
-  suppressWarnings: false,
-  sw: false,
-  'suppress-warnings': false,
-  src: 'index.js',
-  s: 'index.js',
-  dist: 'dist',
-  d: 'dist',
-  outfileName: 'bundle.js',
-  n: 'bundle.js',
-  'outfile-name': 'bundle.js',
-  sourceMaps: false,
-  'source-maps': false,
-  stripComments: false,
-  strip: false,
-  'strip-comments': false,
-  '$0': '/usr/local/bin/mm-snap',
-};
-
-const root = (
-  mockArgv.src.indexOf('/') === -1 ? '.' : mockArgv.src.substring(0, mockArgv.src.lastIndexOf('/') + 1)
-);
-
 describe('watch', () => {
   describe('Watch a directory and its subdirectories for changes, and build when files are added or changed.', () => {
 
     let watcherEmitter;
+
+    const mockArgv = {
+      _: ['watch'],
+      verboseErrors: false,
+      v: false,
+      'verbose-errors': false,
+      suppressWarnings: false,
+      sw: false,
+      'suppress-warnings': false,
+      src: 'index.js',
+      s: 'index.js',
+      dist: 'dist',
+      d: 'dist',
+      outfileName: 'bundle.js',
+      n: 'bundle.js',
+      'outfile-name': 'bundle.js',
+      sourceMaps: false,
+      'source-maps': false,
+      stripComments: false,
+      strip: false,
+      'strip-comments': false,
+      '$0': '/usr/local/bin/mm-snap',
+    };
+
+    const root = (
+      mockArgv.src.indexOf('/') === -1 ? '.' : mockArgv.src.substring(0, mockArgv.src.lastIndexOf('/') + 1)
+    );
 
     beforeEach(() => {
       jest.spyOn(chokidar, 'watch').mockImplementation(() => {
