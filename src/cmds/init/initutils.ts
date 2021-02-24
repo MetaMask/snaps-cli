@@ -1,10 +1,55 @@
-import { promises as fs } from 'fs';
+import { promises as fs, existsSync } from 'fs';
 import pathUtils from 'path';
+import initPackageJson from 'init-package-json';
 import { CONFIG_PATHS, logError, logWarning, prompt, trimPathString } from '../../utils';
 import { YargsArgs } from '../../types/yargs';
-import { ManifestWalletProperty } from '../../types/package';
+import { ManifestWalletProperty, NodePackageManifest } from '../../types/package';
 
 const CONFIG_PATH = CONFIG_PATHS[0];
+
+export async function asyncPackageInit(): Promise<NodePackageManifest> {
+
+  // use existing package.json if found
+  const hasPackage = existsSync('package.json');
+
+  if (hasPackage) {
+
+    console.log(`Init: Attempting to use existing 'package.json'...`);
+
+    try {
+
+      const pkg = JSON.parse(await fs.readFile('package.json', 'utf8'));
+      console.log(`Init: Successfully parsed 'package.json'!`);
+      return pkg;
+    } catch (error) {
+
+      logError(
+        `Init Error: Could not parse 'package.json'. Please verify that the file is correctly formatted and try again.`,
+        error,
+      );
+      process.exit(1);
+    }
+  }
+
+  // exit if yarn.lock is found, or we'll be in trouble
+  const usesYarn = existsSync('yarn.lock');
+
+  if (usesYarn) {
+    logError(`Init Error: Found a 'yarn.lock' file but no 'package.json'. Please run 'yarn init' and try again.`);
+    process.exit(1);
+  }
+
+  // run 'npm init'
+  return new Promise((resolve, reject) => {
+    initPackageJson(process.cwd(), '', {}, (err, data) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(data);
+      }
+    });
+  });
+}
 
 export async function buildWeb3Wallet(argv: YargsArgs): Promise<[
   ManifestWalletProperty,
