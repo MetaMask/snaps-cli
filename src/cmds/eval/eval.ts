@@ -19,17 +19,23 @@ export async function snapEval(argv: YargsArgs): Promise<boolean> {
 
 function workerEval(bundlePath: string): Promise<null> {
   return new Promise((resolve, _reject) => {
-    new Worker(getEvalWorkerPath())
-      .on('exit', (exitCode: number) => {
-        if (exitCode === 0) {
-          resolve(null);
-        } else {
-          throw new Error(`Worker exited abnormally! Code: ${exitCode}`);
-        }
-      })
+    console.log('WORKER EVAL 1');
+    const w = new Worker(getEvalWorkerPath());
+    // console.log('WORKER', w)
+    w.on('exit', (exitCode: number) => {
+      console.log('WORKER EVAL 3');
+      if (exitCode === 0) {
+        console.log('WORKER EVAL 4');
+        resolve(null);
+      } else {
+        console.log('WORKER EVAL 5');
+        throw new Error(`Worker exited abnormally! Code: ${exitCode}`);
+      }
+    })
       .postMessage({
         pluginFilePath: bundlePath,
       });
+    console.log('WORKER EVAL 2');
   });
 }
 
