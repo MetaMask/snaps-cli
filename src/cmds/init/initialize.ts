@@ -1,10 +1,8 @@
-import { promises as fs, existsSync } from 'fs';
-import initPackageJson from 'init-package-json';
+import { promises as fs } from 'fs';
 import { CONFIG_PATHS, logError, closePrompt } from '../../utils';
 import { YargsArgs } from '../../types/yargs';
-import { NodePackageManifest } from '../../types/package';
 import template from './initTemplate.json';
-import { validateEmptyDir, buildWeb3Wallet } from './initutils';
+import { asyncPackageInit, validateEmptyDir, buildWeb3Wallet } from './initutils';
 
 const CONFIG_PATH = CONFIG_PATHS[0];
 
@@ -18,7 +16,6 @@ interface InitOutput {
 }
 
 export async function initHandler(argv: YargsArgs): Promise<InitOutput> {
-  console.log(argv);
   console.log(`Init: Begin building 'package.json'\n`);
 
   const pkg = await asyncPackageInit();
@@ -27,13 +24,7 @@ export async function initHandler(argv: YargsArgs): Promise<InitOutput> {
 
   console.log(`\nInit: Set 'package.json' web3Wallet properties\n`);
 
-  const hel = await buildWeb3Wallet(argv);
-  console.log('thnta', hel);
-  const [web3Wallet, _newArgs] = hel;
-  console.log('werb', web3Wallet);
-  console.log('hnta', _newArgs);
-
-  // const [web3Wallet, _newArgs] = await buildWeb3Wallet(argv);
+  const [web3Wallet, _newArgs] = await buildWeb3Wallet(argv);
   const newArgs = _newArgs as YargsArgs;
   pkg.web3Wallet = web3Wallet;
 
@@ -78,49 +69,6 @@ export async function initHandler(argv: YargsArgs): Promise<InitOutput> {
   }
 
   closePrompt();
+  console.log('thneat', { ...argv, ...newArgs });
   return { ...argv, ...newArgs } as InitOutput;
-}
-
-async function asyncPackageInit(): Promise<NodePackageManifest> {
-
-  // use existing package.json if found
-  const hasPackage = existsSync('package.json');
-
-  if (hasPackage) {
-
-    console.log(`Init: Attempting to use existing 'package.json'...`);
-
-    try {
-
-      const pkg = JSON.parse(await fs.readFile('package.json', 'utf8'));
-      console.log(`Init: Successfully parsed 'package.json'!`);
-      return pkg;
-    } catch (error) {
-
-      logError(
-        `Init Error: Could not parse 'package.json'. Please verify that the file is correctly formatted and try again.`,
-        error,
-      );
-      process.exit(1);
-    }
-  }
-
-  // exit if yarn.lock is found, or we'll be in trouble
-  const usesYarn = existsSync('yarn.lock');
-
-  if (usesYarn) {
-    logError(`Init Error: Found a 'yarn.lock' file but no 'package.json'. Please run 'yarn init' and try again.`);
-    process.exit(1);
-  }
-
-  // run 'npm init'
-  return new Promise((resolve, reject) => {
-    initPackageJson(process.cwd(), '', {}, (err, data) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(data);
-      }
-    });
-  });
 }
