@@ -6,16 +6,7 @@ import { asyncPackageInit, validateEmptyDir, buildWeb3Wallet } from './initutils
 
 const CONFIG_PATH = CONFIG_PATHS[0];
 
-interface InitOutput {
-  port: number;
-  dist: string;
-  outfileName: string;
-  sourceMaps: boolean;
-  stripComments: boolean;
-  src: string;
-}
-
-export async function initHandler(argv: YargsArgs): Promise<InitOutput> {
+export async function initHandler(argv: YargsArgs) {
   console.log(`Init: Begin building 'package.json'\n`);
 
   const pkg = await asyncPackageInit();
@@ -69,5 +60,5 @@ export async function initHandler(argv: YargsArgs): Promise<InitOutput> {
   }
 
   closePrompt();
-  return { ...argv, ...newArgs } as InitOutput;
+  return { ...argv, ...newArgs };
 }
