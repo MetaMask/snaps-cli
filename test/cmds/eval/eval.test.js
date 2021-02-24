@@ -4,10 +4,17 @@ const EventEmitter = require('events');
 const { snapEval } = require('../../../dist/src/cmds/eval/eval');
 const fsUtils = require('../../../dist/src/utils/validate-fs');
 
+class MockWorker extends EventEmitter {
+  postMessage() {
+    return undefined;
+  }
+}
+
+jest.mock('worker_threads');
+
 describe('eval', () => {
   describe('snapEval', () => {
-
-    let watcherEmitter;
+    let mockWorker;
 
     const mockArgv = {
       _: ['eval'],
@@ -23,44 +30,52 @@ describe('eval', () => {
     };
 
     beforeEach(() => {
-      jest.spyOn(WorkerThread, 'Worker').mockImplementation(() => {
-        watcherEmitter = new EventEmitter();
-        jest.spyOn(watcherEmitter, 'on');
-        return watcherEmitter;
+      jest.spyOn(console, 'log').mockImplementation(() => undefined);
+      jest.spyOn(process, 'exit').mockImplementation(() => undefined);
+      jest.spyOn(fsUtils, 'validateFilePath')
+        .mockImplementation(async () => true);
+      jest.spyOn(pathUtils, 'join');
+
+      mockWorker = new MockWorker();
+      mockWorker.postMessage = () => undefined;
+      jest.spyOn(mockWorker, 'on');
+      jest.spyOn(mockWorker, 'postMessage').mockImplementation(() => undefined);
+      WorkerThread.Worker.mockImplementation(() => {
+        return mockWorker;
       });
     });
 
     afterEach(() => {
       jest.restoreAllMocks();
-      watcherEmitter = undefined;
+      mockWorker = undefined;
+      delete global.snaps;
     });
 
     // cant make successful eval due to postMessage
-    // it('snapEval successfully executes and logs to console', async () => {
+    it('snapEval successfully executes and logs to console', async () => {
 
-    //   global.snaps = {
-    //     verboseErrors: false,
-    //   };
+      global.snaps = {
+        verboseErrors: false,
+      };
 
-    //   jest.spyOn(console, 'log').mockImplementation();
-    //   jest.spyOn(process, 'exit').mockImplementation(() => undefined);
-    //   const pathMock = jest.spyOn(pathUtils, 'join').mockImplementation();
-    //   const validateFilePathMock = jest.spyOn(fsUtils, 'validateFilePath').mockImplementation(() => true);
+      // const evalPromise = snapEval(mockArgv);
+      snapEval(mockArgv);
+      const finishPromise = new Promise((resolve) => {
+        mockWorker.on('exit', () => resolve());
+      });
+      console.log(mockWorker.listeners('exit'));
 
-    //   await snapEval(mockArgv);
-    //   const finishPromise = new Promise((resolve, _) => {
-    //     watcherEmitter.on('exit', () => {
-    //       resolve();
-    //     });
-    //   });
-    //   watcherEmitter.emit('exit');
-    //   await finishPromise;
+      mockWorker.emit('exit', 0);
+      // await Promise.all([evalPromise, finishPromise])
+      await finishPromise;
+      // await snapEval(mockArgv);
 
-    //   expect(validateFilePathMock).toHaveBeenCalledTimes(1);
-    //   expect(pathMock).toHaveBeenCalledTimes(1);
-    //   expect(process.exit).toHaveBeenCalledWith(1);
-    //   expect(global.console.log).toHaveBeenCalledWith('Eval Success: evaluated \'dist/bundle.js\' in SES!');
-    // });
+      expect(WorkerThread.Worker).toHaveBeenCalledTimes(1);
+      expect(WorkerThread.Worker).toHaveBeenCalledWith(expect.stringContaining('evalWorker.js'));
+      expect(mockWorker.on).toHaveBeenCalledTimes(2);
+      expect(mockWorker.postMessage).toHaveBeenCalledTimes(1);
+      expect(global.console.log).toHaveBeenCalledWith('Eval Success: evaluated \'dist/bundle.js\' in SES!');
+    });
 
     // unable to catch error
     // it('snapEval successfully throws worker and snap eval error', async () => {
@@ -76,13 +91,13 @@ describe('eval', () => {
 
     //   await snapEval(mockArgv);
     //   const finishPromise = new Promise((resolve, _) => {
-    //     watcherEmitter.on('exit', () => {
+    //     mockWorker.on('exit', () => {
     //       // how to catch this error inside internal function
     //       // expect(this).toThrow('Worker exited abnormally! Code: undefined');
     //       resolve();
     //     });
     //   });
-    //   watcherEmitter.emit('exit');
+    //   mockWorker.emit('exit');
     //   await finishPromise;
 
     //   expect(validateFilePathMock).toHaveBeenCalledTimes(1);
