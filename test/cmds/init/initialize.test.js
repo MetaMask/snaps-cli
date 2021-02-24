@@ -68,15 +68,34 @@ describe('initialize', () => {
         },
         { dist: 'dist', outfileName: 'bundle.js', port: 8081 },
       ];
+      const expectedReturnValue = {
+        _: ['init'],
+        verboseErrors: false,
+        v: false,
+        'verbose-errors': false,
+        suppressWarnings: false,
+        sw: false,
+        'suppress-warnings': false,
+        src: 'index.js',
+        s: 'index.js',
+        dist: 'dist',
+        d: 'dist',
+        outfileName: 'bundle.js',
+        n: 'bundle.js',
+        'outfile-name': 'bundle.js',
+        port: 8081,
+        p: 8081,
+        '$0': '/usr/local/bin/mm-snap',
+      };
       const newArgs = { dist: 'dist', outfileName: 'bundle.js', port: 8081, src: 'index.js' };
       const CONFIG_PATH = CONFIG_PATHS[0];
       jest.spyOn(console, 'log').mockImplementation();
-      const fsWriteMock = jest.spyOn(fs, 'writeFile').mockImplementationOnce(() => true);
+      const fsWriteMock = jest.spyOn(fs, 'writeFile').mockImplementation(() => true);
       const asyncPackageInitMock = jest.spyOn(initUtils, 'asyncPackageInit').mockImplementation(() => mockPackage);
       const validateEmptyDirMock = jest.spyOn(initUtils, 'validateEmptyDir').mockImplementation();
       const buildWeb3WalletMock = jest.spyOn(initUtils, 'buildWeb3Wallet').mockImplementation(() => mockWallet);
       const closePromptMock = jest.spyOn(readlineUtils, 'closePrompt').mockImplementation(() => mockPackage);
-      await initHandler(mockArgv);
+      expect(await initHandler(mockArgv)).toStrictEqual(expectedReturnValue);
       expect(global.console.log.mock.calls[0]).toEqual([`Init: Begin building 'package.json'\n`]);
       expect(global.console.log.mock.calls[1]).toEqual([`\nInit: Set 'package.json' web3Wallet properties\n`]);
       expect(global.console.log.mock.calls[2]).toEqual([`\nInit: 'package.json' web3Wallet properties set successfully!`]);

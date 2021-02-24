@@ -69,6 +69,5 @@ export async function initHandler(argv: YargsArgs): Promise<InitOutput> {
   }
 
   closePrompt();
-  console.log('thneat', { ...argv, ...newArgs });
   return { ...argv, ...newArgs } as InitOutput;
 }
