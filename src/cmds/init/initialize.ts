@@ -1,3 +1,4 @@
+/* eslint-disable require-atomic-updates */
 import { promises as fs, existsSync } from 'fs';
 import pathUtils from 'path';
 import initPackageJson from 'init-package-json';
