@@ -3,9 +3,8 @@ import { YargsArgs } from '../../types/yargs';
 import { initHandler } from './initialize';
 
 export async function init(argv: YargsArgs): Promise<void> {
-  const newArgs = await initHandler(argv);
 
-  console.log();
+  const newArgs = await initHandler(argv);
 
   await build({
     ...newArgs,

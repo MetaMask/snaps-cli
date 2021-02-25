@@ -62,8 +62,8 @@ export async function buildWeb3Wallet(argv: YargsArgs): Promise<[
   let initialPermissions: Record<string, unknown> = defaultPerms;
 
   try {
-    const c = await prompt({ question: `Use all default Snap manifest values?`, defaultValue: 'yes', shouldClose: false });
-    if (c && ['y', 'yes'].includes(c.toLowerCase())) {
+    const userInput = await prompt({ question: `Use all default Snap manifest values?`, defaultValue: 'yes', shouldClose: false });
+    if (userInput && ['y', 'yes'].includes(userInput.toLowerCase())) {
       console.log('Using default values...');
       try {
         await fs.mkdir(dist);
