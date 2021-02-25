@@ -92,6 +92,7 @@ export async function buildWeb3Wallet(argv: YargsArgs): Promise<[
         noValidPort = false;
       }
     } catch (portError) {
+      console.log('tthnhn');
       logError(`Invalid port '${port}, please retry.`, portError);
     }
   }
@@ -107,6 +108,7 @@ export async function buildWeb3Wallet(argv: YargsArgs): Promise<[
       if (distError.code === 'EEXIST') {
         logError(`Directory '${dist}' already exists, please retry.`, distError);
       } else {
+        console.log('tthn');
         logError(`Could not make directory '${dist}', please retry.`, distError);
       }
     }
@@ -133,6 +135,7 @@ export async function buildWeb3Wallet(argv: YargsArgs): Promise<[
         invalidPermissions = false;
       }
     } catch (err) {
+      console.log('thn');
       logError(`Invalid permissions '${inputPermissions}', please retry.`, err);
     }
   }

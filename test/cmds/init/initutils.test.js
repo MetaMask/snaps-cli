@@ -47,6 +47,8 @@ describe('initutils', () => {
 
       await expect(asyncPackageInit()).rejects.toThrow(new Error('process exited'));
       expect(existsSyncMock).toHaveBeenCalled();
+      //   called three times even though only called twice in code
+      //   expect(existsSyncMock).toHaveBeenCalledTimes(2);
       expect(readFileMock).toHaveBeenCalledTimes(1);
       expect(parseMock).toHaveBeenCalledTimes(1);
       expect(errorMock).toHaveBeenCalledTimes(2);
@@ -92,6 +94,17 @@ describe('initutils', () => {
       expect(global.console.log).toHaveBeenCalledWith('Using default values...');
     });
 
+    // it('applies default web3wallet values if user input is \'y\'', async () => {
+    //     const mkdirMock = jest.spyOn(fsPromise, 'mkdir').mockImplementation();
+    //     const promptMock = jest.spyOn(readlineUtils, 'prompt').mockImplementation(() => 'y');
+    //     jest.spyOn(console, 'log').mockImplementation();
+  
+    //     await buildWeb3Wallet(mockArgv);
+    //     expect(promptMock).toHaveBeenCalledTimes(1);
+    //     expect(mkdirMock).toHaveBeenCalledTimes(1);
+    //     expect(global.console.log).toHaveBeenCalledWith('Using default values...');
+    //   });
+
     // find way to mock error.code
     // it('logs error if mkdir fails', async () => {
     //   const mkdirMock = jest.spyOn(fsPromise, 'mkdir').mockImplementation(() => {
@@ -107,18 +120,45 @@ describe('initutils', () => {
     // });
 
     // it('prompts user for values', async () => {
+    //   const expectedMockWallet = [
+    //     {
+    //       bundle: {
+    //         local: `outputDir/${mockArgv.outfileName}`,
+    //         url: `http://localhost:8000/outputDir/${mockArgv.outfileName}`,
+    //       },
+    //       initialPermissions: {
+    //         'confirm': {},
+    //         'customPrompt': {},
+    //         'wallet_manageIdentities': {},
+    //       },
+    //     },
+    //     { dist: 'outputDir', outfileName: 'bundle.js', port: 8000 },
+    //   ];
     //   const promptMock = jest.spyOn(readlineUtils, 'prompt')
     //     .mockImplementationOnce(() => 'no')
     //     .mockImplementationOnce(() => 8000)
     //     .mockImplementationOnce(() => 'outputDir')
     //     .mockImplementationOnce(() => 'confirm customPrompt wallet_manageIdentities');
     //   const mkdirMock = jest.spyOn(fsPromise, 'mkdir').mockImplementation();
-    //   jest.spyOn(console, 'log').mockImplementation();
+
+    //   expect(await buildWeb3Wallet(mockArgv)).toStrictEqual(expectedMockWallet);
+    //   expect(promptMock).toHaveBeenCalledTimes(4);
+    //   expect(mkdirMock).toHaveBeenCalledTimes(1);
+    // });
+
+    // it('logs error when user inputs unacceptable values', async () => {
+    //   const promptMock = jest.spyOn(readlineUtils, 'prompt')
+    //     .mockImplementationOnce(() => 'no')
+    //     .mockImplementationOnce(() => 8000)
+    //     .mockImplementationOnce(() => 'outputDir')
+    //     .mockImplementationOnce(() => 'confirm customPrompt wallet_manageIdentities');
+    //   const mkdirMock = jest.spyOn(fsPromise, 'mkdir').mockImplementation();
+    //   const errorMock = jest.spyOn(miscUtils, 'logError').mockImplementation();
 
     //   await buildWeb3Wallet(mockArgv);
-    //   expect(promptMock).toHaveBeenCalledTimes(1);
+    //   expect(promptMock).toHaveBeenCalledTimes(4);
     //   expect(mkdirMock).toHaveBeenCalledTimes(1);
-    //   expect(global.console.log).toHaveBeenCalledWith('Using default values...');
+    //   expect(errorMock).toHaveBeenCalledTimes(3);
     // });
 
   });
