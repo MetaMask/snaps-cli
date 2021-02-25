@@ -1,4 +1,3 @@
-/* eslint-disable require-atomic-updates */
 import { promises as fs, existsSync } from 'fs';
 import pathUtils from 'path';
 import initPackageJson from 'init-package-json';
@@ -156,6 +155,7 @@ async function buildWeb3Wallet(argv: YargsArgs): Promise<[
     const inputPort = (await prompt({ question: `local server port:`, defaultValue: port.toString(10) }));
     const parsedPort = Number.parseInt(inputPort, 10);
     if (parsedPort && parsedPort > 0) {
+      // eslint-disable-next-line require-atomic-updates
       port = parsedPort;
       noValidPort = false;
     } else {
@@ -165,6 +165,7 @@ async function buildWeb3Wallet(argv: YargsArgs): Promise<[
 
   let invalidDist = true;
   while (invalidDist) {
+    // eslint-disable-next-line require-atomic-updates
     dist = await prompt({ question: `output directory:`, defaultValue: dist });
     try {
       dist = trimPathString(dist);
