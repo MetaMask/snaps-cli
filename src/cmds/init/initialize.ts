@@ -154,14 +154,12 @@ async function buildWeb3Wallet(argv: YargsArgs): Promise<[
   let noValidPort = true;
   while (noValidPort) {
     const inputPort = (await prompt({ question: `local server port:`, defaultValue: port.toString(10) }));
-    try {
-      const parsedPort = Number.parseInt(inputPort, 10);
-      if (parsedPort && parsedPort > 0) {
-        port = parsedPort;
-        noValidPort = false;
-      }
-    } catch (portError) {
-      logError(`Invalid port '${port}, please retry.`, portError);
+    const parsedPort = Number.parseInt(inputPort, 10);
+    if (parsedPort && parsedPort > 0) {
+      port = parsedPort;
+      noValidPort = false;
+    } else {
+      logError(`Invalid port '${port}, please retry.`);
     }
   }
 
@@ -174,7 +172,7 @@ async function buildWeb3Wallet(argv: YargsArgs): Promise<[
       invalidDist = false;
     } catch (distError) {
       if (distError.code === 'EEXIST') {
-        logError(`Directory '${dist}' already exists, please retry.`, distError);
+        invalidDist = false;
       } else {
         logError(`Could not make directory '${dist}', please retry.`, distError);
       }
