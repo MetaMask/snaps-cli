@@ -106,5 +106,20 @@ describe('initutils', () => {
     //   expect(global.console.log).toHaveBeenCalledWith('Using default values...');
     // });
 
+    // it('prompts user for values', async () => {
+    //   const promptMock = jest.spyOn(readlineUtils, 'prompt')
+    //     .mockImplementationOnce(() => 'no')
+    //     .mockImplementationOnce(() => 8000)
+    //     .mockImplementationOnce(() => 'outputDir')
+    //     .mockImplementationOnce(() => 'confirm customPrompt wallet_manageIdentities');
+    //   const mkdirMock = jest.spyOn(fsPromise, 'mkdir').mockImplementation();
+    //   jest.spyOn(console, 'log').mockImplementation();
+
+    //   await buildWeb3Wallet(mockArgv);
+    //   expect(promptMock).toHaveBeenCalledTimes(1);
+    //   expect(mkdirMock).toHaveBeenCalledTimes(1);
+    //   expect(global.console.log).toHaveBeenCalledWith('Using default values...');
+    // });
+
   });
 });
