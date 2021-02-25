@@ -6,6 +6,7 @@ const readlineUtils = require('../../../dist/src/utils/readline');
 const miscUtils = require('../../../dist/src/utils/misc');
 
 describe('initutils', () => {
+
   describe('asyncPackageInit', () => {
 
     afterEach(() => {
@@ -94,19 +95,8 @@ describe('initutils', () => {
       expect(global.console.log).toHaveBeenCalledWith('Using default values...');
     });
 
-    // it('applies default web3wallet values if user input is \'y\'', async () => {
-    //     const mkdirMock = jest.spyOn(fsPromise, 'mkdir').mockImplementation();
-    //     const promptMock = jest.spyOn(readlineUtils, 'prompt').mockImplementation(() => 'y');
-    //     jest.spyOn(console, 'log').mockImplementation();
-  
-    //     await buildWeb3Wallet(mockArgv);
-    //     expect(promptMock).toHaveBeenCalledTimes(1);
-    //     expect(mkdirMock).toHaveBeenCalledTimes(1);
-    //     expect(global.console.log).toHaveBeenCalledWith('Using default values...');
-    //   });
-
     // find way to mock error.code
-    // it('logs error if mkdir fails', async () => {
+    // it('throws error if fails to make directory and apply default values', async () => {
     //   const mkdirMock = jest.spyOn(fsPromise, 'mkdir').mockImplementation(() => {
     //     throw new Error('mkdir failed');
     //   });
@@ -119,47 +109,87 @@ describe('initutils', () => {
     //   expect(global.console.log).toHaveBeenCalledWith('Using default values...');
     // });
 
-    // it('prompts user for values', async () => {
-    //   const expectedMockWallet = [
-    //     {
-    //       bundle: {
-    //         local: `outputDir/${mockArgv.outfileName}`,
-    //         url: `http://localhost:8000/outputDir/${mockArgv.outfileName}`,
-    //       },
-    //       initialPermissions: {
-    //         'confirm': {},
-    //         'customPrompt': {},
-    //         'wallet_manageIdentities': {},
-    //       },
-    //     },
-    //     { dist: 'outputDir', outfileName: 'bundle.js', port: 8000 },
-    //   ];
-    //   const promptMock = jest.spyOn(readlineUtils, 'prompt')
-    //     .mockImplementationOnce(() => 'no')
-    //     .mockImplementationOnce(() => 8000)
-    //     .mockImplementationOnce(() => 'outputDir')
-    //     .mockImplementationOnce(() => 'confirm customPrompt wallet_manageIdentities');
-    //   const mkdirMock = jest.spyOn(fsPromise, 'mkdir').mockImplementation();
+    it('prompts user for values', async () => {
+      const expectedMockWallet = [
+        {
+          bundle: {
+            local: `outputDir/${mockArgv.outfileName}`,
+            url: `http://localhost:8000/outputDir/${mockArgv.outfileName}`,
+          },
+          initialPermissions: {
+            'confirm': {},
+            'customPrompt': {},
+            'wallet_manageIdentities': {},
+          },
+        },
+        { dist: 'outputDir', outfileName: 'bundle.js', port: 8000 },
+      ];
+      const promptMock = jest.spyOn(readlineUtils, 'prompt')
+        .mockImplementationOnce(() => 'no')
+        .mockImplementationOnce(() => 8000)
+        .mockImplementationOnce(() => 'outputDir')
+        .mockImplementationOnce(() => 'confirm customPrompt wallet_manageIdentities');
+      const mkdirMock = jest.spyOn(fsPromise, 'mkdir').mockImplementation();
 
-    //   expect(await buildWeb3Wallet(mockArgv)).toStrictEqual(expectedMockWallet);
-    //   expect(promptMock).toHaveBeenCalledTimes(4);
-    //   expect(mkdirMock).toHaveBeenCalledTimes(1);
-    // });
+      expect(await buildWeb3Wallet(mockArgv)).toStrictEqual(expectedMockWallet);
+      expect(promptMock).toHaveBeenCalledTimes(4);
+      expect(mkdirMock).toHaveBeenCalledTimes(1);
+    });
 
     // it('logs error when user inputs unacceptable values', async () => {
     //   const promptMock = jest.spyOn(readlineUtils, 'prompt')
     //     .mockImplementationOnce(() => 'no')
-    //     .mockImplementationOnce(() => 8000)
-    //     .mockImplementationOnce(() => 'outputDir')
-    //     .mockImplementationOnce(() => 'confirm customPrompt wallet_manageIdentities');
-    //   const mkdirMock = jest.spyOn(fsPromise, 'mkdir').mockImplementation();
+    //     .mockImplementationOnce(() => 'notanumber')
+    //     .mockImplementationOnce(() => 'invalidDir')
+    //     .mockImplementationOnce(() => 3);
+    //   const mkdirMock = jest.spyOn(fsPromise, 'mkdir').mockImplementation(() => {
+    //     throw new Error('process exited');
+    //   });
     //   const errorMock = jest.spyOn(miscUtils, 'logError').mockImplementation();
 
     //   await buildWeb3Wallet(mockArgv);
     //   expect(promptMock).toHaveBeenCalledTimes(4);
     //   expect(mkdirMock).toHaveBeenCalledTimes(1);
-    //   expect(errorMock).toHaveBeenCalledTimes(3);
+    //   expect(errorMock).toHaveBeenCalledTimes(4);
     // });
 
+  });
+
+  describe('validateEmptyDir', () => {
+
+    afterEach(() => {
+      jest.clearAllMocks();
+      jest.restoreAllMocks();
+    });
+
+    it('warns user if files may be overwritten', async () => {
+      const readdirMock = jest.spyOn(fsPromise, 'readdir').mockImplementation(() => ['index.js', 'dist']);
+      const warningMock = jest.spyOn(miscUtils, 'logWarning').mockImplementation();
+      const promptMock = jest.spyOn(readlineUtils, 'prompt').mockImplementation(() => 'n');
+      jest.spyOn(process, 'exit').mockImplementationOnce(() => undefined);
+      jest.spyOn(console, 'log').mockImplementation();
+
+      await validateEmptyDir();
+      expect(warningMock).toHaveBeenCalledTimes(1);
+      expect(readdirMock).toHaveBeenCalledTimes(1);
+      expect(promptMock).toHaveBeenCalledTimes(1);
+      expect(global.console.log).toHaveBeenCalledWith(`Init: Exiting...`);
+      expect(process.exit).toHaveBeenCalledWith(1);
+    });
+
+    it('handles continue correctly', async () => {
+      const readdirMock = jest.spyOn(fsPromise, 'readdir').mockImplementation(() => ['index.js', 'dist']);
+      const warningMock = jest.spyOn(miscUtils, 'logWarning').mockImplementation();
+      const promptMock = jest.spyOn(readlineUtils, 'prompt').mockImplementation(() => 'YES');
+      jest.spyOn(process, 'exit').mockImplementationOnce(() => undefined);
+      jest.spyOn(console, 'log').mockImplementation();
+
+      await validateEmptyDir();
+      expect(warningMock).toHaveBeenCalledTimes(1);
+      expect(readdirMock).toHaveBeenCalledTimes(1);
+      expect(promptMock).toHaveBeenCalledTimes(1);
+      expect(global.console.log).not.toHaveBeenCalled();
+      expect(process.exit).not.toHaveBeenCalled();
+    });
   });
 });
