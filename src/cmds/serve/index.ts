@@ -35,7 +35,7 @@ async function serve(argv: YargsArgs): Promise<void> {
       public: root as string,
       headers: [
         {
-          source: '**/*.(html|js|json)',
+          source: '**/*',
           headers: [
             {
               key: 'Cache-Control',
