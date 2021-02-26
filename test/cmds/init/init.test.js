@@ -6,6 +6,7 @@ describe('init', () => {
   describe('init', () => {
 
     afterEach(() => {
+      jest.clearAllMocks();
       jest.restoreAllMocks();
     });
 

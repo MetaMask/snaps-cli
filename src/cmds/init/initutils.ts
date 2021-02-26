@@ -77,6 +77,7 @@ export async function buildWeb3Wallet(argv: YargsArgs): Promise<[
       return endWeb3Wallet();
     }
   } catch (err) {
+    console.log('0');
     logError(`Init Error: ${err.message}`, err);
     process.exit(1);
   }

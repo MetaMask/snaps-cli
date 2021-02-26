@@ -8,6 +8,7 @@ describe('build', () => {
   describe('build', () => {
 
     afterEach(() => {
+      jest.clearAllMocks();
       jest.restoreAllMocks();
     });
 

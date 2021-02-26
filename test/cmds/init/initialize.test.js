@@ -7,7 +7,9 @@ const { initHandler } = require('../../../dist/src/cmds/init/initialize');
 
 describe('initialize', () => {
   describe('initHandler', () => {
+
     afterEach(() => {
+      jest.clearAllMocks();
       jest.restoreAllMocks();
     });
 
@@ -40,6 +42,7 @@ describe('initialize', () => {
       p: 8081,
       '$0': '/usr/local/bin/mm-snap',
     };
+
     const mockWallet = [
       {
         bundle: {
@@ -50,6 +53,7 @@ describe('initialize', () => {
       },
       { dist: 'dist', outfileName: 'bundle.js', port: 8081 },
     ];
+
     const expectedReturnValue = {
       _: ['init'],
       verboseErrors: false,

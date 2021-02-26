@@ -1,7 +1,14 @@
 /* eslint-disable jest/prefer-strict-equal */
-const { promises: fs } = require('fs');
+const fs = require('fs');
 const utils = require('../../../dist/src/utils/fs');
 const { manifest } = require('../../../dist/src/cmds/manifest/manifest');
+
+jest.mock('fs', () => ({
+  promises: {
+    writeFile: jest.fn(),
+    readFile: jest.fn(),
+  },
+}));
 
 const mockArgv = {
   _: ['manifest'],
@@ -57,6 +64,7 @@ describe('manifest', () => {
   describe('manifest function validates a snap package.json file', () => {
 
     afterEach(() => {
+      jest.clearAllMocks();
       jest.restoreAllMocks();
     });
 
@@ -77,22 +85,22 @@ describe('manifest', () => {
       await expect(manifest(noDistArgv)).rejects.toThrow('Invalid params: must provide \'dist\'');
     });
 
-    // unable to recreate a ENOENT error
-    // it('throws error if fs.readfile fails', async () => {
-    //   jest.spyOn(JSON, 'parse').mockImplementation((value) => (value));
-    //   const fsMock = jest.spyOn(fs, 'readFile')
-    //     .mockImplementationOnce(() => {
-    //       throw new Error('ENOENT');
-    //     });
-    //   await expect(manifest(mockArgv)).rejects.toThrow('Manifest error: Could not find package.json. Please ensure that you are running the command in the project root directory.');
-    //   expect(fsMock).toHaveBeenCalledTimes(1);
-    // });
+    it('throws error if fs.readfile fails', async () => {
+      jest.spyOn(JSON, 'parse').mockImplementation(() => {
+        const err = new Error('file already exists');
+        err.code = 'ENOENT';
+        throw err;
+      });
+      const fsMock = jest.spyOn(fs.promises, 'readFile').mockImplementation();
+      await expect(manifest(mockArgv)).rejects.toThrow('Manifest error: Could not find package.json. Please ensure that you are running the command in the project root directory.');
+      expect(fsMock).toHaveBeenCalledTimes(1);
+    });
 
     it('throws error if parse fails', async () => {
       jest.spyOn(JSON, 'parse').mockImplementation(() => {
         throw new Error('error');
       });
-      const fsMock = jest.spyOn(fs, 'readFile')
+      const fsMock = jest.spyOn(fs.promises, 'readFile')
         .mockImplementationOnce(async () => await getPackageJson());
       await expect(manifest(mockArgv)).rejects.toThrow('Could not parse package.json');
       expect(fsMock).toHaveBeenCalledTimes(1);
@@ -100,19 +108,18 @@ describe('manifest', () => {
 
     it('throws error if parsed json is invalid', async () => {
       jest.spyOn(JSON, 'parse').mockImplementation(() => false);
-      const fsMock = jest.spyOn(fs, 'readFile')
+      const fsMock = jest.spyOn(fs.promises, 'readFile')
         .mockImplementationOnce(async () => await getPackageJson());
       await expect(manifest(mockArgv)).rejects.toThrow('Invalid parsed package.json: false');
       expect(fsMock).toHaveBeenCalledTimes(1);
     });
 
-    // commented out tests are due to undefined check added in manifest
     it('checks presence of required and recommended keys', async () => {
       const badJSON = {};
       jest.spyOn(JSON, 'parse').mockImplementation((value) => value);
       jest.spyOn(console, 'warn').mockImplementation();
       jest.spyOn(console, 'log').mockImplementation();
-      jest.spyOn(fs, 'readFile')
+      jest.spyOn(fs.promises, 'readFile')
         .mockImplementationOnce(async () => badJSON);
       await manifest(mockArgv);
       expect(global.console.warn.mock.calls[0]).toEqual(['Manifest Warning: Missing required package.json properties:\n\tname\n\tversion\n\tdescription\n\tmain\n\tweb3Wallet\n']);
@@ -124,7 +131,7 @@ describe('manifest', () => {
       jest.spyOn(JSON, 'parse').mockImplementation((value) => value);
       jest.spyOn(utils, 'isFile').mockImplementation(() => false);
       jest.spyOn(console, 'error').mockImplementation();
-      jest.spyOn(fs, 'readFile')
+      jest.spyOn(fs.promises, 'readFile')
         .mockImplementationOnce(async () => await getPackageJson({
           bundle: {
             local: 'dist/bundle.js',
@@ -141,7 +148,7 @@ describe('manifest', () => {
       jest.spyOn(JSON, 'parse').mockImplementation((value) => value);
       jest.spyOn(utils, 'isFile').mockImplementation(() => true);
       jest.spyOn(console, 'error').mockImplementation();
-      jest.spyOn(fs, 'readFile')
+      jest.spyOn(fs.promises, 'readFile')
         .mockImplementationOnce(async () => await getPackageJson({
           bundle: {
             url: 'http://localhost:8081/dist/bundle.js',
@@ -156,7 +163,7 @@ describe('manifest', () => {
       jest.spyOn(JSON, 'parse').mockImplementation((value) => value);
       jest.spyOn(utils, 'isFile').mockImplementation(() => true);
       jest.spyOn(console, 'error').mockImplementation();
-      jest.spyOn(fs, 'readFile')
+      jest.spyOn(fs.promises, 'readFile')
         .mockImplementationOnce(async () => await getPackageJson({
           bundle: {
             local: 'dist/bundle.js',
@@ -171,7 +178,7 @@ describe('manifest', () => {
       jest.spyOn(JSON, 'parse').mockImplementation((value) => value);
       jest.spyOn(utils, 'isFile').mockImplementation(() => true);
       jest.spyOn(console, 'error').mockImplementation();
-      jest.spyOn(fs, 'readFile')
+      jest.spyOn(fs.promises, 'readFile')
         .mockImplementationOnce(async () => await getPackageJson({
           bundle: {
             local: 'dist/bundle.js',
@@ -187,7 +194,7 @@ describe('manifest', () => {
       jest.spyOn(JSON, 'parse').mockImplementation((value) => value);
       jest.spyOn(utils, 'isFile').mockImplementation(() => true);
       jest.spyOn(console, 'error').mockImplementation();
-      jest.spyOn(fs, 'readFile')
+      jest.spyOn(fs.promises, 'readFile')
         .mockImplementationOnce(async () => await getPackageJson({
           bundle: {
             local: 'dist/bundle.js',
@@ -203,7 +210,7 @@ describe('manifest', () => {
       jest.spyOn(JSON, 'parse').mockImplementation((value) => value);
       jest.spyOn(utils, 'isFile').mockImplementation(() => true);
       jest.spyOn(console, 'error').mockImplementation();
-      jest.spyOn(fs, 'readFile')
+      jest.spyOn(fs.promises, 'readFile')
         .mockImplementationOnce(async () => await getPackageJson({
           bundle: {
             local: 'dist/bundle.js',
@@ -220,7 +227,7 @@ describe('manifest', () => {
       jest.spyOn(JSON, 'parse').mockImplementation((value) => value);
       jest.spyOn(utils, 'isFile').mockImplementation(() => true);
       jest.spyOn(console, 'error').mockImplementation();
-      jest.spyOn(fs, 'readFile')
+      jest.spyOn(fs.promises, 'readFile')
         .mockImplementationOnce(async () => await getPackageJson({
           bundle: {
             local: 'dist/bundle.js',
@@ -245,7 +252,7 @@ describe('manifest', () => {
         jest.spyOn(JSON, 'parse').mockImplementation((value) => value);
         jest.spyOn(utils, 'isFile').mockImplementation(() => true);
         jest.spyOn(console, 'error').mockImplementation();
-        jest.spyOn(fs, 'readFile')
+        jest.spyOn(fs.promises, 'readFile')
           .mockImplementationOnce(async () => await getPackageJson({
             bundle: {
               local: 'dist/bundle.js',
@@ -264,7 +271,7 @@ describe('manifest', () => {
         jest.spyOn(JSON, 'parse').mockImplementation((value) => value);
         jest.spyOn(console, 'warn').mockImplementation();
         jest.spyOn(console, 'log').mockImplementation();
-        jest.spyOn(fs, 'readFile')
+        jest.spyOn(fs.promises, 'readFile')
           .mockImplementationOnce(async () => badJSON);
         await manifest(mockArgv);
         expect(global.console.warn).not.toHaveBeenCalled();
@@ -307,9 +314,9 @@ describe('manifest', () => {
           main: 'index.js',
         };
         jest.spyOn(utils, 'isFile').mockImplementation(() => true);
-        jest.spyOn(fs, 'readFile')
+        jest.spyOn(fs.promises, 'readFile')
           .mockImplementationOnce(async () => mockJSON);
-        jest.spyOn(fs, 'writeFile')
+        jest.spyOn(fs.promises, 'writeFile')
           .mockImplementationOnce(() => {
             throw new Error('error');
           });
@@ -339,9 +346,9 @@ describe('manifest', () => {
           },
         };
         jest.spyOn(utils, 'isFile').mockImplementation(() => true);
-        jest.spyOn(fs, 'readFile')
+        jest.spyOn(fs.promises, 'readFile')
           .mockImplementationOnce(async () => mockJSON);
-        jest.spyOn(fs, 'writeFile')
+        jest.spyOn(fs.promises, 'writeFile')
           .mockImplementationOnce(() => doneJSON);
         jest.spyOn(console, 'log').mockImplementation();
         await manifest(populateArgv);
