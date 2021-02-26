@@ -1,6 +1,6 @@
 /* eslint-disable jest/prefer-strict-equal */
 const fs = require('fs');
-const initPackage = require('init-package-json');
+const initPackageJson = require('init-package-json');
 const { asyncPackageInit, buildWeb3Wallet, validateEmptyDir } = require('../../../dist/src/cmds/init/initutils');
 const readlineUtils = require('../../../dist/src/utils/readline');
 const miscUtils = require('../../../dist/src/utils/misc');
@@ -13,6 +13,8 @@ jest.mock('fs', () => ({
     readFile: jest.fn(),
   },
 }));
+
+jest.mock('initPackageJson', () => undefined);
 
 describe('initutils', () => {
 
@@ -58,29 +60,27 @@ describe('initutils', () => {
       expect(global.console.log).toHaveBeenCalledWith(`Init: Attempting to use existing 'package.json'...`);
     });
 
-    // it('yarn lock logic works', async () => {
-    //   const existsSyncMock = jest.spyOn(fs, 'existsSync')
-    //     .mockImplementationOnce(() => false)
-    //     .mockImplementationOnce(() => false);
-    //   const initMock = jest.spyOn(process, 'cwd').mockImplementation(() => 'currentDirectory');
-    //   expect(await asyncPackageInit()).toStrictEqual('test');
-    //   expect(existsSyncMock).toHaveBeenCalledTimes(2);
-    //   expect(initMock).toHaveBeenCalled();
-    // });
+    it('yarn lock logic works', async () => {
+      const existsSyncMock = jest.spyOn(fs, 'existsSync')
+        .mockImplementationOnce(() => false)
+        .mockImplementationOnce(() => false);
+      expect(await asyncPackageInit()).toStrictEqual(!undefined);
+      expect(existsSyncMock).toHaveBeenCalledTimes(2);
+    });
 
-    // it('logs error when yarn lock is found', async () => {
-    //   const existsSyncMock = jest.spyOn(fs, 'existsSync')
-    //     .mockImplementationOnce(() => false)
-    //     .mockImplementationOnce(() => true);
-    //   const errorMock = jest.spyOn(miscUtils, 'logError').mockImplementation();
-    //   const processExitMock = jest.spyOn(process, 'exit').mockImplementationOnce(() => {
-    //     throw new Error('process exited');
-    //   });
-    //   await expect(asyncPackageInit()).rejects.toThrow(new Error('process exited'));
-    //   expect(existsSyncMock).toHaveBeenCalledTimes(2);
-    //   expect(errorMock).toHaveBeenCalledTimes(1);
-    //   expect(processExitMock).toHaveBeenCalledWith(1);
-    // });
+    it('logs error when yarn lock is found', async () => {
+      const existsSyncMock = jest.spyOn(fs, 'existsSync')
+        .mockImplementationOnce(() => false)
+        .mockImplementationOnce(() => true);
+      const errorMock = jest.spyOn(miscUtils, 'logError').mockImplementation();
+      const processExitMock = jest.spyOn(process, 'exit').mockImplementationOnce(() => {
+        throw new Error('process exited');
+      });
+      await expect(asyncPackageInit()).rejects.toThrow(new Error('process exited'));
+      expect(existsSyncMock).toHaveBeenCalledTimes(2);
+      expect(errorMock).toHaveBeenCalledTimes(1);
+      expect(processExitMock).toHaveBeenCalledWith(1);
+    });
   });
 
   describe('buildWeb3Wallet', () => {
