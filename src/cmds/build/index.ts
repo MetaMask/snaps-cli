@@ -1,7 +1,7 @@
 import yargs from 'yargs';
 import builders from '../../builders';
 import { getOutfilePath, validateDirPath, validateFilePath, validateOutfileName } from '../../utils';
-import { snapEval } from '../eval';
+import { snapEval } from '../eval/eval';
 import { manifest } from '../manifest/manifest';
 import { YargsArgs } from '../../types/yargs';
 import { bundle } from './bundle';
