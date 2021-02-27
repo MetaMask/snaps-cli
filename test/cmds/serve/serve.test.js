@@ -1,9 +1,9 @@
 /* eslint-disable jest/prefer-strict-equal */
 const EventEmitter = require('events');
 const http = require('http');
-const { serve } = require('../../dist/src/cmds/serve/serve');
-const serveUtils = require('../../dist/src/cmds/serve/serveutils');
-const fsUtils = require('../../dist/src/utils/validate-fs');
+const { serve } = require('../../../dist/src/cmds/serve/serve');
+const serveUtils = require('../../../dist/src/cmds/serve/serveutils');
+const fsUtils = require('../../../dist/src/utils/validate-fs');
 
 const mockArgv = {
   _: ['serve'],
