@@ -1,10 +1,10 @@
 /* eslint-disable jest/prefer-strict-equal */
 const EventEmitter = require('events');
 const chokidar = require('chokidar');
-const { watch } = require('../../dist/src/cmds/watch/watch');
-const build = require('../../dist/src/cmds/build/bundle');
-const fsUtils = require('../../dist/src/utils/validate-fs');
-const miscUtils = require('../../dist/src/utils/misc');
+const { watch } = require('../../../dist/src/cmds/watch/watch');
+const build = require('../../../dist/src/cmds/build/bundle');
+const fsUtils = require('../../../dist/src/utils/validate-fs');
+const miscUtils = require('../../../dist/src/utils/misc');
 
 describe('watch', () => {
   describe('Watch a directory and its subdirectories for changes, and build when files are added or changed.', () => {
