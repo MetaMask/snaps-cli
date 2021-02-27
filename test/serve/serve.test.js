@@ -26,9 +26,10 @@ describe('serve', () => {
     let watcherEmitter;
 
     beforeEach(() => {
+      const logServerListeningMock = jest.spyOn(serveUtils, 'logServerListening').mockImplementation();
       jest.spyOn(http, 'createServer').mockImplementation(() => {
         watcherEmitter = new EventEmitter();
-        watcherEmitter.listen = () => undefined;
+        watcherEmitter.listen = () => logServerListeningMock();
         jest.spyOn(watcherEmitter, 'on');
         jest.spyOn(watcherEmitter, 'listen');
         return watcherEmitter;
@@ -89,39 +90,5 @@ describe('serve', () => {
       watcherEmitter.emit('request');
       await finishPromise;
     });
-
-    // it('server handles "listen" event correctly', async () => {
-    //   jest.spyOn(console, 'log').mockImplementation();
-    //   const logServerListeningMock = jest.spyOn(serveUtils, 'logServerListening').mockImplementation();
-
-    //   await serve(mockArgv);
-    //   const finishPromise = new Promise((resolve, _) => {
-    //     watcherEmitter.listen(() => {
-    //       expect(logServerListeningMock).toHaveBeenCalled();
-    //       expect(global.console.log).toHaveBeenCalledWith('\nStarting server...');
-    //       expect(global.console.log).toHaveBeenCalledWith('Server listening on: http://localhost:8081');
-    //       resolve();
-    //     });
-    //   });
-    //   //   expect(logServerListeningMock).toHaveBeenCalled();
-    //   //   expect(global.console.log).toHaveBeenCalledWith('\nStarting server...');
-    //   //   expect(global.console.log).toHaveBeenCalledWith('Server listening on: http://localhost:8081');
-    //   watcherEmitter.listen();
-    //   await finishPromise;
-    // });
-
-    // it('snapEval successfully executes and logs to console', async () => {
-    //   const mockServerObj = {
-    //     listen: () => console.log('Server listening on: http://localhost:8081'),
-    //     on: jest.fn(),
-    //   };
-    //   jest.spyOn(console, 'log').mockImplementation();
-    //   jest.spyOn(http, 'createServer').mockImplementation(() => mockServerObj);
-    //   const validateDirPathMock = jest.spyOn(utils, 'validateDirPath').mockImplementation(() => true);
-    //   await serve(mockArgv);
-    //   expect(validateDirPathMock).toHaveBeenCalledTimes(1);
-    //   expect(global.console.log).toHaveBeenCalledWith('\nStarting server...');
-    //   expect(global.console.log).toHaveBeenCalledWith('Server listening on: http://localhost:8081');
-    // });
   });
 });
