@@ -1,6 +1,7 @@
+/* eslint-disable import/newline-after-import */
+/* eslint-disable import/order */
 /* eslint-disable jest/prefer-strict-equal */
 const fs = require('fs');
-const initPackageJson = require('init-package-json');
 const { asyncPackageInit, buildWeb3Wallet, validateEmptyDir } = require('../../dist/src/cmds/init/initutils');
 const readlineUtils = require('../../dist/src/utils/readline');
 const miscUtils = require('../../dist/src/utils/misc');
@@ -13,6 +14,9 @@ jest.mock('fs', () => ({
     readFile: jest.fn(),
   },
 }));
+
+jest.mock('init-package-json');
+const initPackageJson = require('init-package-json');
 
 describe('initutils', () => {
 
@@ -58,13 +62,23 @@ describe('initutils', () => {
       expect(global.console.log).toHaveBeenCalledWith(`Init: Attempting to use existing 'package.json'...`);
     });
 
-    // it('yarn lock logic works', async () => {
-    //   const existsSyncMock = jest.spyOn(fs, 'existsSync')
-    //     .mockImplementationOnce(() => false)
-    //     .mockImplementationOnce(() => false);
-    //   await asyncPackageInit();
-    //   expect(existsSyncMock).toHaveBeenCalledTimes(2);
-    // });
+    it('yarn lock logic works throws error if initpackagejson is rejected', async () => {
+      const existsSyncMock = jest.spyOn(fs, 'existsSync')
+        .mockImplementationOnce(() => false)
+        .mockImplementationOnce(() => false);
+      initPackageJson.mockImplementation((_, __, ___, cb) => cb(new Error('initpackage error'), true));
+      await expect(asyncPackageInit()).rejects.toThrow('initpackage error');
+      expect(existsSyncMock).toHaveBeenCalledTimes(2);
+    });
+
+    it('yarn lock logic works', async () => {
+      const existsSyncMock = jest.spyOn(fs, 'existsSync')
+        .mockImplementationOnce(() => false)
+        .mockImplementationOnce(() => false);
+      initPackageJson.mockImplementation((_, __, ___, cb) => cb(false, true));
+      await asyncPackageInit();
+      expect(existsSyncMock).toHaveBeenCalledTimes(2);
+    });
 
     it('logs error when yarn lock is found', async () => {
       const existsSyncMock = jest.spyOn(fs, 'existsSync')
