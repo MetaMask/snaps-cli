@@ -236,8 +236,6 @@ describe('initutils', () => {
       expect(warningMock).toHaveBeenCalledTimes(1);
       expect(readdirMock).toHaveBeenCalledTimes(1);
       expect(promptMock).toHaveBeenCalledTimes(1);
-      expect(global.console.log).not.toHaveBeenCalled();
-      expect(process.exit).not.toHaveBeenCalled();
     });
   });
 
