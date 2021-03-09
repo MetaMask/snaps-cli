@@ -2,9 +2,9 @@ import http from 'http';
 import serveHandler from 'serve-handler';
 import yargs from 'yargs';
 import builders from '../../builders';
-import { logServerError, logServerListening, logRequest } from './serveutils';
-import { validateDirPath } from '../../utils';
 import { YargsArgs } from '../../types/yargs';
+import { validateDirPath } from '../../utils';
+import { logServerError, logServerListening, logRequest } from './serveutils';
 
 module.exports.command = ['serve', 's'];
 module.exports.desc = 'Locally serve Snap file(s) for testing';
