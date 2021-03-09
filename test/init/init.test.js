@@ -1,4 +1,4 @@
-const { init } = require('../../dist/src/cmds/init/init');
+const init = require('../../dist/src/cmds/init');
 const initializeModule = require('../../dist/src/cmds/init/initialize');
 const buildModule = require('../../dist/src/cmds/build');
 
@@ -15,7 +15,7 @@ describe('init', () => {
       const buildMock = jest.spyOn(buildModule, 'build').mockImplementation();
       jest.spyOn(console, 'log').mockImplementation();
 
-      await init({});
+      await init.handler({});
       expect(initHandlerMock).toHaveBeenCalledWith({});
       expect(buildMock).toHaveBeenCalledWith({ manifest: false, eval: true });
       expect(global.console.log).toHaveBeenCalledTimes(1);
