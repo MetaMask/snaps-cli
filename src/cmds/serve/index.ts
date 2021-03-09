@@ -2,7 +2,8 @@ import http from 'http';
 import serveHandler from 'serve-handler';
 import yargs from 'yargs';
 import builders from '../../builders';
-import { logError, validateDirPath } from '../../utils';
+import { logServerError, logServerListening, logRequest } from './serveutils';
+import { validateDirPath } from '../../utils';
 import { YargsArgs } from '../../types/yargs';
 
 module.exports.command = ['serve', 's'];
@@ -33,36 +34,14 @@ async function serve(argv: YargsArgs): Promise<void> {
   const server = http.createServer(async (req, res) => {
     await serveHandler(req, res, {
       public: root as string,
-      headers: [
-        {
-          source: '**/*',
-          headers: [
-            {
-              key: 'Cache-Control',
-              value: 'no-cache',
-            },
-          ],
-        },
-      ],
     });
   });
 
-  server.listen({ port }, () => {
-    console.log(`Server listening on: http://localhost:${port}`);
-  });
+  server.listen({ port }, () => logServerListening(port));
 
-  server.on('request', (request) => {
-    console.log(`Handling incoming request for: ${request.url}`);
-  });
+  server.on('request', (request) => logRequest(request));
 
-  server.on('error', (err) => {
-    if ((err as any).code === 'EADDRINUSE') {
-      logError(`Server error: Port ${port} already in use.`);
-    } else {
-      logError(`Server error: ${err.message}`, err);
-    }
-    process.exit(1);
-  });
+  server.on('error', (error) => logServerError(error, argv.port));
 
   server.on('close', () => {
     console.log('Server closed');
