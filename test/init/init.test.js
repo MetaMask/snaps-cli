@@ -10,54 +10,15 @@ describe('init', () => {
       jest.restoreAllMocks();
     });
 
-    const mockArgv = {
-      _: ['init'],
-      verboseErrors: false,
-      v: false,
-      'verbose-errors': false,
-      suppressWarnings: false,
-      sw: false,
-      'suppress-warnings': false,
-      src: 'index.js',
-      s: 'index.js',
-      dist: 'dist',
-      d: 'dist',
-      outfileName: 'bundle.js',
-      n: 'bundle.js',
-      'outfile-name': 'bundle.js',
-      port: 8081,
-      p: 8081,
-      '$0': '/usr/local/bin/mm-snap',
-    };
-
     it('console logs if successful', async () => {
-      const newMockArgs = {
-        _: ['init'],
-        verboseErrors: false,
-        v: false,
-        'verbose-errors': false,
-        suppressWarnings: false,
-        sw: false,
-        'suppress-warnings': false,
-        src: 'index.js',
-        s: 'index.js',
-        dist: 'dist',
-        d: 'dist',
-        outfileName: 'bundle.js',
-        n: 'bundle.js',
-        'outfile-name': 'bundle.js',
-        port: 8081,
-        p: 8081,
-        '$0': '/usr/local/bin/mm-snap',
-      };
-      const initHandlerMock = jest.spyOn(initializeModule, 'initHandler').mockImplementation(() => newMockArgs);
+      const initHandlerMock = jest.spyOn(initializeModule, 'initHandler').mockImplementation(() => {});
       const buildMock = jest.spyOn(buildModule, 'build').mockImplementation();
       jest.spyOn(console, 'log').mockImplementation();
 
-      await init(mockArgv);
-      expect(initHandlerMock).toHaveBeenCalledWith(mockArgv);
-      expect(buildMock).toHaveBeenCalledWith({ ...newMockArgs, manifest: false, eval: true });
-      expect(global.console.log).toHaveBeenCalledWith(`\nPlugin project successfully initiated!`);
+      await init({});
+      expect(initHandlerMock).toHaveBeenCalledWith({});
+      expect(buildMock).toHaveBeenCalledWith({ manifest: false, eval: true });
+      expect(global.console.log).toHaveBeenCalledTimes(1);
     });
   });
 });
