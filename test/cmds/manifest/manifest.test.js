@@ -10,21 +10,7 @@ jest.mock('fs', () => ({
   },
 }));
 
-const mockArgv = {
-  _: ['manifest'],
-  verboseErrors: false,
-  v: false,
-  'verbose-errors': false,
-  suppressWarnings: false,
-  sw: false,
-  'suppress-warnings': false,
-  dist: 'dist',
-  d: 'dist',
-  port: 8081,
-  p: 8081,
-  populate: false,
-  '$0': '/usr/local/bin/mm-snap',
-};
+const mockArgv = { dist: 'dist' };
 
 const getDefaultWeb3Wallet = () => {
   return {
@@ -69,19 +55,7 @@ describe('manifest', () => {
     });
 
     it('throws an error if there is no dist property', async () => {
-      const noDistArgv = {
-        _: ['manifest'],
-        verboseErrors: false,
-        v: false,
-        'verbose-errors': false,
-        suppressWarnings: false,
-        sw: false,
-        'suppress-warnings': false,
-        port: 8081,
-        p: 8081,
-        populate: true,
-        '$0': '/usr/local/bin/mm-snap',
-      };
+      const noDistArgv = {};
       await expect(manifest(noDistArgv)).rejects.toThrow('Invalid params: must provide \'dist\'');
     });
 
@@ -122,9 +96,8 @@ describe('manifest', () => {
       jest.spyOn(fs.promises, 'readFile')
         .mockImplementationOnce(async () => badJSON);
       await manifest(mockArgv);
-      expect(global.console.warn.mock.calls[0]).toEqual(['Manifest Warning: Missing required package.json properties:\n\tname\n\tversion\n\tdescription\n\tmain\n\tweb3Wallet\n']);
-      expect(global.console.warn.mock.calls[1]).toEqual(['Manifest Warning: Missing recommended package.json properties:\n\trepository\n']);
-      expect(global.console.log).toHaveBeenCalledWith('Manifest Warning: Validation of \'undefined\' package.json completed with warnings. See above.');
+      expect(global.console.warn).toHaveBeenCalledTimes(2);
+      expect(global.console.log).toHaveBeenCalledTimes(1);
     });
 
     it('checks web3Wallet bundle has valid local and url properties', async () => {
@@ -140,8 +113,7 @@ describe('manifest', () => {
           initialPermissions: { alert: {} },
         }));
       await expect(manifest(mockArgv)).rejects.toThrow('Manifest Error: package.json validation failed, please see above errors.');
-      expect(global.console.error.mock.calls[0]).toEqual(['Manifest Error: \'bundle.local\' does not resolve to a file.']);
-      expect(global.console.error.mock.calls[1]).toEqual(['Manifest Error: \'bundle.url\' does not resolve to a URL.']);
+      expect(global.console.error).toHaveBeenCalledTimes(2);
     });
 
     it('checks web3Wallet bundle local property exists', async () => {
@@ -156,7 +128,7 @@ describe('manifest', () => {
           initialPermissions: { alert: {} },
         }));
       await expect(manifest(mockArgv)).rejects.toThrow('Manifest Error: package.json validation failed, please see above errors.');
-      expect(global.console.error).toHaveBeenCalledWith('Manifest Error: Missing required \'web3Wallet\' property \'bundle.local\'.');
+      expect(global.console.error).toHaveBeenCalledTimes(1);
     });
 
     it('checks web3Wallet bundle url property exists', async () => {
@@ -171,7 +143,7 @@ describe('manifest', () => {
           initialPermissions: { alert: {} },
         }));
       await expect(manifest(mockArgv)).rejects.toThrow('Manifest Error: package.json validation failed, please see above errors.');
-      expect(global.console.error).toHaveBeenCalledWith('Manifest Error: Missing required \'bundle.url\' property.');
+      expect(global.console.error).toHaveBeenCalledTimes(1);
     });
 
     it('checks web3Wallet initial permissions property: throws error if not object', async () => {
@@ -187,7 +159,7 @@ describe('manifest', () => {
           initialPermissions: 'foo',
         }));
       await expect(manifest(mockArgv)).rejects.toThrow('Manifest Error: package.json validation failed, please see above errors.');
-      expect(global.console.error).toHaveBeenCalledWith('Manifest Error: \'web3Wallet\' property \'initialPermissions\' must be an object if present.');
+      expect(global.console.error).toHaveBeenCalledTimes(1);
     });
 
     it('checks web3Wallet initial permissions property: throws error if array', async () => {
@@ -203,7 +175,7 @@ describe('manifest', () => {
           initialPermissions: ['alert', 'read'],
         }));
       await expect(manifest(mockArgv)).rejects.toThrow('Manifest Error: package.json validation failed, please see above errors.');
-      expect(global.console.error).toHaveBeenCalledWith('Manifest Error: \'web3Wallet\' property \'initialPermissions\' must be an object if present.');
+      expect(global.console.error).toHaveBeenCalledTimes(1);
     });
 
     it('checks web3Wallet initial permissions property: throws error if permission objects are not objects', async () => {
@@ -219,8 +191,7 @@ describe('manifest', () => {
           initialPermissions: { alert: 'foo', read: ['foo', 'bar'] },
         }));
       await expect(manifest(mockArgv)).rejects.toThrow('Manifest Error: package.json validation failed, please see above errors.');
-      expect(global.console.error.mock.calls[0]).toEqual(['Manifest Error: initial permission \'alert\' must be an object']);
-      expect(global.console.error.mock.calls[1]).toEqual(['Manifest Error: initial permission \'read\' must be an object']);
+      expect(global.console.error).toHaveBeenCalledTimes(2);
     });
 
     it('checks web3Wallet initial permissions property: handles valid and throws error if object\'s permission keys are invalid', async () => {
@@ -236,8 +207,7 @@ describe('manifest', () => {
           initialPermissions: { approve: { invoker: 'foo', date: 4546 }, bad: { dangerous: 'scary' }, parent: { parentCapability: 'mother' } },
         }));
       await expect(manifest(mockArgv)).rejects.toThrow('Manifest Error: package.json validation failed, please see above errors.');
-      expect(global.console.error.mock.calls[0]).toEqual(['Manifest Error: initial permission \'bad\' has unrecognized key \'dangerous\'']);
-      expect(global.console.error.mock.calls[1]).toEqual(['Manifest Error: initial permission \'parent\' has mismatched \'parentCapability\' field \'mother\'']);
+      expect(global.console.error).toHaveBeenCalledTimes(2);
     });
 
     describe('checks if log error and warning aligns to global settings', () => {
@@ -261,8 +231,7 @@ describe('manifest', () => {
             initialPermissions: { alert: 'foo', read: ['foo', 'bar'] },
           }));
         await expect(manifest(mockArgv)).rejects.toThrow('Manifest Error: package.json validation failed, please see above errors.');
-        expect(global.console.error.mock.calls[0]).toEqual(['Manifest Error: initial permission \'alert\' must be an object']);
-        expect(global.console.error.mock.calls[1]).toEqual(['Manifest Error: initial permission \'read\' must be an object']);
+        expect(global.console.error).toHaveBeenCalledTimes(2);
       });
 
       it('checks logManifestWarning prints according to global settings', async () => {
@@ -290,19 +259,9 @@ describe('manifest', () => {
       });
 
       const populateArgv = {
-        _: ['manifest'],
-        verboseErrors: false,
-        v: false,
-        'verbose-errors': false,
-        suppressWarnings: false,
-        sw: false,
-        'suppress-warnings': false,
         dist: 'dist',
-        d: 'dist',
         port: 8081,
-        p: 8081,
         populate: true,
-        '$0': '/usr/local/bin/mm-snap',
       };
 
       it('attempts to set missing web3wallet and throws if write fails', async () => {
@@ -352,8 +311,7 @@ describe('manifest', () => {
           .mockImplementationOnce(() => doneJSON);
         jest.spyOn(console, 'log').mockImplementation();
         await manifest(populateArgv);
-        expect(global.console.log.mock.calls[0]).toEqual(['Manifest: Updated \'bob\' package.json!']);
-        expect(global.console.log.mock.calls[1]).toEqual(['Manifest Success: Validated \'bob\' package.json!']);
+        expect(global.console.log).toHaveBeenCalledTimes(2);
       });
     });
   });
