@@ -23,55 +23,20 @@ describe('initialize', () => {
       license: 'ISC',
     };
 
-    const mockArgv = {
-      _: ['init'],
-      verboseErrors: false,
-      v: false,
-      'verbose-errors': false,
-      suppressWarnings: false,
-      sw: false,
-      'suppress-warnings': false,
-      src: 'index.js',
-      s: 'index.js',
-      dist: 'dist',
-      d: 'dist',
-      outfileName: 'bundle.js',
-      n: 'bundle.js',
-      'outfile-name': 'bundle.js',
-      port: 8081,
-      p: 8081,
-      '$0': '/usr/local/bin/mm-snap',
-    };
-
+    const mockArgv = { foo: 'bar' };
     const mockWallet = [
       {
-        bundle: {
-          local: 'dist/bundle.js',
-          url: 'http://localhost:8081/dist/bundle.js',
-        },
-        initialPermissions: { alert: {} },
+        bundle: {},
+        initialPermissions: {},
       },
       { dist: 'dist', outfileName: 'bundle.js', port: 8081 },
     ];
-
     const expectedReturnValue = {
-      _: ['init'],
-      verboseErrors: false,
-      v: false,
-      'verbose-errors': false,
-      suppressWarnings: false,
-      sw: false,
-      'suppress-warnings': false,
+      foo: 'bar',
       src: 'index.js',
-      s: 'index.js',
       dist: 'dist',
-      d: 'dist',
       outfileName: 'bundle.js',
-      n: 'bundle.js',
-      'outfile-name': 'bundle.js',
       port: 8081,
-      p: 8081,
-      '$0': '/usr/local/bin/mm-snap',
     };
 
     it('function successfully executes under normal conditions', async () => {
@@ -117,14 +82,7 @@ describe('initialize', () => {
     });
 
     it('function does not write to main if undefined', async () => {
-      const mockPackageWithoutMain = {
-        name: 'foo',
-        version: '1.0.0',
-        description: '',
-        scripts: { test: 'echo "Error: no test specified" && exit 1' },
-        author: '',
-        license: 'ISC',
-      };
+      const mockPackageWithoutMain = { foo: 'bar' };
       jest.spyOn(console, 'log').mockImplementation();
       const fsWriteMock = jest.spyOn(fs, 'writeFile').mockImplementation(() => true);
       const asyncPackageInitMock = jest.spyOn(initUtils, 'asyncPackageInit').mockImplementation(() => mockPackageWithoutMain);
