@@ -11,13 +11,14 @@ describe('init', () => {
     });
 
     it('console logs if successful', async () => {
-      const initHandlerMock = jest.spyOn(initializeModule, 'initHandler').mockImplementation(() => {});
+      const mockArgv = {foo: 'bar'};
+      const initHandlerMock = jest.spyOn(initializeModule, 'initHandler').mockImplementation(() => mockArgv);
       const buildMock = jest.spyOn(buildModule, 'build').mockImplementation();
       jest.spyOn(console, 'log').mockImplementation();
 
-      await init.handler({});
-      expect(initHandlerMock).toHaveBeenCalledWith({});
-      expect(buildMock).toHaveBeenCalledWith({ manifest: false, eval: true });
+      await init.handler(mockArgv);
+      expect(initHandlerMock).toHaveBeenCalledWith(mockArgv);
+      expect(buildMock).toHaveBeenCalledWith({ foo: 'bar', manifest: false, eval: true });
       expect(global.console.log).toHaveBeenCalledTimes(1);
     });
   });
