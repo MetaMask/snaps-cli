@@ -11,7 +11,7 @@ describe('init', () => {
     });
 
     it('console logs if successful', async () => {
-      const mockArgv = {foo: 'bar'};
+      const mockArgv = { foo: 'bar' };
       const initHandlerMock = jest.spyOn(initializeModule, 'initHandler').mockImplementation(() => mockArgv);
       const buildMock = jest.spyOn(buildModule, 'build').mockImplementation();
       jest.spyOn(console, 'log').mockImplementation();
