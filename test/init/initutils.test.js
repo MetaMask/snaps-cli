@@ -36,8 +36,7 @@ describe('initutils', () => {
       expect(existsSyncMock).toHaveBeenCalledTimes(1);
       expect(readFileMock).toHaveBeenCalledTimes(1);
       expect(parseMock).toHaveBeenCalledTimes(1);
-      expect(global.console.log.mock.calls[0]).toEqual([`Init: Attempting to use existing 'package.json'...`]);
-      expect(global.console.log.mock.calls[1]).toEqual([`Init: Successfully parsed 'package.json'!`]);
+      expect(global.console.log).toHaveBeenCalledTimes(2);
     });
 
     it('throws error in catch block', async () => {
@@ -59,7 +58,7 @@ describe('initutils', () => {
       expect(parseMock).toHaveBeenCalledTimes(1);
       expect(errorMock).toHaveBeenCalledTimes(1);
       expect(process.exit).toHaveBeenCalledWith(1);
-      expect(global.console.log).toHaveBeenCalledWith(`Init: Attempting to use existing 'package.json'...`);
+      expect(global.console.log).toHaveBeenCalledTimes(1);
     });
 
     it('yarn lock logic works throws error if initpackagejson is rejected', async () => {
@@ -103,23 +102,9 @@ describe('initutils', () => {
     });
 
     const mockArgv = {
-      _: ['init'],
-      verboseErrors: false,
-      v: false,
-      'verbose-errors': false,
-      suppressWarnings: false,
-      sw: false,
-      'suppress-warnings': false,
-      src: 'index.js',
-      s: 'index.js',
       dist: 'dist',
-      d: 'dist',
       outfileName: 'bundle.js',
-      n: 'bundle.js',
-      'outfile-name': 'bundle.js',
       port: 8081,
-      p: 8081,
-      '$0': '/usr/local/bin/mm-snap',
     };
 
     it('applies default web3wallet values if user input is \'y\'', async () => {
@@ -130,7 +115,7 @@ describe('initutils', () => {
       await buildWeb3Wallet(mockArgv);
       expect(promptMock).toHaveBeenCalledTimes(1);
       expect(mkdirMock).toHaveBeenCalledTimes(1);
-      expect(global.console.log).toHaveBeenCalledWith('Using default values...');
+      expect(global.console.log).toHaveBeenCalledTimes(1);
     });
 
     it('throws error if fails to make directory and apply default values', async () => {
@@ -148,7 +133,7 @@ describe('initutils', () => {
 
       await expect(buildWeb3Wallet(mockArgv)).rejects.toThrow(new Error('error message'));
       expect(promptMock).toHaveBeenCalledTimes(1);
-      expect(global.console.log).toHaveBeenCalledWith('Using default values...');
+      expect(global.console.log).toHaveBeenCalledTimes(1);
       expect(errorMock).toHaveBeenCalledTimes(2);
       expect(process.exit).toHaveBeenCalledWith(1);
     });
@@ -221,7 +206,7 @@ describe('initutils', () => {
       expect(warningMock).toHaveBeenCalledTimes(1);
       expect(readdirMock).toHaveBeenCalledTimes(1);
       expect(promptMock).toHaveBeenCalledTimes(1);
-      expect(global.console.log).toHaveBeenCalledWith(`Init: Exiting...`);
+      expect(global.console.log).toHaveBeenCalledTimes(1);
       expect(process.exit).toHaveBeenCalledWith(1);
     });
 
