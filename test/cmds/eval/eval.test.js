@@ -6,7 +6,6 @@ const fsUtils = require('../../../dist/src/utils/validate-fs');
 
 describe('eval', () => {
   describe('snapEval', () => {
-    
     const mockArgv = {
       bundle: 'dist/bundle.js',
     };
