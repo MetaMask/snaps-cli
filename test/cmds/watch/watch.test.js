@@ -1,4 +1,3 @@
-/* eslint-disable jest/prefer-strict-equal */
 const EventEmitter = require('events');
 const chokidar = require('chokidar');
 const watch = require('../../../dist/src/cmds/watch');
