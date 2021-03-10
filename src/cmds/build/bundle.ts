@@ -28,7 +28,7 @@ export function bundle(src: string, dest: string, argv: YargsArgs): Promise<bool
           await writeError('Build error:', bundleError.message, bundleError);
         }
 
-        closeBundleStream(bundleStream, bundleBuffer ? bundleBuffer.toString() : null, { stripComments: argv.stripComments })
+        closeBundleStream(bundleStream, bundleBuffer ? bundleBuffer.toString() : null /*, { stripComments: argv.stripComments } */)
           .then(() => {
             if (bundleBuffer) {
               console.log(`Build success: '${src}' bundled as '${dest}'!`);

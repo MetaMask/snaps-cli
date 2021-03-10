@@ -88,7 +88,7 @@ export function logWarning(msg: string, error?: Error): void {
    * @param err - The original error
    * @param destFilePath - The output file path
    */
-export function writeError(prefix: string, msg: string, err: Error, destFilePath?: string) {
+export async function writeError(prefix: string, msg: string, err: Error, destFilePath?: string): Promise<void> {
   let processedPrefix = prefix;
   if (!prefix.endsWith(' ')) {
     processedPrefix += ' ';
@@ -97,7 +97,7 @@ export function writeError(prefix: string, msg: string, err: Error, destFilePath
   logError(processedPrefix + msg, err);
   try {
     if (destFilePath) {
-      // await filesystem.unlink(destFilePath);
+      await filesystem.unlink(destFilePath);
     }
   } catch (unlinkError) {
     logError(`${processedPrefix}Failed to unlink mangled file.`, unlinkError);
