@@ -39,10 +39,10 @@ describe('watch', () => {
       const validateOutfileNameMock = jest.spyOn(fsUtils, 'validateOutfileName').mockImplementation(() => true);
       const getOutfilePathMock = jest.spyOn(fsUtils, 'getOutfilePath').mockImplementation(() => 'dist/bundle.js');
       await watch.handler(mockArgv);
-      expect(validateDirPathMock).toHaveBeenCalledTimes(1);
-      expect(validateFilePathMock).toHaveBeenCalledTimes(1);
-      expect(validateOutfileNameMock).toHaveBeenCalledTimes(1);
-      expect(getOutfilePathMock).toHaveBeenCalledTimes(1);
+      expect(validateDirPathMock).toHaveBeenCalledWith(mockArgv.dist, true);
+      expect(validateFilePathMock).toHaveBeenCalledWith(mockArgv.src);
+      expect(validateOutfileNameMock).toHaveBeenCalledWith(mockArgv.outfileName);
+      expect(getOutfilePathMock).toHaveBeenCalledWith(mockArgv.dist, mockArgv.outfileName);
     });
 
     it('watcher handles "changed" event correctly', async () => {
