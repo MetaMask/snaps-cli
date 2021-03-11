@@ -1,5 +1,5 @@
 const miscUtils = require('../../../dist/src/utils/misc');
-const { logServerListening, logRequest, logServerError } = require('../../../dist/src/cmds/serve/serveutils');
+const { logServerListening, logRequest, logServerError } = require('../../../dist/src/cmds/serve/serveUtils');
 
 describe('serve utility functions', () => {
   describe('logServerListening', () => {
