@@ -1,7 +1,7 @@
 import browserify from 'browserify';
 import { YargsArgs } from '../../types/yargs';
 import { writeError } from '../../utils/misc';
-import { createBundleStream, closeBundleStream } from './bundleUtils';
+import { createBundleStream, canCloseStream } from './bundleUtils';
 
 /**
  * Builds a Snap bundle JSON file from its JavaScript source.
@@ -12,30 +12,27 @@ import { createBundleStream, closeBundleStream } from './bundleUtils';
  * @param argv.sourceMaps - Whether to output sourcemaps
  * @param argv.stripComments - Whether to remove comments from code
  */
-export function bundle(src: string, dest: string, argv: YargsArgs): Promise<boolean> {
+export function bundle(src: string, dest: string, argv: YargsArgs) {
 
   const { sourceMaps: debug } = argv;
 
-  return new Promise((resolve, _reject) => {
-
+  try {
     const bundleStream = createBundleStream(dest);
 
     browserify(src, { debug })
 
-      .bundle(async (bundleError, bundleBuffer: Buffer) => {
+      .bundle(async (bundleError, bundleBuffer: Buffer) => canCloseStream(bundleError, bundleBuffer, bundleStream, src, dest));
+    return true;
+  } catch (error) {
+    writeError('', 'error: ', error.message);
+  }
 
-        if (bundleError) {
-          await writeError('Build error:', bundleError.message, bundleError);
-        }
+  // return new Promise((resolve, _reject) => {
 
-        closeBundleStream(bundleStream, bundleBuffer ? bundleBuffer.toString() : null /*, { stripComments: argv.stripComments } */)
-          .then(() => {
-            if (bundleBuffer) {
-              console.log(`Build success: '${src}' bundled as '${dest}'!`);
-            }
-            resolve(true);
-          })
-          .catch(async (closeError) => await writeError('Write error:', closeError.message, closeError, dest));
-      });
-  });
+  //   const bundleStream = createBundleStream(dest);
+
+  //   browserify(src, { debug })
+
+  //     .bundle(async (bundleError, bundleBuffer: Buffer) => canCloseStream(bundleError, bundleBuffer, bundleStream, src, dest));
+  // });
 }

@@ -1,6 +1,21 @@
 import { createWriteStream } from 'fs';
 import { writeError } from '../../utils/misc';
 
+export async function canCloseStream(bundleError: any, bundleBuffer: Buffer, bundleStream: NodeJS.WritableStream, src: string, dest: string) {
+  if (bundleError) {
+    await writeError('Build error:', bundleError.message, bundleError);
+  }
+
+  try {
+    await closeBundleStream(bundleStream, bundleBuffer ? bundleBuffer.toString() : null);
+    if (bundleBuffer) {
+      console.log(`Build success: '${src}' bundled as '${dest}'!`);
+    }
+  } catch (closeError) {
+    await writeError('Write error:', closeError.message, closeError, dest);
+  }
+}
+
 /**
  * Opens a stream to write the destination file path.
  *
