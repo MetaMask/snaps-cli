@@ -51,20 +51,16 @@ describe('serve utility functions', () => {
       const mockError = new Error('error message');
       mockError.code = 'EADDRINUSE';
       jest.spyOn(miscUtils, 'logError').mockImplementation();
-      jest.spyOn(process, 'exit').mockImplementation(() => undefined);
       logServerError(mockError, port);
       expect(miscUtils.logError).toHaveBeenCalledTimes(1);
-      expect(process.exit).toHaveBeenCalledWith(1);
     });
 
     it('logs server error to console', async () => {
       const mockBadError = new Error('error message');
       mockBadError.code = 'fake';
       jest.spyOn(miscUtils, 'logError').mockImplementation();
-      jest.spyOn(process, 'exit').mockImplementation(() => undefined);
       logServerError(mockBadError, port);
       expect(miscUtils.logError).toHaveBeenCalledTimes(1);
-      expect(process.exit).toHaveBeenCalledWith(1);
     });
   });
 

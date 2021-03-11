@@ -14,5 +14,4 @@ export function logServerError(err: Error, port: number) {
   } else {
     logError(`Server error: ${err.message}`, err);
   }
-  process.exit(1);
 }

@@ -4,7 +4,7 @@ import yargs from 'yargs';
 import builders from '../../builders';
 import { YargsArgs } from '../../types/yargs';
 import { validateDirPath } from '../../utils';
-import { logServerError, logServerListening, logRequest } from './serveutils';
+import { logServerError, logServerListening, logRequest } from './serveUtils';
 
 module.exports.command = ['serve', 's'];
 module.exports.desc = 'Locally serve Snap file(s) for testing';
@@ -34,6 +34,17 @@ async function serve(argv: YargsArgs): Promise<void> {
   const server = http.createServer(async (req, res) => {
     await serveHandler(req, res, {
       public: root as string,
+      headers: [
+        {
+          source: '**/*',
+          headers: [
+            {
+              key: 'Cache-Control',
+              value: 'no-cache',
+            },
+          ],
+        },
+      ],
     });
   });
 
@@ -41,7 +52,10 @@ async function serve(argv: YargsArgs): Promise<void> {
 
   server.on('request', (request) => logRequest(request));
 
-  server.on('error', (error) => logServerError(error, argv.port));
+  server.on('error', (error) => {
+    logServerError(error, argv.port);
+    process.exit(1);
+  });
 
   server.on('close', () => {
     console.log('Server closed');
