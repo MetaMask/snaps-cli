@@ -1,4 +1,3 @@
-/* eslint-disable jest/prefer-strict-equal */
 const EventEmitter = require('events');
 const chokidar = require('chokidar');
 const watch = require('../../../dist/src/cmds/watch');
@@ -49,7 +48,7 @@ describe('watch', () => {
     it('watcher handles "changed" event correctly', async () => {
       jest.spyOn(console, 'log').mockImplementation();
       const bundleMock = jest.spyOn(build, 'bundle').mockImplementation();
-      const validateFilePathMock = jest.spyOn(fsUtils, 'validateFilePath').mockImplementation(() => true);
+      jest.spyOn(fsUtils, 'validateFilePath').mockImplementation(() => true);
 
       await watch.handler(mockArgv);
       const finishPromise = new Promise((resolve, _) => {
@@ -60,15 +59,13 @@ describe('watch', () => {
       });
       watcherEmitter.emit('change');
       await finishPromise;
-
-      expect(validateFilePathMock).toHaveBeenCalledTimes(1);
       expect(global.console.log).toHaveBeenCalledTimes(2);
     });
 
     it('watcher handles "ready" event correctly', async () => {
       jest.spyOn(console, 'log').mockImplementation();
       const bundleMock = jest.spyOn(build, 'bundle').mockImplementation();
-      const validateFilePathMock = jest.spyOn(fsUtils, 'validateFilePath').mockImplementation(() => true);
+      jest.spyOn(fsUtils, 'validateFilePath').mockImplementation(() => true);
 
       await watch.handler(mockArgv);
       const finishPromise = new Promise((resolve, _) => {
@@ -79,15 +76,13 @@ describe('watch', () => {
       });
       watcherEmitter.emit('ready');
       await finishPromise;
-
-      expect(validateFilePathMock).toHaveBeenCalledTimes(1);
       expect(global.console.log).toHaveBeenCalledTimes(1);
     });
 
     it('watcher handles "add" event correctly', async () => {
       jest.spyOn(console, 'log').mockImplementation();
       const bundleMock = jest.spyOn(build, 'bundle').mockImplementation();
-      const validateFilePathMock = jest.spyOn(fsUtils, 'validateFilePath').mockImplementation(() => true);
+      jest.spyOn(fsUtils, 'validateFilePath').mockImplementation(() => true);
 
       await watch.handler(mockArgv);
       const finishPromise = new Promise((resolve, _) => {
@@ -98,27 +93,23 @@ describe('watch', () => {
       });
       watcherEmitter.emit('add');
       await finishPromise;
-
-      expect(validateFilePathMock).toHaveBeenCalledTimes(1);
       expect(global.console.log).toHaveBeenCalledTimes(2);
     });
 
     it('watcher handles "unlink" event correctly', async () => {
       jest.spyOn(console, 'log').mockImplementation();
       const bundleMock = jest.spyOn(build, 'bundle').mockImplementation();
-      const validateFilePathMock = jest.spyOn(fsUtils, 'validateFilePath').mockImplementation(() => true);
+      jest.spyOn(fsUtils, 'validateFilePath').mockImplementation(() => true);
 
       await watch.handler(mockArgv);
       const finishPromise = new Promise((resolve, _) => {
         watcherEmitter.on('unlink', () => {
-          expect(bundleMock).not.toHaveBeenCalledWith();
+          expect(bundleMock).not.toHaveBeenCalled();
           resolve();
         });
       });
       watcherEmitter.emit('unlink');
       await finishPromise;
-
-      expect(validateFilePathMock).toHaveBeenCalledTimes(1);
       expect(global.console.log).toHaveBeenCalledTimes(2);
     });
 
@@ -128,7 +119,7 @@ describe('watch', () => {
       jest.spyOn(console, 'log').mockImplementation();
       const logErrorMock = jest.spyOn(miscUtils, 'logError').mockImplementation();
       const bundleMock = jest.spyOn(build, 'bundle').mockImplementation();
-      const validateFilePathMock = jest.spyOn(fsUtils, 'validateFilePath').mockImplementation(() => true);
+      jest.spyOn(fsUtils, 'validateFilePath').mockImplementation(() => true);
 
       await watch.handler(mockArgv);
       const finishPromise = new Promise((resolve, _) => {
@@ -140,8 +131,6 @@ describe('watch', () => {
       });
       watcherEmitter.emit('error', mockError);
       await finishPromise;
-
-      expect(validateFilePathMock).toHaveBeenCalledTimes(1);
       expect(global.console.log).toHaveBeenCalledTimes(1);
     });
 
