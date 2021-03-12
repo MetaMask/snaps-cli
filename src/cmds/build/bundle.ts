@@ -25,13 +25,4 @@ export function bundle(src: string, dest: string, argv: YargsArgs) {
     writeError('', 'error: ', error.message);
     return false;
   }
-
-  // return new Promise((resolve, _reject) => {
-
-  //   const bundleStream = createBundleStream(dest);
-
-  //   browserify(src, { debug })
-
-  //     .bundle(async (bundleError, bundleBuffer: Buffer) => canCloseStream(bundleError, bundleBuffer, bundleStream, src, dest));
-  // });
 }
