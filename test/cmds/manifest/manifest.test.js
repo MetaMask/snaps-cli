@@ -48,6 +48,10 @@ global.snaps = {
 describe('manifest', () => {
   describe('manifest function validates a snap package.json file', () => {
 
+    beforeEach(() => {
+      jest.spyOn(console, 'error').mockImplementation();
+    });
+
     afterEach(() => {
       jest.clearAllMocks();
       jest.restoreAllMocks();
@@ -102,7 +106,6 @@ describe('manifest', () => {
     it('checks web3Wallet bundle has valid local and url properties', async () => {
       jest.spyOn(JSON, 'parse').mockImplementation((value) => value);
       jest.spyOn(utils, 'isFile').mockImplementation(() => false);
-      jest.spyOn(console, 'error').mockImplementation();
       jest.spyOn(fs.promises, 'readFile')
         .mockImplementationOnce(async () => await getPackageJson({
           bundle: {
@@ -118,7 +121,6 @@ describe('manifest', () => {
     it('checks web3Wallet bundle local property exists', async () => {
       jest.spyOn(JSON, 'parse').mockImplementation((value) => value);
       jest.spyOn(utils, 'isFile').mockImplementation(() => true);
-      jest.spyOn(console, 'error').mockImplementation();
       jest.spyOn(fs.promises, 'readFile')
         .mockImplementationOnce(async () => await getPackageJson({
           bundle: {
@@ -133,7 +135,6 @@ describe('manifest', () => {
     it('checks web3Wallet bundle url property exists', async () => {
       jest.spyOn(JSON, 'parse').mockImplementation((value) => value);
       jest.spyOn(utils, 'isFile').mockImplementation(() => true);
-      jest.spyOn(console, 'error').mockImplementation();
       jest.spyOn(fs.promises, 'readFile')
         .mockImplementationOnce(async () => await getPackageJson({
           bundle: {
@@ -148,7 +149,6 @@ describe('manifest', () => {
     it('checks web3Wallet initial permissions property: throws error if not object', async () => {
       jest.spyOn(JSON, 'parse').mockImplementation((value) => value);
       jest.spyOn(utils, 'isFile').mockImplementation(() => true);
-      jest.spyOn(console, 'error').mockImplementation();
       jest.spyOn(fs.promises, 'readFile')
         .mockImplementationOnce(async () => await getPackageJson({
           bundle: {
@@ -164,7 +164,6 @@ describe('manifest', () => {
     it('checks web3Wallet initial permissions property: throws error if array', async () => {
       jest.spyOn(JSON, 'parse').mockImplementation((value) => value);
       jest.spyOn(utils, 'isFile').mockImplementation(() => true);
-      jest.spyOn(console, 'error').mockImplementation();
       jest.spyOn(fs.promises, 'readFile')
         .mockImplementationOnce(async () => await getPackageJson({
           bundle: {
@@ -180,7 +179,6 @@ describe('manifest', () => {
     it('checks web3Wallet initial permissions property: throws error if permission objects are not objects', async () => {
       jest.spyOn(JSON, 'parse').mockImplementation((value) => value);
       jest.spyOn(utils, 'isFile').mockImplementation(() => true);
-      jest.spyOn(console, 'error').mockImplementation();
       jest.spyOn(fs.promises, 'readFile')
         .mockImplementationOnce(async () => await getPackageJson({
           bundle: {
@@ -196,7 +194,6 @@ describe('manifest', () => {
     it('checks web3Wallet initial permissions property: handles valid and throws error if object\'s permission keys are invalid', async () => {
       jest.spyOn(JSON, 'parse').mockImplementation((value) => value);
       jest.spyOn(utils, 'isFile').mockImplementation(() => true);
-      jest.spyOn(console, 'error').mockImplementation();
       jest.spyOn(fs.promises, 'readFile')
         .mockImplementationOnce(async () => await getPackageJson({
           bundle: {
@@ -220,7 +217,6 @@ describe('manifest', () => {
         global.snaps.verboseErrors = true;
         jest.spyOn(JSON, 'parse').mockImplementation((value) => value);
         jest.spyOn(utils, 'isFile').mockImplementation(() => true);
-        jest.spyOn(console, 'error').mockImplementation();
         jest.spyOn(fs.promises, 'readFile')
           .mockImplementationOnce(async () => await getPackageJson({
             bundle: {
