@@ -18,13 +18,12 @@ export function bundle(src: string, dest: string, argv: YargsArgs) {
 
   try {
     const bundleStream = createBundleStream(dest);
-
     browserify(src, { debug })
-
       .bundle(async (bundleError, bundleBuffer: Buffer) => canCloseStream(bundleError, bundleBuffer, bundleStream, src, dest));
     return true;
   } catch (error) {
     writeError('', 'error: ', error.message);
+    return false;
   }
 
   // return new Promise((resolve, _reject) => {

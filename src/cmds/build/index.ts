@@ -44,7 +44,7 @@ export async function build(argv: YargsArgs): Promise<void> {
   await validateDirPath(dist, true);
 
   const outfilePath = getOutfilePath(dist, outfileName as string);
-  const result = await bundle(src, outfilePath, argv);
+  const result = bundle(src, outfilePath, argv);
   if (result && argv.eval) {
     await snapEval({ ...argv, bundle: outfilePath });
   }
