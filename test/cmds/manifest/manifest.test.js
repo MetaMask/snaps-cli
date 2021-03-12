@@ -213,7 +213,7 @@ describe('manifest', () => {
         global.snaps.suppressWarnings = false;
       });
 
-      it('checks logManifestError prints according to global settings', async () => {
+      it('suppresses logManifestError per global settings', async () => {
         global.snaps.verboseErrors = true;
         jest.spyOn(JSON, 'parse').mockImplementation((value) => value);
         jest.spyOn(utils, 'isFile').mockImplementation(() => true);
@@ -229,7 +229,7 @@ describe('manifest', () => {
         expect(global.console.error).toHaveBeenCalledTimes(2);
       });
 
-      it('checks logManifestWarning prints according to global settings', async () => {
+      it('suppresses logManifestWarning per global settings', async () => {
         global.snaps.suppressWarnings = true;
         const badJSON = {};
         jest.spyOn(JSON, 'parse').mockImplementation((value) => value);
