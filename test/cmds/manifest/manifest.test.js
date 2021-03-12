@@ -1,4 +1,3 @@
-/* eslint-disable jest/prefer-strict-equal */
 const fs = require('fs');
 const utils = require('../../../dist/src/utils/fs');
 const { manifest } = require('../../../dist/src/cmds/manifest/manifest');
