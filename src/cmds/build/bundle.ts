@@ -1,6 +1,5 @@
 import browserify from 'browserify';
 import { YargsArgs } from '../../types/yargs';
-import { writeError } from '../../utils/misc';
 import { createBundleStream, canCloseStream } from './bundleUtils';
 
 /**
@@ -16,13 +15,10 @@ export function bundle(src: string, dest: string, argv: YargsArgs) {
 
   const { sourceMaps: debug } = argv;
 
-  try {
+  return new Promise((resolve, _reject) => {
+
     const bundleStream = createBundleStream(dest);
     browserify(src, { debug })
-      .bundle(async (bundleError, bundleBuffer: Buffer) => canCloseStream(bundleError, bundleBuffer, bundleStream, src, dest));
-    return true;
-  } catch (error) {
-    writeError('', 'error: ', error.message);
-    return false;
-  }
+      .bundle(async (bundleError, bundleBuffer: Buffer) => await canCloseStream({ bundleError, bundleBuffer, bundleStream, src, dest, resolve, argv }));
+  });
 }
