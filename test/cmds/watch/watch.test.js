@@ -33,16 +33,26 @@ describe('watch', () => {
     });
 
     it('successfully processes arguments from yargs', async () => {
+      const chokidarMock = jest.spyOn(chokidar, 'watch').mockImplementation(() => {
+        watcherEmitter = new EventEmitter();
+        watcherEmitter.add = () => undefined;
+        jest.spyOn(watcherEmitter, 'on');
+        jest.spyOn(watcherEmitter, 'add');
+        return watcherEmitter;
+      });
       jest.spyOn(console, 'log').mockImplementation();
       const validateDirPathMock = jest.spyOn(fsUtils, 'validateDirPath').mockImplementation(() => true);
       const validateFilePathMock = jest.spyOn(fsUtils, 'validateFilePath').mockImplementation(() => true);
       const validateOutfileNameMock = jest.spyOn(fsUtils, 'validateOutfileName').mockImplementation(() => true);
-      const getOutfilePathMock = jest.spyOn(fsUtils, 'getOutfilePath').mockImplementation(() => 'dist/bundle.js');
+      jest.spyOn(fsUtils, 'getOutfilePath').mockImplementation(() => 'dist/bundle.js');
+      const root = (
+        mockArgv.src.indexOf('/') === -1 ? '.' : mockArgv.src.substring(0, mockArgv.lastIndexOf('/') + 1)
+      );
       await watch.handler(mockArgv);
       expect(validateDirPathMock).toHaveBeenCalledWith(mockArgv.dist, true);
       expect(validateFilePathMock).toHaveBeenCalledWith(mockArgv.src);
       expect(validateOutfileNameMock).toHaveBeenCalledWith(mockArgv.outfileName);
-      expect(getOutfilePathMock).toHaveBeenCalledWith(mockArgv.dist, mockArgv.outfileName);
+      expect(chokidarMock.mock.calls[0][0]).toBe(root);
     });
 
     it('watcher handles "changed" event correctly', async () => {
