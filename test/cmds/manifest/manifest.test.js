@@ -21,7 +21,7 @@ const getDefaultWeb3Wallet = () => {
   };
 };
 
-const getPackageJson = async (
+const getPackageJson = (
   web3Wallet = getDefaultWeb3Wallet(),
   name = 'foo',
   version = 1,
