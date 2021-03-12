@@ -16,7 +16,6 @@ describe('serve utility functions', () => {
       logServerListening(portInput);
       expect(global.console.log).toHaveBeenCalledTimes(1);
     });
-
   });
 
   describe('logRequest', () => {
@@ -63,5 +62,4 @@ describe('serve utility functions', () => {
       expect(miscUtils.logError).toHaveBeenCalledTimes(1);
     });
   });
-
 });

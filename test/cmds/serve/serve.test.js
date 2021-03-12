@@ -12,16 +12,16 @@ const mockArgv = {
 describe('serve', () => {
   describe('Starts a local, static HTTP server on the given port with the given root directory.', () => {
 
-    let serverEmitter;
+    let mockServer;
 
     beforeEach(() => {
       const logServerListeningMock = jest.spyOn(serveUtils, 'logServerListening').mockImplementation();
       jest.spyOn(http, 'createServer').mockImplementation(() => {
-        serverEmitter = new EventEmitter();
-        serverEmitter.listen = () => logServerListeningMock();
-        jest.spyOn(serverEmitter, 'on');
-        jest.spyOn(serverEmitter, 'listen');
-        return serverEmitter;
+        mockServer = new EventEmitter();
+        mockServer.listen = () => logServerListeningMock();
+        jest.spyOn(mockServer, 'on');
+        jest.spyOn(mockServer, 'listen');
+        return mockServer;
       });
       jest.spyOn(fsUtils, 'validateDirPath').mockImplementation(() => true);
     });
@@ -36,12 +36,12 @@ describe('serve', () => {
 
       await serve.handler(mockArgv);
       const finishPromise = new Promise((resolve, _) => {
-        serverEmitter.on('close', () => {
+        mockServer.on('close', () => {
           expect(global.console.log).toHaveBeenCalledTimes(2);
           resolve();
         });
       });
-      serverEmitter.emit('close');
+      mockServer.emit('close');
       await finishPromise;
       expect(process.exit).toHaveBeenCalledWith(1);
     });
@@ -53,13 +53,13 @@ describe('serve', () => {
 
       await serve.handler(mockArgv);
       const finishPromise = new Promise((resolve, _) => {
-        serverEmitter.on('error', () => {
+        mockServer.on('error', () => {
           expect(global.console.log).toHaveBeenCalledTimes(1);
           expect(logServerErrorMock).toHaveBeenCalled();
           resolve();
         });
       });
-      serverEmitter.emit('error');
+      mockServer.emit('error');
       await finishPromise;
       expect(process.exit).toHaveBeenCalledWith(1);
     });
@@ -70,13 +70,13 @@ describe('serve', () => {
 
       await serve.handler(mockArgv);
       const finishPromise = new Promise((resolve, _) => {
-        serverEmitter.on('request', () => {
+        mockServer.on('request', () => {
           expect(global.console.log).toHaveBeenCalledTimes(1);
           expect(logRequestMock).toHaveBeenCalled();
           resolve();
         });
       });
-      serverEmitter.emit('request');
+      mockServer.emit('request');
       await finishPromise;
     });
   });
