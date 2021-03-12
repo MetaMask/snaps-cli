@@ -51,6 +51,7 @@ describe('snap-config', () => {
   });
 
   afterAll(() => {
+    jest.clearAllMocks();
     jest.restoreAllMocks();
   });
 

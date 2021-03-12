@@ -9,6 +9,7 @@ describe('readline', () => {
   afterAll(() => {
     jest.unmock('readline');
     jest.restoreAllMocks();
+    jest.clearAllMocks();
   });
 
   describe('openPrompt', () => {

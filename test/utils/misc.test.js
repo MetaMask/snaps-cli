@@ -107,6 +107,7 @@ describe('misc', () => {
 
   afterEach(() => {
     jest.restoreAllMocks();
+    jest.clearAllMocks();
   });
 
   afterAll(() => {

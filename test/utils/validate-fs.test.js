@@ -5,6 +5,7 @@ describe('validate', () => {
 
   afterEach(() => {
     jest.restoreAllMocks();
+    jest.clearAllMocks();
   });
 
   describe('getOutfilePath', () => {
