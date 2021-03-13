@@ -63,7 +63,7 @@ describe('bundleUtils', () => {
 
     it('closes stream with bundleString', async () => {
       const mockWritableStream = fs.createWriteStream();
-      await closeBundleStream(mockWritableStream, 'foo');
+      await closeBundleStream(mockWritableStream, 'foo', false);
       const finishPromise = new Promise((resolve, _reject) => {
         expect(mockWritableStream.end).toHaveBeenCalledWith('foo');
         resolve();
@@ -75,7 +75,7 @@ describe('bundleUtils', () => {
       const mockWritableStream = fs.createWriteStream();
       await closeBundleStream(mockWritableStream, null);
       const finishPromise = new Promise((resolve, _reject) => {
-        expect(mockWritableStream.end).toHaveBeenCalledWith('');
+        expect(mockWritableStream.end).toHaveBeenCalledWith(null);
         resolve();
       });
       await finishPromise;

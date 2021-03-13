@@ -1,37 +1,54 @@
-// /* eslint-disable import/order */
-// const { bundle } = require('../../../dist/src/cmds/build/bundle');
-// const bundleUtils = require('../../../dist/src/cmds/build/bundleUtils');
-// const miscUtils = require('../../../dist/src/utils/misc');
 // const browserify = require('browserify');
+const { bundle } = require('../../../dist/src/cmds/build/bundle');
+const bundleUtils = require('../../../dist/src/cmds/build/bundleUtils');
+const miscUtils = require('../../../dist/src/utils/misc');
 
-// const mockBrowserify = jest.createMockFromModule('browserify');
-// // eslint-disable-next-line jest/prefer-spy-on
-// mockBrowserify.bundle = jest.fn(() => resolve(true));
+jest.mock('browserify', (_, __) => ({
+  bundle: () => Promise.resolve(true),
+}));
+// jest.mock('browserify');
+// const mockBrowserify = require('browserify');
+// jest.createMockFromModule('browserify');
+// jest.spyOn(brows, 'bundle').mockImplementation();
 
-// describe('bundle', () => {
-//   describe('bundle', () => {
+// jest.mock('init-package-json');
+// const initPackageJson = require('init-package-json');
 
-//     afterEach(() => {
-//       jest.clearAllMocks();
-//       jest.restoreAllMocks();
-//     });
+describe('bundle', () => {
+  describe('bundle', () => {
 
-//     global.snaps = {
-//       verboseErrors: false,
-//     };
+    afterEach(() => {
+      jest.clearAllMocks();
+      jest.restoreAllMocks();
+    });
 
-//     it('processes yargs properties correctly', async () => {
-//       const mockArgv = {
-//         sourceMaps: true,
-//       };
-//       jest.spyOn(bundleUtils, 'closeBundleStream').mockImplementation();
-//       jest.spyOn(miscUtils, 'writeError').mockImplementation();
-//       const bundlePromise = bundle('src', 'dest', mockArgv);
-//       await bundlePromise;
-//       expect(mockBrowserify.bundle).toHaveBeenCalled();
-//     });
-//   });
-// });
+    global.snaps = {
+      verboseErrors: false,
+      isWatching: false,
+    };
 
-// // const mockCreateBundleStream = jest.spyOn(bundleUtils, 'createBundleStream').mockImplementation();
-// //       const mockWriteError = jest.spyOn(miscUtils, 'writeError').mockImplementation();
+    it('processes yargs properties correctly', async () => {
+      const mockArgv = {
+        sourceMaps: true,
+      };
+      //   mockBrowserify.mockImplementation((_, __) => ({
+      //     bundle: () => Promise.resolve(true),
+      //   }));
+      //   jest
+      //     .spyOn(browserify, () => ({
+      //       bundle: () => Promise.resolve(true),
+      //     }));
+      //   const instance = browserify();
+      //   await instance.bundle();
+    //   jest.mock('browserify', (_, __) => ({
+    //     __esModule: false,
+    //     default: jest.fn(),
+    //     bundle: (callback) => callback(Promise.resolve(true)),
+    //   }));
+      const createStreamMock = jest.spyOn(bundleUtils, 'createBundleStream').mockImplementation();
+      jest.spyOn(miscUtils, 'writeError').mockImplementation();
+      await bundle('src', 'dest', mockArgv);
+      expect(createStreamMock).toHaveBeenCalled();
+    });
+  });
+});

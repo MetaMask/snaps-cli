@@ -1,33 +1,33 @@
 import { createWriteStream } from 'fs';
 import stripComments from 'strip-comments';
 import { writeError } from '../../utils/misc';
-import { YargsArgs, Option } from '../../types/yargs';
+import { Option } from '../../types/yargs';
 
-interface CloseStreamArgs {
-  bundleError: any;
-  bundleBuffer: Buffer;
-  bundleStream: NodeJS.WritableStream;
-  src: string;
-  dest: string;
-  resolve: any;
-  argv: YargsArgs;
-}
+// interface CloseStreamArgs {
+//   bundleError: any;
+//   bundleBuffer: Buffer;
+//   bundleStream: NodeJS.WritableStream;
+//   src: string;
+//   dest: string;
+//   resolve: any;
+//   argv: YargsArgs;
+// }
 
-export async function canCloseStream({ bundleError, bundleBuffer, bundleStream, src, dest, resolve, argv }: CloseStreamArgs) {
-  if (bundleError) {
-    await writeError('Build error:', bundleError.message, bundleError);
-  }
+// export async function canCloseStream({ bundleError, bundleBuffer, bundleStream, src, dest, resolve, argv }: CloseStreamArgs) {
+//   if (bundleError) {
+//     await writeError('Build error:', bundleError.message, bundleError);
+//   }
 
-  try {
-    await closeBundleStream(bundleStream, bundleBuffer ? bundleBuffer.toString() : null, { stripComments: argv.stripComments });
-    if (bundleBuffer) {
-      console.log(`Build success: '${src}' bundled as '${dest}'!`);
-    }
-    resolve(true);
-  } catch (closeError) {
-    await writeError('Write error:', closeError.message, closeError, dest);
-  }
-}
+//   try {
+//     await closeBundleStream(bundleStream, bundleBuffer ? bundleBuffer.toString() : null, { stripComments: argv.stripComments });
+//     if (bundleBuffer) {
+//       console.log(`Build success: '${src}' bundled as '${dest}'!`);
+//     }
+//     resolve(true);
+//   } catch (closeError) {
+//     await writeError('Write error:', closeError.message, closeError, dest);
+//   }
+// }
 
 /**
  * Opens a stream to write the destination file path.
