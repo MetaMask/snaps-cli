@@ -19,7 +19,7 @@ describe('init', () => {
       await init.handler(mockArgv);
       expect(initHandlerMock).toHaveBeenCalledWith(mockArgv);
       expect(buildMock).toHaveBeenCalledWith({ foo: 'bar', manifest: false, eval: true });
-      expect(global.console.log).toHaveBeenCalledTimes(1);
+      expect(global.console.log).toHaveBeenCalledTimes(2);
     });
   });
 });
