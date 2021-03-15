@@ -1,6 +1,3 @@
-/* eslint-disable import/newline-after-import */
-/* eslint-disable import/order */
-/* eslint-disable jest/prefer-strict-equal */
 const fs = require('fs');
 const { asyncPackageInit, buildWeb3Wallet, validateEmptyDir } = require('../../dist/src/cmds/init/initutils');
 const readlineUtils = require('../../dist/src/utils/readline');
@@ -16,6 +13,7 @@ jest.mock('fs', () => ({
 }));
 
 jest.mock('init-package-json');
+// eslint-disable-next-line import/order
 const initPackageJson = require('init-package-json');
 
 describe('initutils', () => {
