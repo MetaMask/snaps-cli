@@ -1,6 +1,6 @@
 const fs = require('fs');
 const initPackageJson = require('init-package-json');
-const { asyncPackageInit, buildWeb3Wallet, validateEmptyDir } = require('../../dist/src/cmds/init/initutils');
+const { asyncPackageInit, buildWeb3Wallet, validateEmptyDir } = require('../../dist/src/cmds/init/initUtils');
 const readlineUtils = require('../../dist/src/utils/readline');
 const miscUtils = require('../../dist/src/utils/misc');
 
@@ -15,7 +15,7 @@ jest.mock('fs', () => ({
 
 jest.mock('init-package-json');
 
-describe('initutils', () => {
+describe('initUtils', () => {
 
   describe('asyncPackageInit', () => {
 

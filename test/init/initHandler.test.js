@@ -1,8 +1,8 @@
 const { promises: fs } = require('fs');
-const initUtils = require('../../dist/src/cmds/init/initutils');
+const initUtils = require('../../dist/src/cmds/init/initUtils');
 const readlineUtils = require('../../dist/src/utils/readline');
 const miscUtils = require('../../dist/src/utils/misc');
-const { initHandler } = require('../../dist/src/cmds/init/initialize');
+const { initHandler } = require('../../dist/src/cmds/init/initHandler');
 const template = require('../../dist/src/cmds/init/initTemplate.json');
 const { CONFIG_PATHS } = require('../../dist/src/utils/misc');
 

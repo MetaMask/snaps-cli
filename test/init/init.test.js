@@ -1,5 +1,5 @@
 const init = require('../../dist/src/cmds/init');
-const initializeModule = require('../../dist/src/cmds/init/initialize');
+const initializeModule = require('../../dist/src/cmds/init/initHandler');
 const buildModule = require('../../dist/src/cmds/build');
 
 describe('init', () => {

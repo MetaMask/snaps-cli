@@ -2,7 +2,7 @@ import yargs from 'yargs';
 import builders from '../../builders';
 import { YargsArgs } from '../../types/yargs';
 import { build } from '../build';
-import { initHandler } from './initialize';
+import { initHandler } from './initHandler';
 
 module.exports.command = ['init', 'i'];
 module.exports.desc = 'Initialize Snap package';
