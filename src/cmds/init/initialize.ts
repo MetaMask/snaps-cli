@@ -2,7 +2,7 @@ import { promises as fs } from 'fs';
 import { CONFIG_PATHS, logError, closePrompt } from '../../utils';
 import { YargsArgs } from '../../types/yargs';
 import template from './initTemplate.json';
-import { asyncPackageInit, validateEmptyDir, buildWeb3Wallet } from './initutils';
+import { asyncPackageInit, validateEmptyDir, buildWeb3Wallet } from './initUtils';
 
 const CONFIG_PATH = CONFIG_PATHS[0];
 
