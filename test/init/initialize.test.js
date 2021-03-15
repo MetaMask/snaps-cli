@@ -74,13 +74,16 @@ describe('initialize', () => {
       const fsWriteMock = jest.spyOn(fs, 'writeFile').mockImplementation(() => {
         throw new Error('error message');
       });
-      jest.spyOn(process, 'exit').mockImplementation(() => undefined);
+      jest.spyOn(process, 'exit').mockImplementation(() => {
+        throw new Error('process exited');
+      });
       jest.spyOn(initUtils, 'asyncPackageInit').mockImplementation(() => mockPackage);
-      expect(await initHandler(mockArgv)).toStrictEqual(expectedReturnValue);
-      expect(errorMock).toHaveBeenCalledTimes(4);
-      expect(fsWriteMock).toHaveBeenCalledTimes(4);
+      await expect(initHandler(mockArgv))
+        .rejects
+        .toThrow('process exited');
+      expect(errorMock).toHaveBeenCalledTimes(1);
+      expect(fsWriteMock).toHaveBeenCalledTimes(1);
       expect(process.exit).toHaveBeenCalledWith(1);
-      expect(process.exit).toHaveBeenCalledTimes(3);
     });
 
     it('function does not write to main if undefined', async () => {
