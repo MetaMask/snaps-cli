@@ -223,5 +223,4 @@ describe('initutils', () => {
       expect(promptMock).toHaveBeenCalledTimes(1);
     });
   });
-
 });
