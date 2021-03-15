@@ -1,4 +1,5 @@
 const fs = require('fs');
+const initPackageJson = require('init-package-json');
 const { asyncPackageInit, buildWeb3Wallet, validateEmptyDir } = require('../../dist/src/cmds/init/initutils');
 const readlineUtils = require('../../dist/src/utils/readline');
 const miscUtils = require('../../dist/src/utils/misc');
@@ -13,8 +14,6 @@ jest.mock('fs', () => ({
 }));
 
 jest.mock('init-package-json');
-// eslint-disable-next-line import/order
-const initPackageJson = require('init-package-json');
 
 describe('initutils', () => {
 
