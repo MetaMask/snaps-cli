@@ -5,7 +5,6 @@ describe('serve utility functions', () => {
   describe('logServerListening', () => {
 
     afterEach(() => {
-      jest.clearAllMocks();
       jest.restoreAllMocks();
     });
 
@@ -21,7 +20,6 @@ describe('serve utility functions', () => {
   describe('logRequest', () => {
 
     afterEach(() => {
-      jest.clearAllMocks();
       jest.restoreAllMocks();
     });
 
@@ -40,7 +38,6 @@ describe('serve utility functions', () => {
   describe('logServerError', () => {
 
     afterEach(() => {
-      jest.clearAllMocks();
       jest.restoreAllMocks();
     });
 
