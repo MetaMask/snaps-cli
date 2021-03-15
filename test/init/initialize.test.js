@@ -1,4 +1,3 @@
-/* eslint-disable jest/prefer-strict-equal */
 const { promises: fs } = require('fs');
 const initUtils = require('../../dist/src/cmds/init/initutils');
 const readlineUtils = require('../../dist/src/utils/readline');
