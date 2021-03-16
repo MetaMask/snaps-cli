@@ -19,12 +19,10 @@ wallet.registerRpcMessageHandler(async (_originString, requestObject) => {
       if (!approved) {
         throw rpcErrors.eth.unauthorized();
       }
-      const PRIVATE_KEY = await wallet.getAppKey();
-      const signature = await bls.sign(
-        requestObject.params[0],
-        PRIVATE_KEY,
-        DOMAIN,
-      );
+      const PRIVATE_KEY = await wallet.request({
+        method: 'snap_getAppKey',
+      });
+      const signature = await bls.sign(requestObject.params[0], PRIVATE_KEY, DOMAIN);
       return signature;
     }
 
@@ -34,14 +32,20 @@ wallet.registerRpcMessageHandler(async (_originString, requestObject) => {
 });
 
 async function getPubKey() {
-  const PRIV_KEY = await wallet.getAppKey();
+  const PRIV_KEY = await wallet.request({
+    method: 'snap_getAppKey',
+  });
   return bls.getPublicKey(PRIV_KEY);
 }
 
 async function promptUser(message) {
+<<<<<<< HEAD
   const response = await wallet.request({
     method: 'confirm',
     params: [message],
   });
+=======
+  const response = await wallet.request({ method: 'snap_confirm', params: [message] });
+>>>>>>> 590c343 (WIP)
   return response;
 }
