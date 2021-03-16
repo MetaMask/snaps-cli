@@ -3,32 +3,6 @@ import stripComments from 'strip-comments';
 import { writeError } from '../../utils/misc';
 import { Option } from '../../types/yargs';
 
-// interface CloseStreamArgs {
-//   bundleError: any;
-//   bundleBuffer: Buffer;
-//   bundleStream: NodeJS.WritableStream;
-//   src: string;
-//   dest: string;
-//   resolve: any;
-//   argv: YargsArgs;
-// }
-
-// export async function canCloseStream({ bundleError, bundleBuffer, bundleStream, src, dest, resolve, argv }: CloseStreamArgs) {
-//   if (bundleError) {
-//     await writeError('Build error:', bundleError.message, bundleError);
-//   }
-
-//   try {
-//     await closeBundleStream(bundleStream, bundleBuffer ? bundleBuffer.toString() : null, { stripComments: argv.stripComments });
-//     if (bundleBuffer) {
-//       console.log(`Build success: '${src}' bundled as '${dest}'!`);
-//     }
-//     resolve(true);
-//   } catch (closeError) {
-//     await writeError('Write error:', closeError.message, closeError, dest);
-//   }
-// }
-
 /**
  * Opens a stream to write the destination file path.
  *
@@ -82,26 +56,6 @@ export function postProcess(bundleString: string | null, options: Option): strin
   if (options.stripComments) {
     processedString = stripComments(processedString);
   }
-
-  // .import( => ["import"](
-  processedString = processedString.replace(/\.import\(/gu, '["import"](');
-
-  // stuff.eval(otherStuff) => (1, stuff.eval)(otherStuff)
-  processedString = processedString.replace(
-    /((?:\b[\w\d]*[\])]?\.)+eval)(\([^)]*\))/gu,
-    '(1, $1)$2',
-  );
-
-  // if we don't do the above, the below causes syntax errors if it encounters
-  // things of the form: "something.eval(stuff)"
-  // eval(stuff) => (1, eval)(stuff)
-  processedString = processedString.replace(/(\b)(eval)(\([^)]*\))/gu, '$1(1, $2)$3');
-
-  // SES interprets syntactically valid JavaScript '<!--' and '-->' as illegal
-  // HTML comment syntax.
-  // '<!--' => '<! --' && '-->' => '-- >'
-  processedString = processedString.replace(/<!--/gu, '< !--');
-  processedString = processedString.replace(/-->/gu, '-- >');
 
   // Browserify provides the Buffer global as an argument to modules that use
   // it, but this does not work in SES. Since we pass in Buffer as an endowment,
