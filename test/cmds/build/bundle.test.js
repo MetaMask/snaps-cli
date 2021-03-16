@@ -1,10 +1,9 @@
+const mockBrowserify = require('browserify');
 const { bundle } = require('../../../dist/src/cmds/build/bundle');
 const bundleUtils = require('../../../dist/src/cmds/build/bundleUtils');
 const miscUtils = require('../../../dist/src/utils/misc');
 
 jest.mock('browserify');
-// eslint-disable-next-line import/order
-const mockBrowserify = require('browserify');
 
 describe('bundle', () => {
   describe('bundle', () => {
