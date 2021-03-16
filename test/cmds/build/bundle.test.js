@@ -23,11 +23,13 @@ describe('bundle', () => {
         sourceMaps: true,
       };
       mockBrowserify.mockImplementation((_, __) => ({
-        bundle: () => Promise.resolve(true),
+        bundle: () => {
+          return Promise.resolve(true);
+        },
       }));
       const createStreamMock = jest.spyOn(bundleUtils, 'createBundleStream').mockImplementation();
       jest.spyOn(miscUtils, 'writeError').mockImplementation();
-      await bundle('src', 'dest', mockArgv);
+      bundle('src', 'dest', mockArgv);
       expect(createStreamMock).toHaveBeenCalled();
     });
   });
