@@ -22,6 +22,13 @@ if (parentPort !== null) {
     compartment.evaluate(
       // '() => ' + readFileSync(pluginFilePath, 'utf8')
       readFileSync(pluginFilePath, 'utf8'),
+      {
+        sloppyGlobalsMode: true,
+        __moduleShimLexicals__: undefined,
+        __evadeHtmlCommentTest__: false,
+        __evadeImportExpressionTest__: true,
+        __rejectSomeDirectEvalExpressions__: false,
+      },
     );
     setTimeout(() => process.exit(0), 1000); // Hacky McHack
   });
