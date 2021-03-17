@@ -7,7 +7,6 @@ const miscUtils = require('../../../dist/src/utils/misc');
 
 describe('watch', () => {
   describe('Watch a directory and its subdirectories for changes, and build when files are added or changed.', () => {
-
     let watcherEmitter;
 
     const mockArgv = {
@@ -45,7 +44,7 @@ describe('watch', () => {
       const validateFilePathMock = jest.spyOn(fsUtils, 'validateFilePath').mockImplementation(() => true);
       const validateOutfileNameMock = jest.spyOn(fsUtils, 'validateOutfileName').mockImplementation(() => true);
       jest.spyOn(fsUtils, 'getOutfilePath').mockImplementation(() => 'dist/bundle.js');
-      await watch.handler(mockArgv);
+      await watch.handler({ ...mockArgv });
       expect(validateDirPathMock).toHaveBeenCalledWith(mockArgv.dist, true);
       expect(validateFilePathMock).toHaveBeenCalledWith(mockArgv.src);
       expect(validateOutfileNameMock).toHaveBeenCalledWith(mockArgv.outfileName);
@@ -57,7 +56,7 @@ describe('watch', () => {
       const bundleMock = jest.spyOn(build, 'bundle').mockImplementation();
       jest.spyOn(fsUtils, 'validateFilePath').mockImplementation(() => true);
 
-      await watch.handler(mockArgv);
+      await watch.handler({ ...mockArgv });
       const finishPromise = new Promise((resolve, _) => {
         watcherEmitter.on('change', () => {
           expect(bundleMock).toHaveBeenCalledWith(mockArgv.src, `${mockArgv.dist}/${mockArgv.outfileName}`, mockArgv);
@@ -74,7 +73,7 @@ describe('watch', () => {
       const bundleMock = jest.spyOn(build, 'bundle').mockImplementation();
       jest.spyOn(fsUtils, 'validateFilePath').mockImplementation(() => true);
 
-      await watch.handler(mockArgv);
+      await watch.handler({ ...mockArgv });
       const finishPromise = new Promise((resolve, _) => {
         watcherEmitter.on('ready', () => {
           expect(bundleMock).toHaveBeenCalledWith(mockArgv.src, `${mockArgv.dist}/${mockArgv.outfileName}`, mockArgv);
@@ -91,7 +90,7 @@ describe('watch', () => {
       const bundleMock = jest.spyOn(build, 'bundle').mockImplementation();
       jest.spyOn(fsUtils, 'validateFilePath').mockImplementation(() => true);
 
-      await watch.handler(mockArgv);
+      await watch.handler({ ...mockArgv });
       const finishPromise = new Promise((resolve, _) => {
         watcherEmitter.on('add', () => {
           expect(bundleMock).toHaveBeenCalledWith(mockArgv.src, `${mockArgv.dist}/${mockArgv.outfileName}`, mockArgv);
@@ -108,7 +107,7 @@ describe('watch', () => {
       const bundleMock = jest.spyOn(build, 'bundle').mockImplementation();
       jest.spyOn(fsUtils, 'validateFilePath').mockImplementation(() => true);
 
-      await watch.handler(mockArgv);
+      await watch.handler({ ...mockArgv });
       const finishPromise = new Promise((resolve, _) => {
         watcherEmitter.on('unlink', () => {
           expect(bundleMock).not.toHaveBeenCalled();
@@ -128,7 +127,7 @@ describe('watch', () => {
       const bundleMock = jest.spyOn(build, 'bundle').mockImplementation();
       jest.spyOn(fsUtils, 'validateFilePath').mockImplementation(() => true);
 
-      await watch.handler(mockArgv);
+      await watch.handler({ ...mockArgv });
       const finishPromise = new Promise((resolve, _) => {
         watcherEmitter.on('error', () => {
           expect(bundleMock).not.toHaveBeenCalled();
@@ -140,6 +139,5 @@ describe('watch', () => {
       await finishPromise;
       expect(global.console.log).toHaveBeenCalledTimes(1);
     });
-
   });
 });
