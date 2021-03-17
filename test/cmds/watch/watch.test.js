@@ -9,10 +9,16 @@ describe('watch', () => {
   describe('Watch a directory and its subdirectories for changes, and build when files are added or changed.', () => {
     let watcherEmitter;
 
-    const mockArgv = {
-      src: 'index.js',
-      dist: 'dist',
-      outfileName: 'bundle.js',
+    const mockSrc = 'index.js';
+    const mockDist = 'dist';
+    const mockOutfileName = 'bundle.js';
+
+    const getMockArgv = () => {
+      return {
+        src: mockSrc,
+        dist: mockDist,
+        outfileName: mockOutfileName,
+      };
     };
 
     beforeEach(() => {
@@ -32,22 +38,32 @@ describe('watch', () => {
     });
 
     it('successfully processes arguments from yargs', async () => {
-      const chokidarMock = jest.spyOn(chokidar, 'watch').mockImplementation(() => {
-        watcherEmitter = new EventEmitter();
-        watcherEmitter.add = () => undefined;
-        jest.spyOn(watcherEmitter, 'on');
-        jest.spyOn(watcherEmitter, 'add');
-        return watcherEmitter;
-      });
+      const chokidarMock = jest
+        .spyOn(chokidar, 'watch')
+        .mockImplementation(() => {
+          watcherEmitter = new EventEmitter();
+          watcherEmitter.add = () => undefined;
+          jest.spyOn(watcherEmitter, 'on');
+          jest.spyOn(watcherEmitter, 'add');
+          return watcherEmitter;
+        });
       jest.spyOn(console, 'log').mockImplementation();
-      const validateDirPathMock = jest.spyOn(fsUtils, 'validateDirPath').mockImplementation(() => true);
-      const validateFilePathMock = jest.spyOn(fsUtils, 'validateFilePath').mockImplementation(() => true);
-      const validateOutfileNameMock = jest.spyOn(fsUtils, 'validateOutfileName').mockImplementation(() => true);
-      jest.spyOn(fsUtils, 'getOutfilePath').mockImplementation(() => 'dist/bundle.js');
-      await watch.handler({ ...mockArgv });
-      expect(validateDirPathMock).toHaveBeenCalledWith(mockArgv.dist, true);
-      expect(validateFilePathMock).toHaveBeenCalledWith(mockArgv.src);
-      expect(validateOutfileNameMock).toHaveBeenCalledWith(mockArgv.outfileName);
+      const validateDirPathMock = jest
+        .spyOn(fsUtils, 'validateDirPath')
+        .mockImplementation(() => true);
+      const validateFilePathMock = jest
+        .spyOn(fsUtils, 'validateFilePath')
+        .mockImplementation(() => true);
+      const validateOutfileNameMock = jest
+        .spyOn(fsUtils, 'validateOutfileName')
+        .mockImplementation(() => true);
+      jest
+        .spyOn(fsUtils, 'getOutfilePath')
+        .mockImplementation(() => 'dist/bundle.js');
+      await watch.handler(getMockArgv());
+      expect(validateDirPathMock).toHaveBeenCalledWith(mockDist, true);
+      expect(validateFilePathMock).toHaveBeenCalledWith(mockSrc);
+      expect(validateOutfileNameMock).toHaveBeenCalledWith(mockOutfileName);
       expect(chokidarMock.mock.calls[0][0]).toBe('.');
     });
 
@@ -56,10 +72,14 @@ describe('watch', () => {
       const bundleMock = jest.spyOn(build, 'bundle').mockImplementation();
       jest.spyOn(fsUtils, 'validateFilePath').mockImplementation(() => true);
 
-      await watch.handler({ ...mockArgv });
+      await watch.handler(getMockArgv());
       const finishPromise = new Promise((resolve, _) => {
         watcherEmitter.on('change', () => {
-          expect(bundleMock).toHaveBeenCalledWith(mockArgv.src, `${mockArgv.dist}/${mockArgv.outfileName}`, mockArgv);
+          expect(bundleMock).toHaveBeenCalledWith(
+            mockSrc,
+            `${mockDist}/${mockOutfileName}`,
+            getMockArgv(),
+          );
           resolve();
         });
       });
@@ -73,10 +93,14 @@ describe('watch', () => {
       const bundleMock = jest.spyOn(build, 'bundle').mockImplementation();
       jest.spyOn(fsUtils, 'validateFilePath').mockImplementation(() => true);
 
-      await watch.handler({ ...mockArgv });
+      await watch.handler(getMockArgv());
       const finishPromise = new Promise((resolve, _) => {
         watcherEmitter.on('ready', () => {
-          expect(bundleMock).toHaveBeenCalledWith(mockArgv.src, `${mockArgv.dist}/${mockArgv.outfileName}`, mockArgv);
+          expect(bundleMock).toHaveBeenCalledWith(
+            mockSrc,
+            `${mockDist}/${mockOutfileName}`,
+            getMockArgv(),
+          );
           resolve();
         });
       });
@@ -90,10 +114,14 @@ describe('watch', () => {
       const bundleMock = jest.spyOn(build, 'bundle').mockImplementation();
       jest.spyOn(fsUtils, 'validateFilePath').mockImplementation(() => true);
 
-      await watch.handler({ ...mockArgv });
+      await watch.handler(getMockArgv());
       const finishPromise = new Promise((resolve, _) => {
         watcherEmitter.on('add', () => {
-          expect(bundleMock).toHaveBeenCalledWith(mockArgv.src, `${mockArgv.dist}/${mockArgv.outfileName}`, mockArgv);
+          expect(bundleMock).toHaveBeenCalledWith(
+            mockSrc,
+            `${mockDist}/${mockOutfileName}`,
+            getMockArgv(),
+          );
           resolve();
         });
       });
@@ -107,7 +135,7 @@ describe('watch', () => {
       const bundleMock = jest.spyOn(build, 'bundle').mockImplementation();
       jest.spyOn(fsUtils, 'validateFilePath').mockImplementation(() => true);
 
-      await watch.handler({ ...mockArgv });
+      await watch.handler(getMockArgv());
       const finishPromise = new Promise((resolve, _) => {
         watcherEmitter.on('unlink', () => {
           expect(bundleMock).not.toHaveBeenCalled();
@@ -123,11 +151,13 @@ describe('watch', () => {
       const mockError = new Error('error message');
       mockError.message = 'this is a message';
       jest.spyOn(console, 'log').mockImplementation();
-      const logErrorMock = jest.spyOn(miscUtils, 'logError').mockImplementation();
+      const logErrorMock = jest
+        .spyOn(miscUtils, 'logError')
+        .mockImplementation();
       const bundleMock = jest.spyOn(build, 'bundle').mockImplementation();
       jest.spyOn(fsUtils, 'validateFilePath').mockImplementation(() => true);
 
-      await watch.handler({ ...mockArgv });
+      await watch.handler(getMockArgv());
       const finishPromise = new Promise((resolve, _) => {
         watcherEmitter.on('error', () => {
           expect(bundleMock).not.toHaveBeenCalled();
