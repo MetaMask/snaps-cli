@@ -98,18 +98,21 @@ describe('initUtils', () => {
       jest.restoreAllMocks();
     });
 
-    const mockArgv = {
-      dist: 'dist',
-      outfileName: 'bundle.js',
-      port: 8081,
+    const getMockArgv = () => {
+      return {
+        dist: 'dist',
+        outfileName: 'bundle.js',
+        port: 8081,
+      };
     };
 
     it('applies default web3wallet values if user input is \'y\'', async () => {
       const mkdirMock = fs.promises.mkdir.mockImplementation();
       const promptMock = jest.spyOn(readlineUtils, 'prompt').mockImplementation(() => 'y');
       jest.spyOn(console, 'log').mockImplementation();
+      const mockArgv = getMockArgv();
 
-      await buildWeb3Wallet(mockArgv);
+      await buildWeb3Wallet({ ...mockArgv });
       expect(promptMock).toHaveBeenCalledTimes(1);
       expect(mkdirMock).toHaveBeenCalledTimes(1);
       expect(global.console.log).toHaveBeenCalledTimes(1);
@@ -127,8 +130,9 @@ describe('initUtils', () => {
       jest.spyOn(process, 'exit').mockImplementationOnce(() => {
         throw new Error('error message');
       });
+      const mockArgv = getMockArgv();
 
-      await expect(buildWeb3Wallet(mockArgv)).rejects.toThrow(new Error('error message'));
+      await expect(buildWeb3Wallet({ ...mockArgv })).rejects.toThrow(new Error('error message'));
       expect(promptMock).toHaveBeenCalledTimes(1);
       expect(global.console.log).toHaveBeenCalledTimes(1);
       expect(errorMock).toHaveBeenCalledTimes(2);
@@ -136,6 +140,7 @@ describe('initUtils', () => {
     });
 
     it('prompts user for values', async () => {
+      const mockArgv = getMockArgv();
       const expectedMockWallet = [
         {
           bundle: {
@@ -157,7 +162,7 @@ describe('initUtils', () => {
         .mockImplementationOnce(() => 'confirm customPrompt wallet_manageIdentities');
       const mkdirMock = jest.spyOn(fs.promises, 'mkdir').mockImplementation();
 
-      expect(await buildWeb3Wallet(mockArgv)).toStrictEqual(expectedMockWallet);
+      expect(await buildWeb3Wallet({ ...mockArgv })).toStrictEqual(expectedMockWallet);
       expect(promptMock).toHaveBeenCalledTimes(4);
       expect(mkdirMock).toHaveBeenCalledTimes(1);
     });
@@ -177,8 +182,9 @@ describe('initUtils', () => {
         })
         .mockImplementationOnce(() => Promise.resolve());
       const errorMock = jest.spyOn(miscUtils, 'logError').mockImplementation();
+      const mockArgv = getMockArgv();
 
-      await buildWeb3Wallet(mockArgv);
+      await buildWeb3Wallet({ ...mockArgv });
       expect(promptMock).toHaveBeenCalledTimes(7);
       expect(mkdirMock).toHaveBeenCalledTimes(2);
       expect(errorMock).toHaveBeenCalledTimes(3);
