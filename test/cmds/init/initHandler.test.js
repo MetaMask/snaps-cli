@@ -28,14 +28,6 @@ describe('initialize', () => {
       jest.restoreAllMocks();
     });
 
-    // const getMockArgv = () => {
-    //   return {
-    //     src: mockSrc,
-    //     dist: mockDist,
-    //     outfileName: mockOutfileName,
-    //   };
-    // };
-
     const getMockPackage = () => {
       return {
         main: 'index.js',
