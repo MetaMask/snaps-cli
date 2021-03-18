@@ -16,7 +16,7 @@ describe('init', () => {
       const buildMock = jest.spyOn(buildModule, 'build').mockImplementation();
       jest.spyOn(console, 'log').mockImplementation();
 
-      await init.handler(mockArgv);
+      await init.handler({ ...mockArgv });
       expect(initHandlerMock).toHaveBeenCalledWith(mockArgv);
       expect(buildMock).toHaveBeenCalledWith({ foo: 'bar', manifest: false, eval: true });
       expect(global.console.log).toHaveBeenCalledTimes(2);
