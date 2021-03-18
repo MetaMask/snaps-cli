@@ -36,7 +36,7 @@ describe('initUtils', () => {
       expect(global.console.log).toHaveBeenCalledTimes(2);
     });
 
-    it('throws error in catch block', async () => {
+    it('throws error if unable to parse packagejson', async () => {
       const existsSyncMock = jest.spyOn(fs, 'existsSync').mockImplementation(() => true);
       const readFileMock = jest.spyOn(fs.promises, 'readFile').mockImplementationOnce();
       const parseMock = jest.spyOn(JSON, 'parse').mockImplementation(() => {
@@ -117,7 +117,7 @@ describe('initUtils', () => {
 
     it('throws error if fails to make directory and apply default values', async () => {
       fs.promises.mkdir.mockImplementation(() => {
-        const err = new Error('file already exists');
+        const err = new Error('an error message that is not `file already exists`');
         err.code = 'notEEXIST';
         throw err;
       });
@@ -173,7 +173,7 @@ describe('initUtils', () => {
         .mockImplementationOnce(() => 'confirm customPrompt wallet_manageIdentities');
       const mkdirMock = jest.spyOn(fs.promises, 'mkdir')
         .mockImplementationOnce(() => {
-          throw new Error('process exited');
+          throw new Error('error message');
         })
         .mockImplementationOnce(() => Promise.resolve());
       const errorMock = jest.spyOn(miscUtils, 'logError').mockImplementation();
