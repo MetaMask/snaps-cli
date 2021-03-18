@@ -60,16 +60,16 @@ export function postProcess(bundleString: string | null, options: Option): strin
   // // .import( => ["import"](
   // processedString = processedString.replace(/\.import\(/gu, '["import"](');
 
-  // // stuff.eval(otherStuff) => (1, stuff.eval)(otherStuff)
-  // processedString = processedString.replace(
-  //   /((?:\b[\w\d]*[\])]?\.)+eval)(\([^)]*\))/gu,
-  //   '(1, $1)$2',
-  // );
+  // stuff.eval(otherStuff) => (1, stuff.eval)(otherStuff)
+  processedString = processedString.replace(
+    /((?:\b[\w\d]*[\])]?\.)+eval)(\([^)]*\))/gu,
+    '(1, $1)$2',
+  );
 
-  // // if we don't do the above, the below causes syntax errors if it encounters
-  // // things of the form: "something.eval(stuff)"
-  // // eval(stuff) => (1, eval)(stuff)
-  // processedString = processedString.replace(/(\b)(eval)(\([^)]*\))/gu, '$1(1, $2)$3');
+  // if we don't do the above, the below causes syntax errors if it encounters
+  // things of the form: "something.eval(stuff)"
+  // eval(stuff) => (1, eval)(stuff)
+  processedString = processedString.replace(/(\b)(eval)(\([^)]*\))/gu, '$1(1, $2)$3');
 
   // // SES interprets syntactically valid JavaScript '<!--' and '-->' as illegal
   // // HTML comment syntax.
