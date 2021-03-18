@@ -213,6 +213,7 @@ describe('misc', () => {
   });
 
   describe('writeError', () => {
+
     it('calls console error once if filesystem unlink is successful', async () => {
       setVerboseErrors(false);
       setIsWatching(false);
@@ -227,6 +228,7 @@ describe('misc', () => {
       expect(errorMock).toHaveBeenNthCalledWith(1, 'foo bar');
       expect(errorMock).toHaveBeenCalledTimes(1);
     });
+
     it('calls console error twice if filesystem unlink fails', async () => {
       setVerboseErrors(false);
       setIsWatching(false);
