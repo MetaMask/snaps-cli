@@ -28,7 +28,7 @@ export function createBundleStream(dest: string): NodeJS.WritableStream {
    * @param options - post process options
    * @param options.stripComments
    */
-export async function closeBundleStream(stream: NodeJS.WritableStream, bundleString: string | null, options: Option): Promise<void> {
+export function closeBundleStream(stream: NodeJS.WritableStream, bundleString: string | null, options: Option) {
   stream.end(postProcess(bundleString, options) as string);
 }
 

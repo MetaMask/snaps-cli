@@ -40,7 +40,7 @@ export async function canCloseStream({ bundleError, bundleBuffer, bundleStream, 
   }
 
   try {
-    await closeBundleStream(bundleStream, bundleBuffer ? bundleBuffer.toString() : null, { stripComments: argv.stripComments });
+    closeBundleStream(bundleStream, bundleBuffer ? bundleBuffer.toString() : null, { stripComments: argv.stripComments });
     if (bundleBuffer) {
       console.log(`Build success: '${src}' bundled as '${dest}'!`);
     }
