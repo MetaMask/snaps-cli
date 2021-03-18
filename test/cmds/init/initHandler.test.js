@@ -28,38 +28,59 @@ describe('initialize', () => {
       jest.restoreAllMocks();
     });
 
-    const mockPackage = {
-      main: 'index.js',
+    // const getMockArgv = () => {
+    //   return {
+    //     src: mockSrc,
+    //     dist: mockDist,
+    //     outfileName: mockOutfileName,
+    //   };
+    // };
+
+    const getMockPackage = () => {
+      return {
+        main: 'index.js',
+      };
     };
-    const mockPackageAndWallet = {
-      main: 'index.js',
-      web3Wallet: {
-        bundle: {},
-        initialPermissions: {},
-      },
+
+    const getMockPackageAndWallet = () => {
+      return {
+        main: 'index.js',
+        web3Wallet: {
+          bundle: {},
+          initialPermissions: {},
+        },
+      };
     };
-    const mockArgv = { foo: 'bar' };
-    const expectedReturnValue = {
-      foo: 'bar',
-      src: 'index.js',
-      dist: 'dist',
-      outfileName: 'bundle.js',
-      port: 8081,
+
+    const getMockArgv = () => {
+      return { foo: 'bar' };
     };
+
+    const getExpectedReturnValue = () => {
+      return {
+        foo: 'bar',
+        src: 'index.js',
+        dist: 'dist',
+        outfileName: 'bundle.js',
+        port: 8081,
+      };
+    };
+
     const newArgs = { dist: 'dist', outfileName: 'bundle.js', port: 8081, src: 'index.js' };
     const CONFIG_PATH = CONFIG_PATHS[0];
 
     it('function successfully executes under normal conditions', async () => {
       const fsWriteMock = jest.spyOn(fs, 'writeFile').mockImplementation(() => true);
-      jest.spyOn(initUtils, 'asyncPackageInit').mockImplementation(() => mockPackage);
+      jest.spyOn(initUtils, 'asyncPackageInit').mockImplementation(() => getMockPackage());
       const closePromptMock = jest.spyOn(readlineUtils, 'closePrompt')
         .mockImplementation();
-      expect(await initHandler(mockArgv)).toStrictEqual(expectedReturnValue);
+      const mockArgv = getMockArgv();
+      expect(await initHandler({ ...mockArgv })).toStrictEqual(getExpectedReturnValue());
       expect(global.console.log).toHaveBeenCalledTimes(6);
       expect(fsWriteMock)
-        .toHaveBeenNthCalledWith(1, 'package.json', `${JSON.stringify(mockPackageAndWallet, null, 2)}\n`);
+        .toHaveBeenNthCalledWith(1, 'package.json', `${JSON.stringify(getMockPackageAndWallet(), null, 2)}\n`);
       expect(fsWriteMock)
-        .toHaveBeenNthCalledWith(2, mockPackage.main, template.js);
+        .toHaveBeenNthCalledWith(2, getMockPackage().main, template.js);
       expect(fsWriteMock).toHaveBeenNthCalledWith(3, 'index.html', template.html.toString()
         .replace(/_PORT_/gu, newArgs.port.toString() || mockArgv.port.toString()));
       expect(fsWriteMock).toHaveBeenNthCalledWith(4, CONFIG_PATH, JSON.stringify(newArgs, null, 2));
@@ -75,8 +96,9 @@ describe('initialize', () => {
       jest.spyOn(process, 'exit').mockImplementation(() => {
         throw new Error('process exited');
       });
-      jest.spyOn(initUtils, 'asyncPackageInit').mockImplementation(() => mockPackage);
-      await expect(initHandler(mockArgv))
+      const mockArgv = getMockArgv();
+      jest.spyOn(initUtils, 'asyncPackageInit').mockImplementation(() => getMockPackage());
+      await expect(initHandler({ ...mockArgv }))
         .rejects
         .toThrow('process exited');
       expect(errorMock).toHaveBeenCalledTimes(1);
@@ -95,8 +117,9 @@ describe('initialize', () => {
       jest.spyOn(process, 'exit').mockImplementation(() => {
         throw new Error('process exited');
       });
-      jest.spyOn(initUtils, 'asyncPackageInit').mockImplementation(() => mockPackage);
-      await expect(initHandler(mockArgv))
+      const mockArgv = getMockArgv();
+      jest.spyOn(initUtils, 'asyncPackageInit').mockImplementation(() => getMockPackage());
+      await expect(initHandler({ ...mockArgv }))
         .rejects
         .toThrow('process exited');
       expect(errorMock).toHaveBeenCalledTimes(1);
@@ -116,8 +139,9 @@ describe('initialize', () => {
       jest.spyOn(process, 'exit').mockImplementation(() => {
         throw new Error('process exited');
       });
-      jest.spyOn(initUtils, 'asyncPackageInit').mockImplementation(() => mockPackage);
-      await expect(initHandler(mockArgv))
+      const mockArgv = getMockArgv();
+      jest.spyOn(initUtils, 'asyncPackageInit').mockImplementation(() => getMockPackage());
+      await expect(initHandler({ ...mockArgv }))
         .rejects
         .toThrow('process exited');
       expect(errorMock).toHaveBeenCalledTimes(1);
@@ -135,8 +159,9 @@ describe('initialize', () => {
         .mockResolvedValueOnce('successful write to main')
         .mockResolvedValueOnce('successful write to index')
         .mockRejectedValue();
-      jest.spyOn(initUtils, 'asyncPackageInit').mockImplementation(() => mockPackage);
-      await initHandler(mockArgv);
+      const mockArgv = getMockArgv();
+      jest.spyOn(initUtils, 'asyncPackageInit').mockImplementation(() => getMockPackage());
+      await initHandler({ ...mockArgv });
       expect(errorMock).toHaveBeenCalledTimes(1);
       expect(fsWriteMock).toHaveBeenCalledTimes(4);
     });
@@ -149,10 +174,11 @@ describe('initialize', () => {
         outfileName: 'bundle.js',
         port: 8081,
       };
+      const mockArgv = getMockArgv();
       jest.spyOn(fs, 'writeFile').mockImplementation(() => true);
       jest.spyOn(initUtils, 'asyncPackageInit').mockImplementation(() => mockUndefinedMain);
       jest.spyOn(readlineUtils, 'closePrompt').mockImplementation();
-      expect(await initHandler(mockArgv)).toStrictEqual(expectedReturn);
+      expect(await initHandler({ ...mockArgv })).toStrictEqual(expectedReturn);
     });
   });
 });
