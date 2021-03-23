@@ -90,7 +90,7 @@ export async function buildWeb3Wallet(argv: YargsArgs): Promise<[
       port = parsedPort;
       noValidPort = false;
     } else {
-      logError(`Invalid port '${port}, please retry.`);
+      logError(`Invalid port '${parsedPort}', please retry.`);
     }
   }
 
