@@ -57,9 +57,6 @@ export function postProcess(bundleString: string | null, options: Option): strin
     processedString = stripComments(processedString);
   }
 
-  // // .import( => ["import"](
-  // processedString = processedString.replace(/\.import\(/gu, '["import"](');
-
   // stuff.eval(otherStuff) => (1, stuff.eval)(otherStuff)
   processedString = processedString.replace(
     /((?:\b[\w\d]*[\])]?\.)+eval)(\([^)]*\))/gu,
@@ -71,28 +68,22 @@ export function postProcess(bundleString: string | null, options: Option): strin
   // eval(stuff) => (1, eval)(stuff)
   processedString = processedString.replace(/(\b)(eval)(\([^)]*\))/gu, '$1(1, $2)$3');
 
-  // // SES interprets syntactically valid JavaScript '<!--' and '-->' as illegal
-  // // HTML comment syntax.
-  // // '<!--' => '<! --' && '-->' => '-- >'
-  // processedString = processedString.replace(/<!--/gu, '< !--');
-  // processedString = processedString.replace(/-->/gu, '-- >');
+  // Browserify provides the Buffer global as an argument to modules that use
+  // it, but this does not work in SES. Since we pass in Buffer as an endowment,
+  // we can simply remove the argument.
+  processedString = processedString.replace(/^\(function \(Buffer\)\{$/gmu, '(function (){');
 
-  // // Browserify provides the Buffer global as an argument to modules that use
-  // // it, but this does not work in SES. Since we pass in Buffer as an endowment,
-  // // we can simply remove the argument.
-  // processedString = processedString.replace(/^\(function \(Buffer\)\{$/gmu, '(function (){');
+  if (processedString.length === 0) {
+    throw new Error(
+      `Bundled code is empty after postprocessing.`,
+    );
+  }
 
-  // if (processedString.length === 0) {
-  //   throw new Error(
-  //     `Bundled code is empty after postprocessing.`,
-  //   );
-  // }
-
-  // // handle some cases by declaring missing globals
-  // // Babel regeneratorRuntime
-  // if (processedString.indexOf('regeneratorRuntime') !== -1) {
-  //   processedString = `var regeneratorRuntime;\n${processedString}`;
-  // }
+  // handle some cases by declaring missing globals
+  // Babel regeneratorRuntime
+  if (processedString.indexOf('regeneratorRuntime') !== -1) {
+    processedString = `var regeneratorRuntime;\n${processedString}`;
+  }
 
   return processedString;
 }
