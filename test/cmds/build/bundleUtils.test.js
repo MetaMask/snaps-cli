@@ -1,6 +1,6 @@
 const EventEmitter = require('events');
 const fs = require('fs');
-const { createBundleStream, closeBundleStream } = require('../../../dist/src/cmds/build/bundleUtils');
+const { createBundleStream, closeBundleStream, postProcess } = require('../../../dist/src/cmds/build/bundleUtils');
 const miscUtils = require('../../../dist/src/utils/misc');
 
 jest.mock('fs', () => ({
@@ -73,12 +73,22 @@ describe('bundleUtils', () => {
 
     it('if bundleString is null, closes stream with empty line', async () => {
       const mockWritableStream = fs.createWriteStream();
-      await closeBundleStream(mockWritableStream, null);
+      await closeBundleStream(mockWritableStream, null, false);
       const finishPromise = new Promise((resolve, _reject) => {
         expect(mockWritableStream.end).toHaveBeenCalledWith(null);
         resolve();
       });
       await finishPromise;
+    });
+
+  });
+  describe('postProcess', () => {
+    it('trims the string', async () => {
+      expect(postProcess(' trimMe ', { stripComments: true })).toStrictEqual('trimMe');
+    });
+
+    it('processes options correctly', async () => {
+      expect(postProcess('/* delete me */postProcessMe', { stripComments: true })).toStrictEqual('postProcessMe');
     });
   });
 });
