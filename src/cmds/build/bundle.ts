@@ -12,15 +12,26 @@ import { createBundleStream, closeBundleStream } from './bundleUtils';
  * @param argv.sourceMaps - Whether to output sourcemaps
  * @param argv.stripComments - Whether to remove comments from code
  */
-export function bundle(src: string, dest: string, argv: YargsArgs): Promise<boolean> {
-
+export function bundle(
+  src: string,
+  dest: string,
+  argv: YargsArgs,
+): Promise<boolean> {
   const { sourceMaps: debug } = argv;
 
   return new Promise((resolve, _reject) => {
-
     const bundleStream = createBundleStream(dest);
-    browserify(src, { debug })
-      .bundle(async (bundleError, bundleBuffer: Buffer) => await canCloseStream({ bundleError, bundleBuffer, bundleStream, src, dest, resolve, argv }));
+    browserify(src, { debug }).bundle(
+      async (bundleError, bundleBuffer: Buffer) => await canCloseStream({
+        bundleError,
+        bundleBuffer,
+        bundleStream,
+        src,
+        dest,
+        resolve,
+        argv,
+      }),
+    );
   });
 }
 
@@ -34,13 +45,25 @@ interface CloseStreamArgs {
   argv: YargsArgs;
 }
 
-export async function canCloseStream({ bundleError, bundleBuffer, bundleStream, src, dest, resolve, argv }: CloseStreamArgs) {
+export async function canCloseStream({
+  bundleError,
+  bundleBuffer,
+  bundleStream,
+  src,
+  dest,
+  resolve,
+  argv,
+}: CloseStreamArgs) {
   if (bundleError) {
     await writeError('Build error:', bundleError.message, bundleError);
   }
 
   try {
-    closeBundleStream(bundleStream, bundleBuffer ? bundleBuffer.toString() : null, { stripComments: argv.stripComments });
+    closeBundleStream(
+      bundleStream,
+      bundleBuffer ? bundleBuffer.toString() : null,
+      { stripComments: argv.stripComments },
+    );
     if (bundleBuffer) {
       console.log(`Build success: '${src}' bundled as '${dest}'!`);
     }

@@ -1,6 +1,10 @@
 const EventEmitter = require('events');
 const fs = require('fs');
-const { createBundleStream, closeBundleStream, postProcess } = require('../../../dist/src/cmds/build/bundleUtils');
+const {
+  createBundleStream,
+  closeBundleStream,
+  postProcess,
+} = require('../../../dist/src/cmds/build/bundleUtils');
 const miscUtils = require('../../../dist/src/utils/misc');
 
 jest.mock('fs', () => ({
@@ -8,9 +12,7 @@ jest.mock('fs', () => ({
 }));
 
 describe('bundleUtils', () => {
-
   describe('createBundleStream', () => {
-
     let mockStream;
 
     beforeEach(() => {
@@ -29,7 +31,9 @@ describe('bundleUtils', () => {
     });
 
     it('writes error on error event', async () => {
-      const mockWriteError = jest.spyOn(miscUtils, 'writeError').mockImplementation();
+      const mockWriteError = jest
+        .spyOn(miscUtils, 'writeError')
+        .mockImplementation();
       createBundleStream('foo');
       const finishPromise = new Promise((resolve, _reject) => {
         mockStream.on('error', () => {
@@ -43,7 +47,6 @@ describe('bundleUtils', () => {
   });
 
   describe('closeBundleStream', () => {
-
     let mockStream;
 
     beforeEach(() => {
@@ -80,15 +83,18 @@ describe('bundleUtils', () => {
       });
       await finishPromise;
     });
-
   });
   describe('postProcess', () => {
     it('trims the string', async () => {
-      expect(postProcess(' trimMe ', { stripComments: true })).toStrictEqual('trimMe');
+      expect(postProcess(' trimMe ', { stripComments: true })).toStrictEqual(
+        'trimMe',
+      );
     });
 
     it('processes options correctly', async () => {
-      expect(postProcess('/* delete me */postProcessMe', { stripComments: true })).toStrictEqual('postProcessMe');
+      expect(
+        postProcess('/* delete me */postProcessMe', { stripComments: true }),
+      ).toStrictEqual('postProcessMe');
     });
   });
 });

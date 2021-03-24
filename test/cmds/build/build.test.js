@@ -6,7 +6,6 @@ const fsUtils = require('../../../dist/src/utils/validate-fs');
 
 describe('build', () => {
   describe('build', () => {
-
     afterEach(() => {
       jest.clearAllMocks();
       jest.restoreAllMocks();
@@ -25,16 +24,33 @@ describe('build', () => {
         manifest: true,
       };
       const outfilePath = `${mockArgv.dist}/${mockArgv.outfileName}`;
-      const validateOutfileNameMock = jest.spyOn(fsUtils, 'validateOutfileName').mockImplementation();
-      const validateFilePathMock = jest.spyOn(fsUtils, 'validateFilePath').mockImplementation();
-      const validateDirPathMock = jest.spyOn(fsUtils, 'validateDirPath').mockImplementation();
-      const bundleMock = jest.spyOn(buildBundle, 'bundle').mockImplementation(() => true);
+      const validateOutfileNameMock = jest
+        .spyOn(fsUtils, 'validateOutfileName')
+        .mockImplementation();
+      const validateFilePathMock = jest
+        .spyOn(fsUtils, 'validateFilePath')
+        .mockImplementation();
+      const validateDirPathMock = jest
+        .spyOn(fsUtils, 'validateDirPath')
+        .mockImplementation();
+      const bundleMock = jest
+        .spyOn(buildBundle, 'bundle')
+        .mockImplementation(() => true);
       const evalMock = jest.spyOn(evalModule, 'snapEval').mockImplementation();
-      const manifestMock = jest.spyOn(manifestModule, 'manifest').mockImplementation();
+      const manifestMock = jest
+        .spyOn(manifestModule, 'manifest')
+        .mockImplementation();
 
       await build(mockArgv);
-      expect(bundleMock).toHaveBeenCalledWith(mockArgv.src, outfilePath, mockArgv);
-      expect(evalMock).toHaveBeenCalledWith({ ...mockArgv, bundle: outfilePath });
+      expect(bundleMock).toHaveBeenCalledWith(
+        mockArgv.src,
+        outfilePath,
+        mockArgv,
+      );
+      expect(evalMock).toHaveBeenCalledWith({
+        ...mockArgv,
+        bundle: outfilePath,
+      });
       expect(manifestMock).toHaveBeenCalledWith(mockArgv);
       expect(validateOutfileNameMock).toHaveBeenCalledTimes(1);
       expect(validateFilePathMock).toHaveBeenCalledTimes(1);
@@ -47,15 +63,29 @@ describe('build', () => {
         dist: 'dist',
       };
       const outfilePath = `${mockArgv.dist}/bundle.js`;
-      const validateOutfileNameMock = jest.spyOn(fsUtils, 'validateOutfileName').mockImplementation();
-      const validateFilePathMock = jest.spyOn(fsUtils, 'validateFilePath').mockImplementation();
-      const validateDirPathMock = jest.spyOn(fsUtils, 'validateDirPath').mockImplementation();
-      const bundleMock = jest.spyOn(buildBundle, 'bundle').mockImplementation(() => true);
+      const validateOutfileNameMock = jest
+        .spyOn(fsUtils, 'validateOutfileName')
+        .mockImplementation();
+      const validateFilePathMock = jest
+        .spyOn(fsUtils, 'validateFilePath')
+        .mockImplementation();
+      const validateDirPathMock = jest
+        .spyOn(fsUtils, 'validateDirPath')
+        .mockImplementation();
+      const bundleMock = jest
+        .spyOn(buildBundle, 'bundle')
+        .mockImplementation(() => true);
       const evalMock = jest.spyOn(evalModule, 'snapEval').mockImplementation();
-      const manifestMock = jest.spyOn(manifestModule, 'manifest').mockImplementation();
+      const manifestMock = jest
+        .spyOn(manifestModule, 'manifest')
+        .mockImplementation();
 
       await build(mockArgv);
-      expect(bundleMock).toHaveBeenCalledWith(mockArgv.src, outfilePath, mockArgv);
+      expect(bundleMock).toHaveBeenCalledWith(
+        mockArgv.src,
+        outfilePath,
+        mockArgv,
+      );
       expect(evalMock).not.toHaveBeenCalled();
       expect(manifestMock).not.toHaveBeenCalled();
       expect(validateOutfileNameMock).not.toHaveBeenCalled();
