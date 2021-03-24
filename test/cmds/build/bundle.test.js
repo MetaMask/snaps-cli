@@ -18,6 +18,7 @@ describe('bundle', () => {
     verboseErrors: false,
     isWatching: false,
   };
+
   describe('bundle', () => {
     it('processes yargs properties correctly', async () => {
       const mockArgv = {
@@ -31,6 +32,7 @@ describe('bundle', () => {
       const createStreamMock = jest
         .spyOn(bundleUtils, 'createBundleStream')
         .mockImplementation();
+
       bundle('src', 'dest', mockArgv);
       expect(createStreamMock).toHaveBeenCalled();
       expect(checkBrowserify).toHaveBeenCalledWith('src', { debug: true });
@@ -56,6 +58,7 @@ describe('bundle', () => {
         .mockImplementation();
       jest.spyOn(miscUtils, 'writeError').mockImplementation();
       const logMock = jest.spyOn(console, 'log').mockImplementation();
+
       await canCloseStream({
         bundleError: false,
         bundleStream: {},
@@ -79,6 +82,7 @@ describe('bundle', () => {
         .mockImplementation(() => {
           throw new Error('error message');
         });
+
       await expect(
         canCloseStream({
           bundleError: false,

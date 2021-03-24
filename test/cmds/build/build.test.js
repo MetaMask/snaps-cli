@@ -23,6 +23,7 @@ describe('build', () => {
         eval: true,
         manifest: true,
       };
+
       const outfilePath = `${mockArgv.dist}/${mockArgv.outfileName}`;
       const validateOutfileNameMock = jest
         .spyOn(fsUtils, 'validateOutfileName')
@@ -101,6 +102,7 @@ describe('build', () => {
         eval: true,
         manifest: true,
       };
+
       jest.spyOn(fsUtils, 'validateOutfileName').mockImplementation();
       jest.spyOn(fsUtils, 'validateFilePath').mockImplementation();
       jest.spyOn(fsUtils, 'validateDirPath').mockImplementation();

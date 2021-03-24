@@ -67,6 +67,7 @@ describe('bundleUtils', () => {
     it('closes stream with bundleString', async () => {
       const mockWritableStream = fs.createWriteStream();
       await closeBundleStream(mockWritableStream, 'foo', false);
+
       const finishPromise = new Promise((resolve, _reject) => {
         expect(mockWritableStream.end).toHaveBeenCalledWith('foo');
         resolve();
@@ -77,6 +78,7 @@ describe('bundleUtils', () => {
     it('if bundleString is null, closes stream with empty line', async () => {
       const mockWritableStream = fs.createWriteStream();
       await closeBundleStream(mockWritableStream, null, false);
+
       const finishPromise = new Promise((resolve, _reject) => {
         expect(mockWritableStream.end).toHaveBeenCalledWith(null);
         resolve();
@@ -84,6 +86,7 @@ describe('bundleUtils', () => {
       await finishPromise;
     });
   });
+
   describe('postProcess', () => {
     it('trims the string', async () => {
       expect(postProcess(' trimMe ', { stripComments: true })).toStrictEqual(
