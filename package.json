@@ -19,10 +19,10 @@
     "test:nobuild": "jest",
     "dev:gen-init-template": "node ./dist/development/generateInitTemplate.js",
     "dev:build-examples": "node ./dist/development/buildExamples.js",
-    "lint:tsjs": "eslint . --ext js,ts",
-    "lint:json": "prettier *.json",
-    "lint": "yarn lint:tsjs && yarn lint:json",
-    "lint:fix": "yarn lint:tsjs --fix && yarn lint:json --write"
+    "lint:eslint": "eslint . --ext js,ts",
+    "lint:json": "prettier **/*.json --ignore-path .gitignore",
+    "lint": "yarn lint:eslint && yarn lint:json --check",
+    "lint:fix": "yarn lint:eslint --fix && yarn lint:json --write"
   },
   "author": "Erik Marks <rekmarks@protonmail.com>",
   "contributors": [
