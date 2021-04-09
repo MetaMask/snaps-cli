@@ -79,14 +79,19 @@ export function logWarning(msg: string, error?: Error): void {
 }
 
 /**
-   * Logs an error, attempts to unlink the destination file, and exits.
-   *
-   * @param prefix - The message prefix
-   * @param msg - The error message
-   * @param err - The original error
-   * @param destFilePath - The output file path
-   */
-export async function writeError(prefix: string, msg: string, err: Error, destFilePath?: string): Promise<void> {
+ * Logs an error, attempts to unlink the destination file, and exits.
+ *
+ * @param prefix - The message prefix
+ * @param msg - The error message
+ * @param err - The original error
+ * @param destFilePath - The output file path
+ */
+export async function writeError(
+  prefix: string,
+  msg: string,
+  err: Error,
+  destFilePath?: string,
+): Promise<void> {
   let processedPrefix = prefix;
   if (!prefix.endsWith(' ')) {
     processedPrefix += ' ';
