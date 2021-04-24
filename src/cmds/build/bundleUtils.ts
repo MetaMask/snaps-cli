@@ -51,7 +51,7 @@ export function closeBundleStream(
  */
 export function postProcess(
   bundleString: string | null,
-  options: Option,
+  options: Partial<Option> = {},
 ): string | null {
   if (typeof bundleString !== 'string') {
     return null;

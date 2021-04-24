@@ -88,16 +88,32 @@ describe('bundleUtils', () => {
   });
 
   describe('postProcess', () => {
-    it('trims the string', async () => {
-      expect(postProcess(' trimMe ', { stripComments: true })).toStrictEqual(
+    it('trims the string', () => {
+      expect(postProcess(' trimMe ')).toStrictEqual(
         'trimMe',
       );
     });
 
-    it('processes options correctly', async () => {
+    it('strips comments if configured to do so', () => {
       expect(
         postProcess('/* delete me */postProcessMe', { stripComments: true }),
       ).toStrictEqual('postProcessMe');
+    });
+
+    it('ignores comments if configured to do so', () => {
+      expect(
+        postProcess('/* leave me alone */postProcessMe'),
+      ).toStrictEqual('/* leave me alone */postProcessMe');
+    });
+
+    it('applies regeneratorRuntime hack', () => {
+      expect(postProcess('(regeneratorRuntime)')).toStrictEqual(
+        'var regeneratorRuntime;\n(regeneratorRuntime)',
+      );
+    });
+
+    it('throws an error if the postprocessed string is empty', () => {
+      expect(() => postProcess(' ')).toThrow(/^Bundled code is empty/u);
     });
   });
 });
