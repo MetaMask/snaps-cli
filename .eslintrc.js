@@ -3,7 +3,7 @@ module.exports = {
 
   overrides: [
     {
-      files: ['src/**/*.ts', 'development/*.ts'],
+      files: ['**/*.ts'],
       extends: ['@metamask/eslint-config-typescript'],
       env: {
         node: true,
@@ -11,6 +11,10 @@ module.exports = {
       globals: {
         snaps: true,
       },
+    },
+
+    {
+      files: ['src/**/*', 'development/**/*'],
       rules: {
         'node/no-process-exit': 'off',
       },
