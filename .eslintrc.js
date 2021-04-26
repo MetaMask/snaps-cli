@@ -1,9 +1,5 @@
 module.exports = {
-  extends: [
-    '@metamask/eslint-config',
-    '@metamask/eslint-config-nodejs',
-    '@metamask/eslint-config-jest',
-  ],
+  extends: ['@metamask/eslint-config', '@metamask/eslint-config-nodejs'],
 
   overrides: [
     {
@@ -63,6 +59,7 @@ module.exports = {
 
     {
       files: ['test/**/*.js'],
+      extends: ['@metamask/eslint-config-jest'],
       rules: {
         'node/no-callback-literal': 'off',
       },
