@@ -30,7 +30,7 @@ describe('readline', () => {
       const promptResult = await prompt({
         question: 'question',
       });
-      expect(createInterfaceSpy).toHaveBeenCalled();
+      expect(createInterfaceSpy).toHaveBeenCalledTimes(1);
       expect(promptResult).toStrictEqual('answer');
     });
 
