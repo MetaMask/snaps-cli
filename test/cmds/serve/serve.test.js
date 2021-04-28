@@ -77,7 +77,6 @@ describe('serve', () => {
         mockServer = new EventEmitter();
         mockServer.listen = () => undefined;
         jest.spyOn(mockServer, 'on');
-        // jest.spyOn(mockServer, 'listen');
         return mockServer;
       });
 
