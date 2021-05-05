@@ -1,9 +1,5 @@
-const miscUtils = require('../../../dist/src/utils/misc');
-const {
-  logServerListening,
-  logRequest,
-  logServerError,
-} = require('../../../dist/src/cmds/serve/serveUtils');
+import * as miscUtils from '../../utils/misc';
+import { logServerListening, logRequest, logServerError } from './serveUtils';
 
 describe('serve utility functions', () => {
   describe('logServerListening', () => {
@@ -32,7 +28,7 @@ describe('serve utility functions', () => {
     const port = 8000;
 
     it('logs already in use error to console', async () => {
-      const mockError = new Error('error message');
+      const mockError: Error & { code?: string } = new Error('error message');
       mockError.code = 'EADDRINUSE';
       jest.spyOn(miscUtils, 'logError').mockImplementation();
       logServerError(mockError, port);
@@ -40,7 +36,9 @@ describe('serve utility functions', () => {
     });
 
     it('logs server error to console', async () => {
-      const mockBadError = new Error('error message');
+      const mockBadError: Error & { code?: string } = new Error(
+        'error message',
+      );
       mockBadError.code = 'fake';
       jest.spyOn(miscUtils, 'logError').mockImplementation();
       logServerError(mockBadError, port);

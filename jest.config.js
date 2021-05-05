@@ -10,6 +10,7 @@ module.exports = {
     },
   },
   moduleFileExtensions: ['ts', 'js', 'json'],
+  preset: 'ts-jest',
   // "resetMocks" resets all mocks, including mocked modules, to jest.fn(),
   // between each test case.
   resetMocks: true,
@@ -18,6 +19,6 @@ module.exports = {
   // modules.
   restoreMocks: true,
   testEnvironment: 'node',
-  testRegex: ['\\.test\\.js$'],
+  testRegex: ['\\.test\\.(ts|js)$'],
   testTimeout: 2500,
 };
