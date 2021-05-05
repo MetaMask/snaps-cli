@@ -51,10 +51,6 @@ describe('manifest', () => {
       jest.spyOn(console, 'error').mockImplementation();
     });
 
-    afterEach(() => {
-      jest.restoreAllMocks();
-    });
-
     it('throws an error if there is no dist property', async () => {
       const noDistArgv = {};
       await expect(manifest(noDistArgv)).rejects.toThrow(
@@ -288,10 +284,6 @@ describe('manifest', () => {
     describe('attempt to set missing/erroneous properties if commanded', () => {
       beforeEach(() => {
         jest.spyOn(JSON, 'parse').mockImplementation((value) => value);
-      });
-
-      afterEach(() => {
-        jest.restoreAllMocks();
       });
 
       const populateArgv = {

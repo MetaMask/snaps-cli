@@ -118,10 +118,6 @@ describe('misc', () => {
     global.snaps.isWatching = bool;
   };
 
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-
   afterAll(() => {
     delete global.snaps;
   });

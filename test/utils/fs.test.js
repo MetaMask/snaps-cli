@@ -75,7 +75,6 @@ describe('file system checks', () => {
 
   describe('isDirectory', () => {
     afterEach(() => {
-      jest.restoreAllMocks();
       delete global.snaps;
     });
 

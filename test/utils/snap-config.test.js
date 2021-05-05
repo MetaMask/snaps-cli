@@ -44,17 +44,11 @@ const getYargsInstance = ({ keys = {}, aliases = {} } = {}) => {
 jest.mock('fs');
 
 describe('snap-config', () => {
-  beforeAll(() => {
+  beforeEach(() => {
     jest.spyOn(console, 'error').mockImplementation(() => undefined);
     jest.spyOn(process, 'exit').mockImplementation(() => undefined);
     jest.spyOn(JSON, 'parse').mockImplementation((value) => value);
-  });
 
-  afterAll(() => {
-    jest.restoreAllMocks();
-  });
-
-  beforeEach(() => {
     global.snaps = {
       verboseErrors: false,
       suppressWarnings: false,

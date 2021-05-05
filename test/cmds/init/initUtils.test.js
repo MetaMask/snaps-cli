@@ -21,10 +21,6 @@ jest.mock('init-package-json');
 
 describe('initUtils', () => {
   describe('asyncPackageInit', () => {
-    afterEach(() => {
-      jest.restoreAllMocks();
-    });
-
     it('console logs if successful', async () => {
       const existsSyncMock = jest
         .spyOn(fs, 'existsSync')
@@ -115,10 +111,6 @@ describe('initUtils', () => {
   });
 
   describe('buildWeb3Wallet', () => {
-    afterEach(() => {
-      jest.restoreAllMocks();
-    });
-
     const getMockArgv = () => {
       return {
         dist: 'dist',
@@ -322,10 +314,6 @@ describe('initUtils', () => {
   });
 
   describe('validateEmptyDir', () => {
-    afterEach(() => {
-      jest.restoreAllMocks();
-    });
-
     it('warns user if files may be overwritten', async () => {
       const readdirMock = jest
         .spyOn(fs.promises, 'readdir')

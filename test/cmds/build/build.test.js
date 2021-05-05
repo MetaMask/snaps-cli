@@ -6,10 +6,6 @@ const fsUtils = require('../../../dist/src/utils/validate-fs');
 
 describe('build', () => {
   describe('build', () => {
-    afterEach(() => {
-      jest.restoreAllMocks();
-    });
-
     global.snaps = {
       verboseErrors: false,
     };

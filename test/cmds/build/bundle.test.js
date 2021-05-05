@@ -5,10 +5,6 @@ const bundleUtils = require('../../../dist/src/cmds/build/bundleUtils');
 jest.mock('browserify');
 
 describe('bundle', () => {
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-
   global.snaps = {
     verboseErrors: false,
     isWatching: false,

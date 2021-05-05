@@ -6,10 +6,6 @@ jest.mock('readline', () => {
 });
 
 describe('readline', () => {
-  afterAll(() => {
-    jest.restoreAllMocks();
-  });
-
   describe('prompt', () => {
     let questionMock;
     const closeMock = jest.fn();

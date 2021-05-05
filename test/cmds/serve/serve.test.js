@@ -31,10 +31,6 @@ describe('serve', () => {
       jest.spyOn(fsUtils, 'validateDirPath').mockImplementation(() => true);
     });
 
-    afterEach(() => {
-      jest.restoreAllMocks();
-    });
-
     it('server handles "close" event correctly', async () => {
       jest.spyOn(console, 'log').mockImplementation();
 

@@ -7,10 +7,6 @@ const {
 
 describe('serve utility functions', () => {
   describe('logServerListening', () => {
-    afterEach(() => {
-      jest.restoreAllMocks();
-    });
-
     const portInput = 8000;
 
     it('logs to console', async () => {
@@ -21,10 +17,6 @@ describe('serve utility functions', () => {
   });
 
   describe('logRequest', () => {
-    afterEach(() => {
-      jest.restoreAllMocks();
-    });
-
     const requestInput = {
       url: 'http://localhost:8000',
     };
@@ -37,10 +29,6 @@ describe('serve utility functions', () => {
   });
 
   describe('logServerError', () => {
-    afterEach(() => {
-      jest.restoreAllMocks();
-    });
-
     const port = 8000;
 
     it('logs already in use error to console', async () => {

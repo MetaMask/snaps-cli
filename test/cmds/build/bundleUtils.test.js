@@ -25,10 +25,6 @@ describe('bundleUtils', () => {
       });
     });
 
-    afterEach(() => {
-      jest.restoreAllMocks();
-    });
-
     it('writes error on error event', async () => {
       const mockWriteError = jest
         .spyOn(miscUtils, 'writeError')
@@ -53,10 +49,6 @@ describe('bundleUtils', () => {
       mockStream.end = () => undefined;
       jest.spyOn(mockStream, 'on');
       jest.spyOn(mockStream, 'end');
-    });
-
-    afterEach(() => {
-      jest.restoreAllMocks();
     });
 
     it('writes to console error if there is a bundle Error', async () => {

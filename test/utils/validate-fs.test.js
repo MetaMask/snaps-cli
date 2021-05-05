@@ -7,10 +7,6 @@ const {
 const filesystem = require('../../dist/src/utils/fs');
 
 describe('validate', () => {
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-
   describe('getOutfilePath', () => {
     it('gets the complete out file path', () => {
       expect(getOutfilePath('./src', 'outDir')).toStrictEqual('src/outDir');

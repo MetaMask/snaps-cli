@@ -26,7 +26,6 @@ describe('initialize', () => {
     });
 
     afterEach(() => {
-      jest.restoreAllMocks();
       delete global.snaps;
     });
 

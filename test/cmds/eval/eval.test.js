@@ -20,7 +20,6 @@ describe('eval', () => {
     });
 
     afterEach(() => {
-      jest.restoreAllMocks();
       delete global.snaps;
     });
 
@@ -70,7 +69,6 @@ describe('eval', () => {
     });
 
     afterEach(() => {
-      jest.restoreAllMocks();
       mockWorker = undefined;
       delete global.snaps;
     });
