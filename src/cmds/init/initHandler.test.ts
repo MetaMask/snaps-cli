@@ -119,6 +119,7 @@ describe('initialize', () => {
       const errorMock = jest.spyOn(miscUtils, 'logError').mockImplementation();
       const fsWriteMock = jest
         .spyOn(fs, 'writeFile')
+        // failed write to package.json
         .mockRejectedValue(undefined);
       jest.spyOn(process, 'exit').mockImplementation(() => {
         throw new Error('process exited');
@@ -145,6 +146,7 @@ describe('initialize', () => {
         .spyOn(fs, 'writeFile')
         // succesful write to package.json
         .mockResolvedValueOnce()
+        // failed write to index.js
         .mockRejectedValue(undefined);
       jest.spyOn(process, 'exit').mockImplementation(() => {
         throw new Error('process exited');
@@ -173,7 +175,7 @@ describe('initialize', () => {
         .mockResolvedValueOnce()
         // successful write to index.js
         .mockResolvedValueOnce()
-        // failure
+        // failed write to index.html
         .mockRejectedValue(undefined);
       jest.spyOn(process, 'exit').mockImplementation(() => {
         throw new Error('process exited');
@@ -204,6 +206,7 @@ describe('initialize', () => {
         .mockResolvedValueOnce()
         // succesful write to index.html
         .mockResolvedValueOnce()
+        // failed write to snap.config.json
         .mockRejectedValue(undefined);
       jest
         .spyOn(initUtils, 'asyncPackageInit')
