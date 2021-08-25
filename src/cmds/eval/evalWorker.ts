@@ -17,10 +17,9 @@ if (parentPort !== null) {
   parentPort.on('message', (message: { pluginFilePath: string }) => {
     const { pluginFilePath } = message;
 
-    new Compartment(getMockEndowments())
-      .evaluate(
-        readFileSync(pluginFilePath, 'utf8'),
-      );
+    new Compartment(getMockEndowments()).evaluate(
+      readFileSync(pluginFilePath, 'utf8'),
+    );
     setTimeout(() => process.exit(0), 1000); // Hack to ensure worker exits
   });
 }
