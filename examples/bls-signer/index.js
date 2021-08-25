@@ -22,7 +22,11 @@ wallet.registerRpcMessageHandler(async (_originString, requestObject) => {
       const PRIVATE_KEY = await wallet.request({
         method: 'snap_getAppKey',
       });
-      const signature = await bls.sign(requestObject.params[0], PRIVATE_KEY, DOMAIN);
+      const signature = await bls.sign(
+        requestObject.params[0],
+        PRIVATE_KEY,
+        DOMAIN,
+      );
       return signature;
     }
 
@@ -39,13 +43,9 @@ async function getPubKey() {
 }
 
 async function promptUser(message) {
-<<<<<<< HEAD
   const response = await wallet.request({
-    method: 'confirm',
+    method: 'snap_confirm',
     params: [message],
   });
-=======
-  const response = await wallet.request({ method: 'snap_confirm', params: [message] });
->>>>>>> 590c343 (WIP)
   return response;
 }
