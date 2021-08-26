@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.4.2]
 ### Added
-- Compatability with latest 2021 snaps branches ([#114](https://github.com/MetaMask/snaps-cli/pull/114))
+- API Compatability with latest 2021 snaps branches ([#114](https://github.com/MetaMask/snaps-cli/pull/114))
 - Init command unit tests ([#97](https://github.com/MetaMask/snaps-cli/pull/97))
 - GitHub Actions for CI/Releases ([#116](https://github.com/MetaMask/snaps-cli/pull/116))
 - CODEOWNERS file ([#108](https://github.com/MetaMask/snaps-cli/pull/108))
