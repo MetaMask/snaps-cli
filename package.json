@@ -11,6 +11,7 @@
     "!dist/development"
   ],
   "scripts": {
+    "setup": "yarn install && yarn allow-scripts",
     "build:prep": "mkdir -p dist && rm -rf dist/*",
     "build:typescript": "tsc --project ./tsconfig.build.json",
     "build:chmod": "chmod +x ./dist/src/main.js",
@@ -30,6 +31,8 @@
     "url": "git+https://github.com/MetaMask/snaps-cli.git"
   },
   "devDependencies": {
+    "@lavamoat/allow-scripts": "^1.0.6",
+    "@metamask/auto-changelog": "^2.5.0",
     "@metamask/eslint-config": "^6.0.0",
     "@metamask/eslint-config-jest": "^6.0.0",
     "@metamask/eslint-config-nodejs": "^6.0.0",
@@ -63,7 +66,6 @@
   "dependencies": {
     "@babel/core": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
-    "@metamask/auto-changelog": "^2.5.0",
     "babelify": "^10.0.0",
     "browserify": "^17.0.0",
     "chokidar": "^3.0.2",
@@ -84,5 +86,10 @@
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
+  },
+  "lavamoat": {
+    "allowScripts": {
+      "@lavamoat/preinstall-always-fail": false
+    }
   }
 }
