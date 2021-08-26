@@ -7,9 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [0.4.2]
+### Added
+- compatability with latest 2021 snaps branches ([#114](https://github.com/MetaMask/snaps-cli/pull/114))
+- init command unit tests ([#97](https://github.com/MetaMask/snaps-cli/pull/97))
+
+### Changed
+- CI to use GitHub Actions ([#116](https://github.com/MetaMask/snaps-cli/pull/116))
+
 ### Uncategorized
-- Migrate to GitHub Actions ([#116](https://github.com/MetaMask/snaps-cli/pull/116))
-- 2021 compat rebased ([#114](https://github.com/MetaMask/snaps-cli/pull/114))
 - Bump path-parse from 1.0.6 to 1.0.7 ([#113](https://github.com/MetaMask/snaps-cli/pull/113))
 - Bump glob-parent from 5.1.0 to 5.1.2 ([#112](https://github.com/MetaMask/snaps-cli/pull/112))
 - Bump browserslist from 4.16.3 to 4.16.6 ([#110](https://github.com/MetaMask/snaps-cli/pull/110))
@@ -22,7 +27,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - @metamask/eslint-config*@6.0.0 ([#102](https://github.com/MetaMask/snaps-cli/pull/102))
 - Clear all mocks in Jest config ([#103](https://github.com/MetaMask/snaps-cli/pull/103))
 - Build Cmd Unit Tests ([#98](https://github.com/MetaMask/snaps-cli/pull/98))
-- Add init command unit tests ([#97](https://github.com/MetaMask/snaps-cli/pull/97))
 - Watch Command Unit Tests ([#93](https://github.com/MetaMask/snaps-cli/pull/93))
 - Manifest Command Unit Tests ([#94](https://github.com/MetaMask/snaps-cli/pull/94))
 - Update ethers in example ([#100](https://github.com/MetaMask/snaps-cli/pull/100))
@@ -48,42 +52,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - fix fs.exists and fs.readdir errors ([#71](https://github.com/MetaMask/snaps-cli/pull/71))
 - Fix building examples, minor issues ([#69](https://github.com/MetaMask/snaps-cli/pull/69))
 - Fix examples dependency installation in CI ([#68](https://github.com/MetaMask/snaps-cli/pull/68))
-- Add CircleCI config ([#67](https://github.com/MetaMask/snaps-cli/pull/67))
-- Add comment strip option ([#65](https://github.com/MetaMask/snaps-cli/pull/65))
+- CircleCI config ([#67](https://github.com/MetaMask/snaps-cli/pull/67))
+- comment strip option ([#65](https://github.com/MetaMask/snaps-cli/pull/65))
 - Fix linting ([#66](https://github.com/MetaMask/snaps-cli/pull/66))
-- add eslint and fix related errors ([#64](https://github.com/MetaMask/snaps-cli/pull/64))
-- Update README.md
-- Fix typo in changelog
-- Stop committing example build files
+- eslint and fix related errors ([#64](https://github.com/MetaMask/snaps-cli/pull/64))
 - Convert to Web Workers and ses@^0.11.0 ([#60](https://github.com/MetaMask/snaps-cli/pull/60))
-- Update readme files
-- Upgrade ethers in examples/ethers-js
-- Update minimist resolution
-- Remove unnecessary dependency from bls-signer
 - Bump npm-user-validate from 1.0.0 to 1.0.1 in /examples/bls-signer ([#57](https://github.com/MetaMask/snaps-cli/pull/57))
 - Bump ini from 1.3.5 to 1.3.8 in /examples/bls-signer ([#59](https://github.com/MetaMask/snaps-cli/pull/59))
 - Bump dot-prop from 4.2.0 to 4.2.1 in /examples/bls-signer ([#58](https://github.com/MetaMask/snaps-cli/pull/58))
-- Use yarn in examples
-- browserify@17.0.0
 - Bump yargs-parser from 15.0.0 to 15.0.1 ([#56](https://github.com/MetaMask/snaps-cli/pull/56))
-- Use yarn, update .nvmrc
 - Remove 3box example
 - Bump elliptic from 6.5.1 to 6.5.3 ([#53](https://github.com/MetaMask/snaps-cli/pull/53))
 - Bump lodash from 4.17.15 to 4.17.19 ([#52](https://github.com/MetaMask/snaps-cli/pull/52))
 - Bump npm from 6.13.4 to 6.14.6 in bls-signer example ([#51](https://github.com/MetaMask/snaps-cli/pull/51))
 - bump nvmrc version in readme ([#47](https://github.com/MetaMask/snaps-cli/pull/47))
-- Update README.md
 - Bump acorn from 7.1.0 to 7.1.1 ([#49](https://github.com/MetaMask/snaps-cli/pull/49))
 - fix 3box frontend errors, SES errors remain
 - Add custom account example ([#48](https://github.com/MetaMask/snaps-cli/pull/48))
 - update .nvmrc to 10.17.0
 - Bump npm from 6.11.3 to 6.13.4 in /examples/bls-signer ([#42](https://github.com/MetaMask/snaps-cli/pull/42))
-- update example dapps for new API
+- Example dapps for new API
 - update bundle
 - add identicon settings example
 - Add ethers.js example
 - Fix 3box example ([#39](https://github.com/MetaMask/snaps-cli/pull/39))
-- 0.4.1
 
 ## [0.4.1]
 ### Uncategorized
