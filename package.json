@@ -20,7 +20,7 @@
     "dev:gen-init-template": "node ./dist/development/generateInitTemplate.js",
     "dev:build-examples": "node ./dist/development/buildExamples.js",
     "lint:eslint": "eslint . --cache --ext js,ts",
-    "lint:misc": "prettier '**/*.json' '**/*.md' '**/*.yml' --ignore-path .gitignore",
+    "lint:misc": "prettier '**/*.json' '**/*.md' '!CHANGELOG.md' '**/*.yml' --ignore-path .gitignore",
     "lint": "yarn lint:eslint && yarn lint:misc --check",
     "lint:fix": "yarn lint:eslint --fix && yarn lint:misc --write"
   },
@@ -67,6 +67,7 @@
   "dependencies": {
     "@babel/core": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
+    "@metamask/auto-changelog": "^2.5.0",
     "babelify": "^10.0.0",
     "browserify": "^17.0.0",
     "chokidar": "^3.0.2",
@@ -83,5 +84,9 @@
   },
   "engines": {
     "node": ">=14.15.1"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }
