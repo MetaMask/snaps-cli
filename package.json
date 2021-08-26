@@ -24,10 +24,6 @@
     "lint": "yarn lint:eslint && yarn lint:misc --check",
     "lint:fix": "yarn lint:eslint --fix && yarn lint:misc --write"
   },
-  "author": "Erik Marks <rekmarks@protonmail.com>",
-  "contributors": [
-    "Dan Miller <dmiller@kyokan.io"
-  ],
   "license": "ISC",
   "repository": {
     "type": "git",
