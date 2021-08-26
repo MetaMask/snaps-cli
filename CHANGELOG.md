@@ -27,7 +27,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Build Cmd Unit Tests ([#98](https://github.com/MetaMask/snaps-cli/pull/98))
 - Watch Command Unit Tests ([#93](https://github.com/MetaMask/snaps-cli/pull/93))
 - Manifest Command Unit Tests ([#94](https://github.com/MetaMask/snaps-cli/pull/94))
-- Update ethers in example ([#100](https://github.com/MetaMask/snaps-cli/pull/100))
 - Serve Command Unit Tests ([#92](https://github.com/MetaMask/snaps-cli/pull/92))
 - Bump elliptic from 6.5.3 to 6.5.4 ([#95](https://github.com/MetaMask/snaps-cli/pull/95))
 - Eval Cmd Unit Tests ([#91](https://github.com/MetaMask/snaps-cli/pull/91))
@@ -35,7 +34,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - refactor init buildweb3wallet ([#89](https://github.com/MetaMask/snaps-cli/pull/89))
 - Add license file ([#88](https://github.com/MetaMask/snaps-cli/pull/88))
 - Restore crypto to eval environment ([#87](https://github.com/MetaMask/snaps-cli/pull/87))
-- Remove environment option ([#86](https://github.com/MetaMask/snaps-cli/pull/86))
 - Fix applyConfig behavior ([#85](https://github.com/MetaMask/snaps-cli/pull/85))
 - Make applyConfig transform argv instead of builders ([#84](https://github.com/MetaMask/snaps-cli/pull/84))
 - Refactor snap-config utils and tests ([#83](https://github.com/MetaMask/snaps-cli/pull/83))
@@ -48,9 +46,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Reorganize file structure using commandDir for yargs ([#72](https://github.com/MetaMask/snaps-cli/pull/72))
 - Fix file existence checks in init.js ([#73](https://github.com/MetaMask/snaps-cli/pull/73))
 - fix fs.exists and fs.readdir errors ([#71](https://github.com/MetaMask/snaps-cli/pull/71))
-- Fix building examples, minor issues ([#69](https://github.com/MetaMask/snaps-cli/pull/69))
-- Fix examples dependency installation in CI ([#68](https://github.com/MetaMask/snaps-cli/pull/68))
-- CircleCI config ([#67](https://github.com/MetaMask/snaps-cli/pull/67))
 - comment strip option ([#65](https://github.com/MetaMask/snaps-cli/pull/65))
 - Fix linting ([#66](https://github.com/MetaMask/snaps-cli/pull/66))
 - eslint and fix related errors ([#64](https://github.com/MetaMask/snaps-cli/pull/64))
@@ -59,21 +54,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bump ini from 1.3.5 to 1.3.8 in /examples/bls-signer ([#59](https://github.com/MetaMask/snaps-cli/pull/59))
 - Bump dot-prop from 4.2.0 to 4.2.1 in /examples/bls-signer ([#58](https://github.com/MetaMask/snaps-cli/pull/58))
 - Bump yargs-parser from 15.0.0 to 15.0.1 ([#56](https://github.com/MetaMask/snaps-cli/pull/56))
-- Remove 3box example
 - Bump elliptic from 6.5.1 to 6.5.3 ([#53](https://github.com/MetaMask/snaps-cli/pull/53))
 - Bump lodash from 4.17.15 to 4.17.19 ([#52](https://github.com/MetaMask/snaps-cli/pull/52))
 - Bump npm from 6.13.4 to 6.14.6 in bls-signer example ([#51](https://github.com/MetaMask/snaps-cli/pull/51))
 - bump nvmrc version in readme ([#47](https://github.com/MetaMask/snaps-cli/pull/47))
 - Bump acorn from 7.1.0 to 7.1.1 ([#49](https://github.com/MetaMask/snaps-cli/pull/49))
-- fix 3box frontend errors, SES errors remain
-- Add custom account example ([#48](https://github.com/MetaMask/snaps-cli/pull/48))
-- update .nvmrc to 10.17.0
+- .nvmrc to 10.17.0
 - Bump npm from 6.11.3 to 6.13.4 in /examples/bls-signer ([#42](https://github.com/MetaMask/snaps-cli/pull/42))
-- Example dapps for new API
-- update bundle
-- add identicon settings example
-- Add ethers.js example
-- Fix 3box example ([#39](https://github.com/MetaMask/snaps-cli/pull/39))
+
+### Removed
+- 3box example
+- environment option ([#86](https://github.com/MetaMask/snaps-cli/pull/86))
 
 ## [0.4.1]
 ### Uncategorized
