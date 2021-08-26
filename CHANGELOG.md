@@ -10,11 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - compatability with latest 2021 snaps branches ([#114](https://github.com/MetaMask/snaps-cli/pull/114))
 - init command unit tests ([#97](https://github.com/MetaMask/snaps-cli/pull/97))
+- GitHub Actions for CI/Releases ([#116](https://github.com/MetaMask/snaps-cli/pull/116))
 
 ### Changed
-- CI to use GitHub Actions ([#116](https://github.com/MetaMask/snaps-cli/pull/116))
-
-### Uncategorized
 - Bump path-parse from 1.0.6 to 1.0.7 ([#113](https://github.com/MetaMask/snaps-cli/pull/113))
 - Bump glob-parent from 5.1.0 to 5.1.2 ([#112](https://github.com/MetaMask/snaps-cli/pull/112))
 - Bump browserslist from 4.16.3 to 4.16.6 ([#110](https://github.com/MetaMask/snaps-cli/pull/110))
