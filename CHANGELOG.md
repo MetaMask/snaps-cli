@@ -8,8 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.4.2]
 ### Added
-- compatability with latest 2021 snaps branches ([#114](https://github.com/MetaMask/snaps-cli/pull/114))
-- init command unit tests ([#97](https://github.com/MetaMask/snaps-cli/pull/97))
+- Compatability with latest 2021 snaps branches ([#114](https://github.com/MetaMask/snaps-cli/pull/114))
+- Init command unit tests ([#97](https://github.com/MetaMask/snaps-cli/pull/97))
 - GitHub Actions for CI/Releases ([#116](https://github.com/MetaMask/snaps-cli/pull/116))
 - CODEOWNERS file ([#108](https://github.com/MetaMask/snaps-cli/pull/108))
 
@@ -24,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Serve Command Unit Tests ([#92](https://github.com/MetaMask/snaps-cli/pull/92))
 - Eval Cmd Unit Tests ([#91](https://github.com/MetaMask/snaps-cli/pull/91))
 - Prevent serve command from caching files ([#90](https://github.com/MetaMask/snaps-cli/pull/90))
-- refactor init buildweb3wallet ([#89](https://github.com/MetaMask/snaps-cli/pull/89))
+- buildweb3wallet init refactor ([#89](https://github.com/MetaMask/snaps-cli/pull/89))
 - Add license file ([#88](https://github.com/MetaMask/snaps-cli/pull/88))
 - Restore crypto to eval environment ([#87](https://github.com/MetaMask/snaps-cli/pull/87))
 - Fix applyConfig behavior ([#85](https://github.com/MetaMask/snaps-cli/pull/85))
@@ -33,21 +33,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add utils unit tests ([#76](https://github.com/MetaMask/snaps-cli/pull/76))
 - @metamask/eslint-config@5.0.0 ([#80](https://github.com/MetaMask/snaps-cli/pull/80))
 - Change alias for suppressWarnings ([#81](https://github.com/MetaMask/snaps-cli/pull/81))
-- reorganize utils file structure ([#79](https://github.com/MetaMask/snaps-cli/pull/79))
+- Reorganize utils file structure ([#79](https://github.com/MetaMask/snaps-cli/pull/79))
 - Node version to 14 ([#77](https://github.com/MetaMask/snaps-cli/pull/77))
 - Source code to use Typescript ([#75](https://github.com/MetaMask/snaps-cli/pull/75))
 - File structure using commandDir for yargs ([#72](https://github.com/MetaMask/snaps-cli/pull/72))
 - File existence checks and fixes in init.js ([#73](https://github.com/MetaMask/snaps-cli/pull/73))
 - fs.exists and fs.readdir usage to better handle errors ([#71](https://github.com/MetaMask/snaps-cli/pull/71))
-- comment strip option ([#65](https://github.com/MetaMask/snaps-cli/pull/65))
-- linting ([#66](https://github.com/MetaMask/snaps-cli/pull/66))
-- eslint and fix related errors ([#64](https://github.com/MetaMask/snaps-cli/pull/64))
+- Comment strip option ([#65](https://github.com/MetaMask/snaps-cli/pull/65))
 - Convert to Web Workers and ses@^0.11.0 ([#60](https://github.com/MetaMask/snaps-cli/pull/60))
 - .nvmrc to 10.17.0
 
 ### Removed
 - 3box example
-- environment option ([#86](https://github.com/MetaMask/snaps-cli/pull/86))
+- Environment option ([#86](https://github.com/MetaMask/snaps-cli/pull/86))
 
 ## [0.4.1]
 ### Uncategorized
