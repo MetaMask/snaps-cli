@@ -21,13 +21,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Use workers as the execution environment ([#60](https://github.com/MetaMask/snaps-cli/pull/60))
 - Use `ses@^0.11.0` ([#60](https://github.com/MetaMask/snaps-cli/pull/60))
 
-### Fixed
-- File existence checks `init` command ([#73](https://github.com/MetaMask/snaps-cli/pull/73))
-- `fs.exists` and `fs.readdir` error handling ([#71](https://github.com/MetaMask/snaps-cli/pull/71))
-
 ### Removed
 - 3box example
 - Environment option ([#86](https://github.com/MetaMask/snaps-cli/pull/86))
+
+### Fixed
+- File existence checks `init` command ([#73](https://github.com/MetaMask/snaps-cli/pull/73))
+- `fs.exists` and `fs.readdir` error handling ([#71](https://github.com/MetaMask/snaps-cli/pull/71))
 
 ## [0.4.1]
 ### Uncategorized
