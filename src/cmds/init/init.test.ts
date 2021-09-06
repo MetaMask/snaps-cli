@@ -1,6 +1,6 @@
-import * as buildModule from '../build';
+import * as buildHandlerModule from '../build/buildHandler';
 import * as initHandlerModule from './initHandler';
-import * as initModule from '.';
+import initModule from '.';
 
 describe('init module', () => {
   it('console logs if successful', async () => {
@@ -8,11 +8,12 @@ describe('init module', () => {
     const initHandlerMock = jest
       .spyOn(initHandlerModule, 'initHandler')
       .mockImplementation(() => mockArgv as any);
-    const buildMock = jest.spyOn(buildModule, 'build').mockImplementation();
+    const buildMock = jest
+      .spyOn(buildHandlerModule, 'build')
+      .mockImplementation();
     jest.spyOn(console, 'log').mockImplementation();
 
-    // TODO: Fix index.ts exports
-    await (initModule as any).handler({ ...(mockArgv as any) });
+    await initModule.handler({ ...(mockArgv as any) });
     expect(initHandlerMock).toHaveBeenCalledWith(mockArgv);
     expect(buildMock).toHaveBeenCalledWith({
       foo: 'bar',

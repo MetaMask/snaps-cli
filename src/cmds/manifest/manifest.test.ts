@@ -1,7 +1,7 @@
 import fs from 'fs';
 import * as utils from '../../utils/fs';
-import * as manifestHandlerModule from './manifest';
-import * as manifestModule from '.';
+import * as manifestHandlerModule from './manifestHandler';
+import manifestModule from '.';
 
 jest.mock('fs', () => ({
   promises: {

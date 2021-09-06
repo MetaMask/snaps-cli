@@ -6,18 +6,16 @@ module.exports = {
   coveragePathIgnorePatterns: [
     // These are just type declarations.
     './src/types/*',
-    // This just calls the cli function from exported from cli.ts
-    './src/main.ts',
-    // TODO: We should test this
-    './src/cmds/eval/evalWorker.ts',
+    // TODO: Test the eval worker
+    './src/cmds/eval/eval-worker.ts',
   ],
   coverageReporters: ['text', 'html'],
   coverageThreshold: {
     global: {
-      branches: 85,
-      functions: 95,
+      branches: 86,
+      functions: 100,
       lines: 100,
-      statements: 99,
+      statements: 100,
     },
   },
   moduleFileExtensions: ['js', 'json', 'jsx', 'ts', 'tsx', 'node'],

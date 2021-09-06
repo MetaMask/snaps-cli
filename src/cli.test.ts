@@ -2,7 +2,7 @@ import yargs from 'yargs';
 import { cli } from './cli';
 import commands from './cmds';
 
-const commandMap = (commands as yargs.CommandModule[]).reduce(
+const commandMap = ((commands as unknown) as yargs.CommandModule[]).reduce(
   (map, commandModule) => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     map[commandModule.command![0]] = commandModule;
@@ -66,8 +66,8 @@ describe('cli', () => {
     });
   });
 
-  // Commands are fully tested in their respecitve unit tests.
-  // This is just to ensure full coverage of different code paths in cli.ts.
+  // Commands are fully tested in their respective unit tests.
+  // This is just to ensure full coverage of cli.ts.
   describe('locally defined commands', () => {
     beforeEach(() => {
       processExitSpy.mockImplementation();
@@ -85,7 +85,7 @@ describe('cli', () => {
         ]);
         await finished;
         expect(mockCommandHandler).toHaveBeenCalledTimes(1);
-        // TODO: Test default arguments for each command
+        // TODO: Test the complete argv for each command
         expect(mockCommandHandler).toHaveBeenCalledWith(
           expect.objectContaining({
             _: [command],
