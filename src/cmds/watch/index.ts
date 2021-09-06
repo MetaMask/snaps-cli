@@ -14,7 +14,6 @@ import {
 module.exports.command = ['watch', 'w'];
 module.exports.desc = 'Build Snap on change';
 module.exports.builder = (yarg: yargs.Argv) => {
-  /* istanbul ignore next */
   yarg
     .option('src', builders.src)
     .option('dist', builders.dist)

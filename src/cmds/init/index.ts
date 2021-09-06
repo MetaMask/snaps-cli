@@ -7,7 +7,6 @@ import { initHandler } from './initHandler';
 module.exports.command = ['init', 'i'];
 module.exports.desc = 'Initialize Snap package';
 module.exports.builder = (yarg: yargs.Argv) => {
-  /* istanbul ignore next */
   yarg
     .option('src', builders.src)
     .option('dist', builders.dist)

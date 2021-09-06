@@ -69,6 +69,35 @@ describe('watch', () => {
       expect(chokidarMock.mock.calls[0][0]).toBe('.');
     });
 
+    it('successfully processes arguments from yargs: nested src path', async () => {
+      const chokidarMock = jest
+        .spyOn(chokidar, 'watch')
+        .mockImplementation(() => {
+          watcherEmitter = getMockWatcher();
+          return watcherEmitter as any;
+        });
+      jest.spyOn(console, 'log').mockImplementation();
+      const validateDirPathMock = jest
+        .spyOn(fsUtils, 'validateDirPath')
+        .mockImplementation(async () => true);
+      const validateFilePathMock = jest
+        .spyOn(fsUtils, 'validateFilePath')
+        .mockImplementation(async () => true);
+      const validateOutfileNameMock = jest
+        .spyOn(fsUtils, 'validateOutfileName')
+        .mockImplementation(() => true);
+      jest
+        .spyOn(fsUtils, 'getOutfilePath')
+        .mockImplementation(() => 'dist/bundle.js');
+
+      // TODO: Fix index.ts exports
+      await (watch as any).handler({ ...getMockArgv(), src: 'foo/index.js' });
+      expect(validateDirPathMock).toHaveBeenCalledWith(mockDist, true);
+      expect(validateFilePathMock).toHaveBeenCalledWith('foo/index.js');
+      expect(validateOutfileNameMock).toHaveBeenCalledWith(mockOutfileName);
+      expect(chokidarMock.mock.calls[0][0]).toBe('foo/');
+    });
+
     it('watcher handles "changed" event correctly', async () => {
       jest.spyOn(console, 'log').mockImplementation();
       const bundleMock = jest.spyOn(build, 'bundle').mockImplementation();
