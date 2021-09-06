@@ -13,6 +13,7 @@ export const commandModules = [
   serveModule,
   watchModule,
 ];
+
 export const build = buildModule.handler;
 export const evaluate = evaluateModule.handler;
 export const init = initModule.handler;
