@@ -6,9 +6,10 @@ const snapEval = evalModule.handler;
 
 describe('eval', () => {
   describe('snapEval', () => {
-    const mockArgv = {
-      bundle: 'dist/bundle.js',
-    };
+    const getMockArgv = () =>
+      ({
+        bundle: 'dist/bundle.js',
+      } as any);
 
     beforeEach(() => {
       jest.spyOn(console, 'log').mockImplementation(() => undefined);
@@ -31,7 +32,7 @@ describe('eval', () => {
         .spyOn(workerEvalModule, 'workerEval')
         .mockImplementation(async () => null);
 
-      await snapEval(mockArgv as any);
+      await snapEval(getMockArgv());
       expect(global.console.log).toHaveBeenCalledTimes(1);
     });
 
@@ -48,7 +49,7 @@ describe('eval', () => {
         throw new Error('process exited');
       });
       await expect(async () => {
-        await snapEval(mockArgv as any);
+        await snapEval(getMockArgv());
       }).rejects.toThrow('process exited');
 
       expect(console.log).not.toHaveBeenCalled();

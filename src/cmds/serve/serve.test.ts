@@ -5,10 +5,11 @@ import * as fsUtils from '../../utils/validate-fs';
 import * as serveUtils from './serveUtils';
 import serve from '.';
 
-const mockArgv = {
-  root: '.',
-  port: 8081,
-};
+const getMockArgv = () =>
+  ({
+    root: '.',
+    port: 8081,
+  } as any);
 
 jest.mock('serve-handler', () => jest.fn());
 
@@ -43,7 +44,7 @@ describe('serve', () => {
     it('server handles "close" event correctly', async () => {
       jest.spyOn(console, 'log').mockImplementation();
 
-      await serve.handler(mockArgv as any);
+      await serve.handler(getMockArgv());
       const finishPromise = new Promise<void>((resolve, _) => {
         mockServer.on('close', () => {
           expect(global.console.log).toHaveBeenCalledTimes(2);
@@ -62,7 +63,7 @@ describe('serve', () => {
         .mockImplementation();
       jest.spyOn(process, 'exit').mockImplementation(() => undefined as never);
 
-      await serve.handler(mockArgv as any);
+      await serve.handler(getMockArgv());
       const finishPromise = new Promise<void>((resolve, _) => {
         mockServer.on('error', () => {
           expect(global.console.log).toHaveBeenCalledTimes(1);
@@ -90,7 +91,7 @@ describe('serve', () => {
         .spyOn(serveUtils, 'logRequest')
         .mockImplementation();
 
-      await serve.handler(mockArgv as any);
+      await serve.handler(getMockArgv());
       const finishPromise = new Promise<void>((resolve, _) => {
         mockServer.on('request', (...args) => {
           expect(global.console.log).toHaveBeenCalledTimes(1);

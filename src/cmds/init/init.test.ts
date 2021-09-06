@@ -7,7 +7,7 @@ describe('init module', () => {
     const mockArgv = { foo: 'bar' };
     const initHandlerMock = jest
       .spyOn(initHandlerModule, 'initHandler')
-      .mockImplementation(() => mockArgv as any);
+      .mockImplementation(() => ({ ...(mockArgv as any) }));
     const buildMock = jest
       .spyOn(buildHandlerModule, 'build')
       .mockImplementation();
