@@ -5,5 +5,5 @@ import manifest from './manifest';
 import serve from './serve';
 import watch from './watch';
 
-const commands = [init, build, evaluate, manifest, serve, watch];
-export default commands;
+export const allCommands = [init, build, evaluate, manifest, serve, watch];
+export { init, build, evaluate, manifest, serve, watch };
