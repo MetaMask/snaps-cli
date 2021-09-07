@@ -3,7 +3,7 @@ import { parentPort } from 'worker_threads';
 import { readFileSync } from 'fs';
 import crypto from 'crypto';
 
-// eslint-disable-next-line import/no-unassigned-import, @typescript-eslint/no-require-imports
+// eslint-disable-next-line import/no-unassigned-import
 import 'ses/lockdown';
 
 declare let lockdown: any, Compartment: any;
