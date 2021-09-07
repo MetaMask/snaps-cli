@@ -1387,10 +1387,10 @@
     semver "^7.3.5"
     yargs "^17.0.1"
 
-"@metamask/eslint-config-jest@^6.0.0":
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/@metamask/eslint-config-jest/-/eslint-config-jest-6.0.0.tgz#9e10cfbca31236afd7be2058be70365084e540d6"
-  integrity sha512-C0sXmyp5Hnp5IHVYXaW2TJAo/E9UiS192CwyUcw2qU1Ck7lj4z/wHdgROaH5F6rInqBO3afkDaqnArqvoxvO5Q==
+"@metamask/eslint-config-jest@^8.0.0":
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/@metamask/eslint-config-jest/-/eslint-config-jest-8.0.0.tgz#1433c2dffbd60239430ea789c71df11e94872a1c"
+  integrity sha512-m2/crRcaiRO8z6NC04+AudfjgIXvdrUy2oDjecjELa3nmgkJ+cVemCfioREpjaXoXW/soNImZXbgLrA98uQ6ig==
 
 "@metamask/eslint-config-nodejs@^6.0.0":
   version "6.0.0"
