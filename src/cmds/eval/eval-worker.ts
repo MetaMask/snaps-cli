@@ -34,6 +34,7 @@ function getMockEndowments() {
     Math,
     wallet: {
       registerRpcMessageHandler: () => true,
+      request: () => undefined,
     },
     setTimeout,
     SubtleCrypto: () => undefined,
